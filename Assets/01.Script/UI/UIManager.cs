@@ -31,7 +31,7 @@ public class UIManager : MonoBehaviour
     private void Reset()
     {
         mainCanvas = GameObject.Find(MainCanvasName)?.GetComponent<Canvas>();
-        AllUI = mainCanvas.GetComponentsInChildren<UIBase>();
+        AllUI = mainCanvas.GetComponentsInChildren<UIBase>(true);
     }
 
     private void Awake()
@@ -50,27 +50,18 @@ public class UIManager : MonoBehaviour
         {
             UIDictionary[UI.GetType()] = UI;
         }
-    }
-
-    public void OpenUI<T>() where T : UIBase
-    {
-        GetUI<T>()?.Open();
+        AllUI = null;
     }
 
     public T Add<T>() where T : UIBase
     {
-        if (mainCanvas.GetComponentInChildren<T>() is T ui)
+        if (mainCanvas.GetComponentInChildren<T>() is T value)
         {
-            UIDictionary[ui.GetType()] = ui;
-            return ui;
+            UIDictionary[value.GetType()] = value;
+            return value;
         }
         DebugHelper.LogError($"{typeof(T).Name} NONO.", mainCanvas);
         return null;
-    }
-
-    public void CloseUI<T>() where T : UIBase
-    {
-        GetUI<T>()?.Close();
     }
 
     public T GetUI<T>() where T : UIBase
@@ -78,9 +69,9 @@ public class UIManager : MonoBehaviour
         Type key = typeof(T);
         if (UIDictionary.ContainsKey(key))
         {
-            if (UIDictionary[key] is T)
+            if (UIDictionary[key] is T value)
             {
-                return UIDictionary[key] as T;
+                return value;
             }
         }
         else
@@ -92,5 +83,14 @@ public class UIManager : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public void OpenUI<T>() where T : UIBase
+    {
+        GetUI<T>()?.Open();
+    }
+    public void CloseUI<T>() where T : UIBase
+    {
+        GetUI<T>()?.Close();
     }
 }

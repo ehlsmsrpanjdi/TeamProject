@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public class BaseImage : Image, IPointerEnterHandler, IPointerExitHandler
 {
 
-    Color prevColor;
-    Color ChangeColor = Color.yellow;
+    protected Color prevColor;
+    protected Color ChangeColor = Color.yellow;
 
     public virtual void OnPointerEnter(PointerEventData eventData)
     {

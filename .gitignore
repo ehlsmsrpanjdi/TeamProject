@@ -83,3 +83,26 @@ crashlytics-build.properties
 /[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta
 /[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers
 /[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers.meta
+
+# Rider-specific (JetBrains)
+.idea/
+*.sln.iml
+*.ipr
+*.iws
+*.iml
+
+# Rider workspace
+.idea/
+*.sln.iml
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/contentModel.xml
+.idea/.idea.DotSettings
+
+# Optional: user-specific run configs
+.idea/runConfigurations/
+
+

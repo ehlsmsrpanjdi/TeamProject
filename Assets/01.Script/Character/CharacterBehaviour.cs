@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class CharacterBehaviour : MonoBehaviour
 {
-    void SpawnCharacter()
-    {
-
-    }
+    public CharacterDataSO characterData;
 
     //공격
     void Attack()

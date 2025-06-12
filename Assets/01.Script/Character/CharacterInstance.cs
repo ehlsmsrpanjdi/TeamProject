@@ -6,12 +6,12 @@ public class CharacterInstance
 {
     public CharacterDataSO characterData;
 
+
     public int enhancementLevel = 0; // 강화 레벨 (랭크와 별도)
 
     public CharacterInstance(CharacterDataSO data)
     {
         characterData = data;
-        _currentRank = data.startRank;
     }
 
     private Rank _currentRank;
@@ -25,8 +25,25 @@ public class CharacterInstance
         characterData.baseHealth * GetRankInfo().hpMultiplier
     );
 
-    public List<Skill> CurrentSkills => GetRankInfo().Skills;
-
+    public List<Skill> CurrentSkills
+    {
+        get
+        {
+            var allSkills = new List<Skill>();
+            foreach (var info in characterData.rankInfo)
+            {
+                if (info.rank <= currentRank)
+                {
+                    foreach (var skill in info.Skills)
+                    {
+                        if (!allSkills.Contains(skill))
+                            allSkills.Add(skill);
+                    }
+                }
+            }
+            return allSkills;
+        }
+    }
 
     public RankInfo GetRankInfo()
     {

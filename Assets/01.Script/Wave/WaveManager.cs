@@ -32,14 +32,19 @@ public class WaveManager : MonoBehaviour
         yield return new WaitForSeconds(waveInterval);
 
         int totalCount = currentWave * zombiesPerWave;         // 전체 소환할 좀비 수
-        int spawnBatch = 5;                                    // 몇 번에 나눠서 소환할지
+        int spawnBatch = 5;                                     // 몇 번에 나눠서 소환할지
         int zombiesPerBatch = Mathf.CeilToInt((float)totalCount / spawnBatch); // 한 번에 소환할 수
 
         for (int i = 0; i < spawnBatch; i++)
         {
-            spawner.SpawnWave(zombiesPerBatch); // 좀비 소환
-            Debug.Log($"[WaveManager] {i + 1}/{spawnBatch}차 소환 - {zombiesPerBatch}마리");
-            yield return new WaitForSeconds(3f); // 다음 소환까지 대기
+            // 남은 좀비 수 계산
+            int remainingZombies = totalCount - (i * zombiesPerBatch);
+            // 마지막 배치일 경우 남은 좀비 수만큼 소환
+            int countToSpawn = Mathf.Min(zombiesPerBatch, remainingZombies);
+
+            spawner.SpawnWave(countToSpawn); // 좀비 소환
+            Debug.Log($"[WaveManager] {i + 1}/{spawnBatch}차 소환 - {countToSpawn}마리");
+            yield return new WaitForSeconds(1f); // 다음 소환까지 대기
         }
 
         aliveZombies = totalCount; // 총 좀비 수 등록
@@ -49,7 +54,7 @@ public class WaveManager : MonoBehaviour
         isWaveSpawning = false;
     }
 
-    // 좀비가 사망했을 때
+    // 좀비가 사망했을 때 호출
     public void OnZombieDied()
     {
         aliveZombies--;

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53ab74b5ca703354e904542ecc72e3c5, type: 3}
+  m_Name: Gacha
+  m_EditorClassIdentifier: 
+  titlePrefix: "\uBF51\uAE30 \uC9C4"
+  questType: 0
+  startValue: 10
+  valueIncrement: 10
+  descriptionFormat: "\uAC00\uCC60\uB97C \uD558\uC138\uC694"

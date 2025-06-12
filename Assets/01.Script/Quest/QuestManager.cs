@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class QuestManager : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class QuestManager : MonoBehaviour
 
         CheckAllDailyQuests();
         InvokeRepeating(nameof(UpdatePlayTime), 60f, 60f);
+
     }
 
     // 일퀘 목록 생성
@@ -84,14 +86,19 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    // 퀘스트 클리어 버튼과 연결, 보상 수령
+    // 퀘스트 클리어 버튼과 연결, 보상 수령. 버튼 연결 시 ClaimReward(dailyQuests[0])처럼 연결.
     public void ClaimReward(QuestData quest)
     {
         if (quest.IsCompleted && !quest.IsClaimed)
         {
             quest.IsClaimed = true;
             SaveQuestProgressToPrefs(quest);
+
             Debug.Log($"보상 수령: {quest.Title}");
+        }
+        else
+        {
+            Debug.Log($"{quest.Title}보상 수령 실패, 조건여부: {quest.IsCompleted}, 수령여부 : {quest.IsClaimed}");
         }
     }
 
@@ -138,14 +145,14 @@ public class QuestManager : MonoBehaviour
         SaveQuestProgressToPrefs(attackQuest);
         Debug.Log($"강화 횟수: {attackQuest.CurrentValue} / {attackQuest.TargetValue}");
 
+
         if (attackQuest.CurrentValue >= attackQuest.TargetValue)
         {
             attackQuest.IsCompleted = true;
             SaveQuestProgressToPrefs(attackQuest);
-            Debug.Log("공격력 강화 퀘스트 완료!");
+            Debug.Log($"공격력 강화 퀘스트 완료!");
         }
     }
-
 
     private void LoadQuestProgressFromPrefs()
     {
@@ -186,7 +193,7 @@ public class QuestManager : MonoBehaviour
             {
                 playQuest.IsCompleted = true;
                 SaveQuestProgressToPrefs(playQuest);
-                Debug.Log("30분 이상 플레이 퀘스트 완료!");
+                Debug.Log($"10분 이상 플레이 퀘스트 완료!");
             }
         }
     }

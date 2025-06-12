@@ -35,20 +35,33 @@ public class ZombieAI : MonoBehaviour, IDamageable
     private void OnEnable()
     {
         if (agent == null) agent = GetComponent<NavMeshAgent>();
-        if (animator == null) animator = GetComponent<Animator>();
         if (rb == null) rb = GetComponent<Rigidbody>();
-        if (zombieRenderer == null) zombieRenderer = GetComponentInChildren<Renderer>();
-        if (zombieRenderer != null)
-            originalColor = zombieRenderer.material.color;
-
+        if (animator == null) animator = GetComponent<Animator>();
         if (statHandler == null) statHandler = GetComponent<ZombieStatHandler>();
-        statHandler.ResetHealth();
-        agent.speed = statHandler.MoveSpeed;
 
-
-        rb.isKinematic = true;
         target = GameObject.FindWithTag("Player")?.transform;
+
+        statHandler.ResetHealth();
+
         ChangeState(State.Chase);
+
+        rb.velocity = Vector3.zero;
+        rb.isKinematic = true;
+
+        if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 1f, NavMesh.AllAreas))
+        {
+            transform.position = hit.position;
+            agent.enabled = true;
+            agent.Warp(hit.position);
+        }
+
+        animator.Rebind();
+
+        // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
+        if (animator != null && animator.runtimeAnimatorController != null)
+            animator.SetBool("", true);
+
+        agent.speed = statHandler.MoveSpeed;
     }
 
     private void Awake()
@@ -95,6 +108,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
             {
                 Debug.LogWarning("[Chase] agent가 NavMesh 위에 없음");
             }
+
             // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
             if (animator != null && animator.runtimeAnimatorController != null)
                 animator.SetBool("", true);
@@ -102,6 +116,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         else
         {
             agent.isStopped = true;
+
             // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
             if (animator != null && animator.runtimeAnimatorController != null)
                 animator.SetBool("", false);
@@ -112,6 +127,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), 10f * Time.deltaTime);
         }
     }
+
 
 
     private void Attack()

@@ -123,74 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: 2e5a75da66f74b84db63e9c6c29d113d, type: 2}
---- !u!1001 &110311179
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1709366760422639344, guid: 6ae4665cf501c6e47ad19a37c19b2364,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.46
-      objectReference: {fileID: 0}
-    - target: {fileID: 1709366760422639344, guid: 6ae4665cf501c6e47ad19a37c19b2364,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -4.13
-      objectReference: {fileID: 0}
-    - target: {fileID: 1709366760422639344, guid: 6ae4665cf501c6e47ad19a37c19b2364,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -3.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1709366760422639344, guid: 6ae4665cf501c6e47ad19a37c19b2364,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1709366760422639344, guid: 6ae4665cf501c6e47ad19a37c19b2364,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1709366760422639344, guid: 6ae4665cf501c6e47ad19a37c19b2364,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1709366760422639344, guid: 6ae4665cf501c6e47ad19a37c19b2364,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1709366760422639344, guid: 6ae4665cf501c6e47ad19a37c19b2364,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1709366760422639344, guid: 6ae4665cf501c6e47ad19a37c19b2364,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1709366760422639344, guid: 6ae4665cf501c6e47ad19a37c19b2364,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8850365060977371982, guid: 6ae4665cf501c6e47ad19a37c19b2364,
-        type: 3}
-      propertyPath: m_Name
-      value: Zombie
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 6ae4665cf501c6e47ad19a37c19b2364, type: 3}
 --- !u!114 &116179674 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6881240401751341461, guid: a45ce5f91559e554886ee9bea103bd8e,
@@ -807,6 +739,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -376985652383929975, guid: 3bf2a48ac0f0d2d4fb2d3ea784cd1111,
+        type: 3}
+      propertyPath: knockbackDamage
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -376985652383929975, guid: 3bf2a48ac0f0d2d4fb2d3ea784cd1111,
+        type: 3}
+      propertyPath: targetMask.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 945555528487280985, guid: 3bf2a48ac0f0d2d4fb2d3ea784cd1111,
         type: 3}
       propertyPath: m_Name
@@ -815,7 +757,7 @@ PrefabInstance:
     - target: {fileID: 3023926817728269881, guid: 3bf2a48ac0f0d2d4fb2d3ea784cd1111,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.529034
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 3023926817728269881, guid: 3bf2a48ac0f0d2d4fb2d3ea784cd1111,
         type: 3}
@@ -825,7 +767,7 @@ PrefabInstance:
     - target: {fileID: 3023926817728269881, guid: 3bf2a48ac0f0d2d4fb2d3ea784cd1111,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 22.46
+      value: -85.6
       objectReference: {fileID: 0}
     - target: {fileID: 3023926817728269881, guid: 3bf2a48ac0f0d2d4fb2d3ea784cd1111,
         type: 3}
@@ -2708,4 +2650,3 @@ SceneRoots:
   - {fileID: 2411890457599202609}
   - {fileID: 7956742930500360468}
   - {fileID: 8078335967517005195}
-  - {fileID: 110311179}

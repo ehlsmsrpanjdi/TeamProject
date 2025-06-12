@@ -25,11 +25,25 @@ public class ZombieSpawner : MonoBehaviour
         for (int i = 0; i < zombiesPerWave; i++)
         {
             Vector3 randomPos = GetRandomPositionInArea();
+
+            // ✅ NavMesh 위 위치로 보정
+            if (UnityEngine.AI.NavMesh.SamplePosition(randomPos, out UnityEngine.AI.NavMeshHit hit, 1f, UnityEngine.AI.NavMesh.AllAreas))
+            {
+                randomPos = hit.position;
+            }
+            else
+            {
+                Debug.LogWarning("[ZombieSpawner] NavMesh 위에서 위치를 찾지 못했습니다");
+                continue; // 이 위치는 스킵하고 다음으로
+            }
+
             GameObject zombie = zombiePool.GetZombie(randomPos);
             if (zombie == null)
             {
                 break;
             }
+
+            zombie.transform.position = randomPos;
         }
     }
 

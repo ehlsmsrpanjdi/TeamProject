@@ -6,6 +6,7 @@ public class KnockbackArea : MonoBehaviour
     public float radius = 3f;
     public float interval = 0.5f;
     public float knockbackForce = 5f;
+    public int knockbackDamage = 0;
     public LayerMask targetMask;
 
     private void OnEnable()
@@ -27,7 +28,7 @@ public class KnockbackArea : MonoBehaviour
                 if (target != null)
                 {
                     Vector3 dir = hit.transform.position - transform.position;
-                    target.TakeDamage(0, transform.position, knockbackForce);
+                    target.TakeDamage(knockbackDamage, transform.position, knockbackForce);
                 }
             }
 
@@ -43,3 +44,4 @@ public class KnockbackArea : MonoBehaviour
     }
 #endif
 }
+

@@ -738,8 +738,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chrData:
   - {fileID: 11400000, guid: 144ea01d0b6af09428ca593fbd5e6261, type: 2}
-  - {fileID: 11400000, guid: 8aea71ef95931044fb132802afca0c61, type: 2}
-  - {fileID: 11400000, guid: c7286b6b6f5d80c46ba976e20534a51f, type: 2}
+  - {fileID: 11400000, guid: 95a0694075e09824aa7ee0ed8d29d382, type: 2}
+  - {fileID: 11400000, guid: c84dd35dc1ebc5148997f4b75a6ce5c5, type: 2}
   chrPrefab: {fileID: 1045027572587088549, guid: b5d9359d3633b884db3237311a7cc2a0,
     type: 3}
 --- !u!4 &1845270412

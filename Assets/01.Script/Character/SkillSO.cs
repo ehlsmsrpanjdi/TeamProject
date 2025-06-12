@@ -9,4 +9,5 @@ public class Skill : ScriptableObject
     public string skillDescription;
     public float skillDamage;
     public float skillCooldown;
+    //스킬 범위 추가 가능
 }

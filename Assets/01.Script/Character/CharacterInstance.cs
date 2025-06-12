@@ -8,18 +8,14 @@ public class CharacterInstance
 
     public int enhancementLevel = 0; // 강화 레벨 (랭크와 별도)
 
-    public Rank currentRank
+    public CharacterInstance(CharacterDataSO data)
     {
-        get
-        {
-            return characterData.startRank;
-            // 초기 시작 랭크는 캐릭터에서 설정
-        }
-        set
-        {
-            characterData.startRank = value;
-        }
+        characterData = data;
+        _currentRank = data.startRank;
     }
+
+    private Rank _currentRank;
+    public Rank currentRank {get => _currentRank; set => _currentRank = value; }
 
     public int CurrentAttack => Mathf.RoundToInt(
         characterData.baseAttack * GetRankInfo().attackMultiplier + GetEnhancementBonus()

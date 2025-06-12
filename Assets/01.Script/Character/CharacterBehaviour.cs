@@ -4,18 +4,6 @@ using UnityEngine;
 
 public class CharacterBehaviour : MonoBehaviour
 {
-    public CharacterInstance chrInstance;
-
-    public void Start()
-    {
-        chrInstance = GetComponent<CharacterInstance>();
-    }
-
-    public void Update()
-    {
-
-    }
-
     void SpawnCharacter()
     {
 

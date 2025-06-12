@@ -39,6 +39,21 @@ public class CharacterInventory : MonoBehaviour
             Debug.Log($"{characters.character.Name}, 등급: {characters.rank}");
         }
     }
+
+    /*public DrawResult GetOwnedCharacter(int index)
+    {
+        if (index >= 0 && index < ownedCharacters.Count)
+        {
+            return ownedCharacters[index];
+        }
+        return default(DrawResult);
+    }*/
+
+    public List<DrawResult> GetOwnedCharacters()
+    {
+        return new List<DrawResult>(ownedCharacters);
+    }
+
     private void OnDestroy()
     {
         GachaManager.Instance.OnCharacterDraw -= AddCharacter; // 오브젝트가 사라질 때 이벤트 구독 해지

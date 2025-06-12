@@ -26,7 +26,6 @@ public class GachaTest : MonoBehaviour
     }
 
 
-
     private void OnDestroy()
     {
         GachaManager.Instance.OnCharacterDraw -= HandleGacha;

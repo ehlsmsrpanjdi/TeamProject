@@ -3,16 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum Rank
-{
-    C,
-    B,
-    A,
-    S,
-    SS,
-    SSS,
-}
-
 public struct DrawResult
 {
     public CharacterData character;

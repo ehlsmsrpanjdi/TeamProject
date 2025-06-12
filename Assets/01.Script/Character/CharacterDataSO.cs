@@ -21,6 +21,7 @@ public class CharacterDataSO : ScriptableObject
 
     public int baseAttack; // 기본 공격력
     public int baseHealth; // 기본 체력
+    public Rank startRank; // 시작 랭크
 
     public List<RankInfoSO> rankInfo;
 }

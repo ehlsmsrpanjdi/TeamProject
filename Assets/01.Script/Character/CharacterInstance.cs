@@ -8,7 +8,18 @@ public class CharacterInstance
 
     public int enhancementLevel = 0; // 강화 레벨 (랭크와 별도)
 
-    public Rank currentRank = Rank.C; // 초기 시작 랭크
+    public Rank currentRank
+    {
+        get
+        {
+            return characterData.startRank;
+            // 초기 시작 랭크는 캐릭터에서 설정
+        }
+        set
+        {
+            characterData.startRank = value;
+        }
+    }
 
     public int CurrentAttack => Mathf.RoundToInt(
         characterData.baseAttack * GetRankInfo().attackMultiplier + GetEnhancementBonus()
@@ -29,7 +40,7 @@ public class CharacterInstance
 
     public void SetRank(Rank newRank)
     {
-        currentRank = newRank; //currentRank에 새로운 랭크 넣어주기
+        currentRank = newRank; //currentRank에 새로운 랭크 넣어주기. 랭크업시 활용??
     }
 
     private float GetEnhancementBonus()

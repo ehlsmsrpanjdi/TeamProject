@@ -16,6 +16,7 @@ MonoBehaviour:
   characterImage: {fileID: 0}
   baseAttack: 130
   baseHealth: 1200
+  startRank: 1
   rankInfo:
   - {fileID: 11400000, guid: 7e66e7f9eaf580b458cef33ab13150b9, type: 2}
   - {fileID: 11400000, guid: b1f07fefb07fbc84ea460cb45dacea83, type: 2}

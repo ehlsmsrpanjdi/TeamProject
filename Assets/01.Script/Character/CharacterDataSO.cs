@@ -23,5 +23,17 @@ public class CharacterDataSO : ScriptableObject
     public int baseHealth; // 기본 체력
     public Rank startRank; // 시작 랭크
 
-    public List<RankInfoSO> rankInfo;
+    public List<RankInfo> rankInfo;
+}
+
+
+[System.Serializable]
+public class RankInfo
+{
+    public Rank rank;
+    public float attackMultiplier; //랭크업 당 증가 되는 기본 공격력 배율
+    public float hpMultiplier; //랭크업 당 증가 되는 기본 체력 배율
+    public List<Skill> Skills;
+    public int requiredOwnedCount; //랭크업 시 필요한 개수
+
 }

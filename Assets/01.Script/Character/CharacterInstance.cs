@@ -32,7 +32,7 @@ public class CharacterInstance
     public List<Skill> CurrentSkills => GetRankInfo().Skills;
 
 
-    public RankInfoSO GetRankInfo()
+    public RankInfo GetRankInfo()
     {
         //랭크 정보 가지고 오기.
         return characterData.rankInfo.Find(info => info.rank == currentRank);

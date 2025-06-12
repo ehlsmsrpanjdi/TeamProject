@@ -15,13 +15,14 @@ public class ZombieStatHandler : MonoBehaviour
     [Header("사거리")]
     public float defaultAttackRange = 2f;
 
-    public int MaxHealth { get; private set; }
-    public int CurrentHealth { get; private set; }
-    public int Damage { get; private set; }
-    public float MoveSpeed { get; private set; }
-    public float AttackDelay { get; private set; }
-    public float AttackRange { get; private set; }
+    public int MaxHealth { get; private set; }      // 최대 체력
+    public int CurrentHealth { get; private set; }  // 현재 체력
+    public int Damage { get; private set; }          // 공격력
+    public float MoveSpeed { get; private set; }     // 이동 속도
+    public float AttackDelay { get; private set; }   // 공격 딜레이
+    public float AttackRange { get; private set; }   // 공격 사거리
 
+    //기본값으로 스탯 세팅
     private void Awake()
     {
         MaxHealth = defaultMaxHealth;
@@ -32,6 +33,7 @@ public class ZombieStatHandler : MonoBehaviour
         AttackRange = defaultAttackRange;
     }
 
+    // 외부에서 전달받은 스탯 데이터로 세팅
     public void SetStats(ZombieStats stats)
     {
         MaxHealth = stats.maxHealth;
@@ -42,6 +44,7 @@ public class ZombieStatHandler : MonoBehaviour
         AttackRange = stats.attackRange;
     }
 
+    // 대미지 처리, 체력이 0 이하가 되면 true 반환 (사망 신호)
     public bool TakeDamage(int amount)
     {
         CurrentHealth -= amount;
@@ -53,6 +56,7 @@ public class ZombieStatHandler : MonoBehaviour
         return false;
     }
 
+    // 체력 초기화 (최대 체력으로 복원)
     public void ResetHealth()
     {
         CurrentHealth = MaxHealth;

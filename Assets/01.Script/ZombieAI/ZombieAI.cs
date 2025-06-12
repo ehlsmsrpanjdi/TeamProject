@@ -5,34 +5,40 @@ using System.Collections;
 [RequireComponent(typeof(ZombieStatHandler))]
 public class ZombieAI : MonoBehaviour, IDamageable
 {
-    public enum State { Idle, Chase, Attack, Die }
+    // 좀비 행동 상태
+    public enum State
+    {
+        Idle,
+        Chase,
+        Attack,
+        Die
+    }
+
     private State currentState;
 
-    private NavMeshAgent agent;
-    private Animator animator;
-    private Rigidbody rb;
-    private Renderer zombieRenderer;
-    private Transform target;
-    private ZombieStatHandler statHandler;
-    private ZombiePool pool;
-    private WaveManager waveManager;
+    private NavMeshAgent agent; // 네비메시 에이전트
+    private Animator animator; // 애니메이터
+    private Rigidbody rb; // 리지드바디
+    private Renderer zombieRenderer; // 렌더러 (피격 시 색변경용)
+    private Transform target; // 플레이어 Transform
+    private ZombieStatHandler statHandler; // 좀비 스탯 핸들러
+    private ZombiePool pool; // 좀비 풀
+    private WaveManager waveManager; // 웨이브 매니저
 
-    [Header("디버그용 공격 범위")]
-    [SerializeField] private float debugAttackRange = 2f;
+    [Header("디버그용 공격 범위")] [SerializeField]
+    private float debugAttackRange = 2f;
 
-    [Header("접근거리")]
-    public float stopDistance = 2f;
+    [Header("접근거리")] public float stopDistance = 2f;
 
-    [Header("대미지 점멸")]
-    public float flashDuration = 0.1f;
+    [Header("대미지 점멸")] public float flashDuration = 0.1f;
 
-    [Header("넉백회복")]
-    public float knockbackRecoverTime = 0.3f;
+    [Header("넉백회복")] public float knockbackRecoverTime = 0.3f;
 
-    private float attackTimer;
-    private Color originalColor;
-    private bool isKnockback = false;
+    private float attackTimer; // 공격 딜레이 타이머
+    private Color originalColor; // 원래 색상 저장
+    private bool isKnockback = false; // 넉백 중인지 여부
 
+    // 오브젝트 활성화 시 초기화
     private void OnEnable()
     {
         if (agent == null) agent = GetComponent<NavMeshAgent>();
@@ -40,15 +46,16 @@ public class ZombieAI : MonoBehaviour, IDamageable
         if (animator == null) animator = GetComponent<Animator>();
         if (statHandler == null) statHandler = GetComponent<ZombieStatHandler>();
 
-        target = GameObject.FindWithTag("Player")?.transform;
+        target = GameObject.FindWithTag("Player")?.transform; // 플레이어 찾기
 
-        statHandler.ResetHealth();
+        statHandler.ResetHealth(); // 체력 초기화
 
-        ChangeState(State.Chase);
+        ChangeState(State.Chase); // 초기 상태를 추적으로 설정
 
         rb.velocity = Vector3.zero;
         rb.isKinematic = true;
 
+        // 현재 위치를 NavMesh 위로 보정
         if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 1f, NavMesh.AllAreas))
         {
             transform.position = hit.position;
@@ -65,18 +72,23 @@ public class ZombieAI : MonoBehaviour, IDamageable
         agent.speed = statHandler.MoveSpeed;
     }
 
+    // 시작 시 참조 캐싱
     private void Awake()
     {
         pool = FindObjectOfType<ZombiePool>();
         statHandler = GetComponent<ZombieStatHandler>();
     }
+
+    // 시작 시 웨이브 매니저 참조 캐싱
     private void Start()
     {
         waveManager = FindObjectOfType<WaveManager>();
     }
+
+    // 매 프레임 상태에 따른 행동 실행
     private void Update()
     {
-        if (currentState == State.Die || isKnockback) return;
+        if (currentState == State.Die || isKnockback) return; // 죽었거나 넉백 중이면 행동 중지
 
         switch (currentState)
         {
@@ -89,18 +101,21 @@ public class ZombieAI : MonoBehaviour, IDamageable
         }
     }
 
+    // 플레이어를 추적하는 상태
     private void Chase()
     {
         if (target == null) return;
 
         float dist = Vector3.Distance(transform.position, target.position);
 
+        // 공격 범위 내에 들어오면 공격 상태로 전환
         if (dist <= statHandler.AttackRange)
         {
             ChangeState(State.Attack);
             return;
         }
 
+        // 플레이어와 일정 거리 이상 떨어져 있으면 이동
         if (dist > stopDistance)
         {
             if (agent.isOnNavMesh)
@@ -125,26 +140,26 @@ public class ZombieAI : MonoBehaviour, IDamageable
             if (animator != null && animator.runtimeAnimatorController != null)
                 animator.SetBool("", false);
 
+            // 플레이어를 향해 부드럽게 회전
             Vector3 lookDir = target.position - transform.position;
             lookDir.y = 0;
             if (lookDir != Vector3.zero)
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), 10f * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir),
+                    10f * Time.deltaTime);
         }
     }
-
-
 
     private void Attack()
     {
         if (target == null) return;
 
-        agent.ResetPath();
+        agent.ResetPath(); // 이동 경로 초기화
 
         // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
         if (animator != null && animator.runtimeAnimatorController != null)
             animator.SetBool("", false);
 
-        transform.LookAt(target);
+        transform.LookAt(target); // 플레이어를 바라봄
 
         attackTimer += Time.deltaTime;
 
@@ -152,6 +167,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         {
             Debug.Log("[ZombieAI] 공격 시도");
 
+            // 공격 대상이 IDamageable 인터페이스 구현 여부 확인 후 대미지 전달
             IDamageable damageTarget = target.GetComponent<IDamageable>();
             if (damageTarget != null)
             {
@@ -163,9 +179,11 @@ public class ZombieAI : MonoBehaviour, IDamageable
                 Debug.LogWarning("[ZombieAI] 대상이 IDamageable 아님");
             }
 
-            attackTimer = 0;
+            attackTimer = 0; // 타이머 초기화
         }
     }
+
+    // 에디터에서 공격 범위를 시각화하는 함수
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -173,12 +191,14 @@ public class ZombieAI : MonoBehaviour, IDamageable
         Gizmos.DrawWireSphere(center, debugAttackRange);
     }
 
+    // 상태 변경
     private void ChangeState(State newState)
     {
         currentState = newState;
         attackTimer = 0;
     }
 
+    // 대미지를 받음
     public void TakeDamage(int amount, Vector3 attackerPosition, float knockbackForce)
     {
         bool isDead = statHandler.TakeDamage(amount);
@@ -188,11 +208,12 @@ public class ZombieAI : MonoBehaviour, IDamageable
         }
         else
         {
-            StartCoroutine(FlashRed());
-            StartCoroutine(ApplyKnockback(attackerPosition, knockbackForce));
+            StartCoroutine(FlashRed()); // 붉은색 점멸 효과 시작
+            StartCoroutine(ApplyKnockback(attackerPosition, knockbackForce)); // 넉백 효과 시작
         }
     }
 
+    // 붉은색 점멸 효과 코루틴
     private IEnumerator FlashRed()
     {
         if (zombieRenderer == null) yield break;
@@ -202,6 +223,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         zombieRenderer.material.color = originalColor;
     }
 
+    // 넉백 효과 코루틴
     private IEnumerator ApplyKnockback(Vector3 attackerPosition, float force)
     {
         if (rb == null) yield break;
@@ -221,6 +243,8 @@ public class ZombieAI : MonoBehaviour, IDamageable
         agent.enabled = true;
         isKnockback = false;
     }
+
+    // 좀비 사망 처리
     public void Die()
     {
         if (currentState == State.Die) return;
@@ -238,22 +262,25 @@ public class ZombieAI : MonoBehaviour, IDamageable
             rb.velocity = Vector3.zero;
             rb.isKinematic = true;
         }
+
         // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
         if (animator != null && animator.runtimeAnimatorController != null)
-            animator.SetTrigger("die");
+            animator.SetTrigger("");
 
-
+        // 웨이브 매니저에 좀비 사망 알림
         waveManager?.OnZombieDied();
 
+        // 풀에 반환 대기 시작
         StartCoroutine(ReturnToPoolAfterDelay(2f));
     }
 
-
+    // 지정 시간 후 풀에 좀비 반환
     private IEnumerator ReturnToPoolAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         pool.ReturnZombie(gameObject);
 
+        // 안전을 위해 웨이브 매니저에 추가 사망 알림
         FindObjectOfType<WaveManager>()?.OnZombieDied();
     }
 }

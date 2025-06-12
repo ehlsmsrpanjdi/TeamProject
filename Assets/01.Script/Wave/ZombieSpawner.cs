@@ -5,28 +5,13 @@ public class ZombieSpawner : MonoBehaviour
     public ZombiePool zombiePool;
     public Transform spawnAreaCenter;
     public Vector2 spawnAreaSize = new Vector2(10f, 10f);
-    public float spawnInterval = 5f;
-    public int zombiesPerWave = 5;
 
-    private float timer;
-
-    private void Update()
+    public void SpawnWave(int zombieCount)
     {
-        timer += Time.deltaTime;
-        if (timer >= spawnInterval)
-        {
-            SpawnWave();
-            timer = 0;
-        }
-    }
-
-    private void SpawnWave()
-    {
-        for (int i = 0; i < zombiesPerWave; i++)
+        for (int i = 0; i < zombieCount; i++)
         {
             Vector3 randomPos = GetRandomPositionInArea();
 
-            // ✅ NavMesh 위 위치로 보정
             if (UnityEngine.AI.NavMesh.SamplePosition(randomPos, out UnityEngine.AI.NavMeshHit hit, 1f, UnityEngine.AI.NavMesh.AllAreas))
             {
                 randomPos = hit.position;
@@ -34,14 +19,11 @@ public class ZombieSpawner : MonoBehaviour
             else
             {
                 Debug.LogWarning("[ZombieSpawner] NavMesh 위에서 위치를 찾지 못했습니다");
-                continue; // 이 위치는 스킵하고 다음으로
+                continue;
             }
 
             GameObject zombie = zombiePool.GetZombie(randomPos);
-            if (zombie == null)
-            {
-                break;
-            }
+            if (zombie == null) break;
 
             zombie.transform.position = randomPos;
         }

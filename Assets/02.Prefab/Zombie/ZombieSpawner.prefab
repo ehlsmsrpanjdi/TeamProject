@@ -76,8 +76,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6493d02c530bbd42a9e8ca82dc3f909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zombiePool: {fileID: 0}
+  zombiePool: {fileID: 6881240401751341461, guid: a45ce5f91559e554886ee9bea103bd8e,
+    type: 3}
   spawnAreaCenter: {fileID: 266974855827010246}
   spawnAreaSize: {x: 20, y: 20}
-  spawnInterval: 5
   zombiesPerWave: 5

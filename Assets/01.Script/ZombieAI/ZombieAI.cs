@@ -15,6 +15,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
     private Transform target;
     private ZombieStatHandler statHandler;
     private ZombiePool pool;
+    private WaveManager waveManager;
 
     [Header("디버그용 공격 범위")]
     [SerializeField] private float debugAttackRange = 2f;
@@ -69,7 +70,10 @@ public class ZombieAI : MonoBehaviour, IDamageable
         pool = FindObjectOfType<ZombiePool>();
         statHandler = GetComponent<ZombieStatHandler>();
     }
-
+    private void Start()
+    {
+        waveManager = FindObjectOfType<WaveManager>();
+    }
     private void Update()
     {
         if (currentState == State.Die || isKnockback) return;
@@ -222,17 +226,34 @@ public class ZombieAI : MonoBehaviour, IDamageable
         if (currentState == State.Die) return;
 
         ChangeState(State.Die);
-        agent.isStopped = true;
-        agent.enabled = false;
-        rb.isKinematic = true;
-        animator.SetTrigger("die");
+
+        if (agent != null && agent.enabled)
+        {
+            agent.isStopped = true;
+            agent.enabled = false;
+        }
+
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.isKinematic = true;
+        }
+        // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
+        if (animator != null && animator.runtimeAnimatorController != null)
+            animator.SetTrigger("die");
+
+
+        waveManager?.OnZombieDied();
 
         StartCoroutine(ReturnToPoolAfterDelay(2f));
     }
+
 
     private IEnumerator ReturnToPoolAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
         pool.ReturnZombie(gameObject);
+
+        FindObjectOfType<WaveManager>()?.OnZombieDied();
     }
 }

@@ -137,6 +137,7 @@ MonoBehaviour:
   radius: 3
   interval: 0.5
   knockbackForce: 5
+  knockbackDamage: 0
   targetMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8

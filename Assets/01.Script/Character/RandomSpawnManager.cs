@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RandomSpawnManager : MonoBehaviour
@@ -34,9 +35,9 @@ public class RandomSpawnManager : MonoBehaviour
 
     void InfoCharacter()
     {
-        Debug.Log($"이름 : {chrInstance.characterData.name}");
-        Debug.Log($"랭크 : {chrInstance.currentRank}");
-        Debug.Log($"보유 스킬 : {chrInstance.CurrentSkills}");
+        Debug.Log($"이름 : {chrInstance.characterData.characterName}");
+        Debug.Log($"랭크 : {chrInstance.characterData.startRank}");
+        Debug.Log($"보유 스킬 : {string.Join(", ", chrInstance.CurrentSkills.Select(skill => skill.skillName))}");
         Debug.Log($"공격력 : {chrInstance.CurrentAttack}");
         Debug.Log($"체력 : {chrInstance.CurrentHP}");
 

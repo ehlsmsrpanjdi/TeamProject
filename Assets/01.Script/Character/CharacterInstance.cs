@@ -12,6 +12,7 @@ public class CharacterInstance
     public CharacterInstance(CharacterDataSO data)
     {
         characterData = data;
+        currentRank = data.startRank;
     }
 
     private Rank _currentRank;

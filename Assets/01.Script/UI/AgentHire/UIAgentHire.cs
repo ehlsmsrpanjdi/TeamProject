@@ -24,7 +24,13 @@ public class UIAgentHire : UIBase
         HireButton.OnClick = Hire;
         HireMultiButton.OnClick = HireMulti;
 
-        ReturnButton.OnClick = UIManager.Instance.CloseUI<UIAgentHire>;
+        ReturnButton.OnClick = ReturnButtonOn;
+    }
+
+    void ReturnButtonOn()
+    {
+        UIManager.Instance.CloseUI<UIAgentHire>();
+        UIManager.Instance.OpenUI<UILobby>();
     }
 
     void HireMulti()

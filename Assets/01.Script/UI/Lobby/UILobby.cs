@@ -28,7 +28,7 @@ public class UILobby : UIBase
 
     private void Awake()
     {
-        Agent_Button.OnClick = UIManager.Instance.OpenUI<UIAgentHire>;
+        Agent_Button.OnClick = OnAgentClick;
         Quest_Button.OnClick = UIManager.Instance.OpenUI<UIQuestScroll>;
         //BattleField_Button .OnClick = UIManager.Instance.OpenUI<UIBattleField>;
         Management_Button.OnClick = OnManagementClick;
@@ -38,7 +38,12 @@ public class UILobby : UIBase
     void OnManagementClick()
     {
         UIManager.Instance.OpenUI<UIManagement>();
-        //UIManager.Instance.CloseUI<UIStatus>(); 
+        UIManager.Instance.CloseUI<UILobby>();
+    }
 
+    void OnAgentClick()
+    {
+        UIManager.Instance.OpenUI<UIAgentHire>();
+        UIManager.Instance.CloseUI<UILobby>();
     }
 }

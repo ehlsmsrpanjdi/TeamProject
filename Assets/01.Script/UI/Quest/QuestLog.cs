@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 public class QuestLog : MonoBehaviour
 {
-    [SerializeField] Image ConfirmButton;
+    [SerializeField] OnClickImage ConfirmButton;
 
     const string QuestNameText = "QuestNameText";
     const string QuestDescriptionText = "QuestDescriptionText";
@@ -16,9 +17,9 @@ public class QuestLog : MonoBehaviour
 
     private void Reset()
     {
-        QuestName = GameObject.Find(QuestNameText).GetComponent<TextMeshProUGUI>();
-        QuestDescription = GameObject.Find(QuestNameText).GetComponent<TextMeshProUGUI>();
-        ConfirmButton = GetComponentInChildren<Image>();
+        QuestName = transform.Find(QuestNameText).GetComponent<TextMeshProUGUI>();
+        QuestDescription = transform.Find(QuestDescriptionText).GetComponent<TextMeshProUGUI>();
+        ConfirmButton = GetComponentInChildren<OnClickImage>();
     }
 
     public void SetQuestName(string name)
@@ -31,4 +32,8 @@ public class QuestLog : MonoBehaviour
         QuestDescription.text = description;
     }
 
+    public void SetQuestAction(Action _Action)
+    {
+        ConfirmButton.OnClick = _Action;
+    }
 }

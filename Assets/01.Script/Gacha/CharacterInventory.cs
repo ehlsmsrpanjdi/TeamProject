@@ -40,14 +40,14 @@ public class CharacterInventory : MonoBehaviour
         }
     }
 
-    public DrawResult GetOwnedCharacter(int index)
+    /*public DrawResult GetOwnedCharacter(int index)
     {
         if (index >= 0 && index < ownedCharacters.Count)
         {
             return ownedCharacters[index];
         }
         return default(DrawResult);
-    }
+    }*/
 
     public List<DrawResult> GetOwnedCharacters()
     {

@@ -8,15 +8,15 @@ public class UIOption : UIBase
     const string Img_Exit = "Img_Exit";
     const string Img_Option = "Img_Option";
 
-    [SerializeField] UIOptionImage Continue;
-    [SerializeField] UIOptionImage Exit;
-    [SerializeField] UIOptionImage Option;
+    [SerializeField] OnClickImage Continue;
+    [SerializeField] OnClickImage Exit;
+    [SerializeField] OnClickImage Option;
 
     private void Reset()
     {
-        Continue = this.TryFindChild(Img_Continue).GetComponent<UIOptionImage>();
-        Exit = this.TryFindChild(Img_Exit).GetComponent<UIOptionImage>();
-        Option = this.TryFindChild(Img_Option).GetComponent<UIOptionImage>();
+        Continue = this.TryFindChild(Img_Continue).GetComponent<OnClickImage>();
+        Exit = this.TryFindChild(Img_Exit).GetComponent<OnClickImage>();
+        Option = this.TryFindChild(Img_Option).GetComponent<OnClickImage>();
     }
 
     private void Awake()

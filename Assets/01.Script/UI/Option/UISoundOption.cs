@@ -7,13 +7,13 @@ public class UISoundOption : UIBase
 {
     [SerializeField] Slider[] MusicSlider;
 
-    [SerializeField] UIOptionImage Return;
+    [SerializeField] OnClickImage Return;
 
     private void Reset()
     {
         MusicSlider = GetComponentsInChildren<Slider>();
 
-        Return = this.TryFindChild("Img_Return").GetComponent<UIOptionImage>();
+        Return = this.TryFindChild("Img_Return").GetComponent<OnClickImage>();
     }
 
     private void Awake()

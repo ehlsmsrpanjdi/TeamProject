@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,29 @@ public class QuestManager : MonoBehaviour
 {
     public List<QuestData> dailyQuests = new();
     private int playTimeSeconds = 0;
+
+    static UIManager instance;
+    public static UIManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<UIManager>();
+                if (instance == null)
+                {
+                    GameObject obj = new GameObject("UIManager");
+                    instance = obj.AddComponent<UIManager>();
+                    DontDestroyOnLoad(instance.gameObject);
+                }
+                else
+                {
+                    DontDestroyOnLoad(instance.gameObject);
+                }
+            }
+            return instance;
+        }
+    }
 
     private void Start()
     {
@@ -91,10 +115,13 @@ public class QuestManager : MonoBehaviour
                     case QuestType.DailyLogin:
                         quest.IsCompleted = true;
                         SaveQuestProgressToPrefs(quest);
+                        CheckAllClearQuest();
                         break;
                 }
             }
         }
+
+        CheckAllClearQuest();
     }
 
     // 퀘스트 클리어 버튼과 연결, 보상 수령. 버튼 연결 시 ClaimReward(dailyQuests[0])처럼 연결.
@@ -156,12 +183,12 @@ public class QuestManager : MonoBehaviour
         SaveQuestProgressToPrefs(attackQuest);
         Debug.Log($"강화 횟수: {attackQuest.CurrentValue} / {attackQuest.TargetValue}");
 
-
         if (attackQuest.CurrentValue >= attackQuest.TargetValue)
         {
             attackQuest.IsCompleted = true;
             SaveQuestProgressToPrefs(attackQuest);
             Debug.Log($"공격력 강화 퀘스트 완료!");
+            CheckAllClearQuest();
         }
     }
 
@@ -204,8 +231,28 @@ public class QuestManager : MonoBehaviour
             {
                 playQuest.IsCompleted = true;
                 SaveQuestProgressToPrefs(playQuest);
+                CheckAllClearQuest();
                 Debug.Log($"10분 이상 플레이 퀘스트 완료!");
             }
+        }
+    }
+
+
+    private void CheckAllClearQuest()
+    {
+        var allClearQuest = dailyQuests.Find(q => q.Type == QuestType.AllClear);
+        if (allClearQuest == null || allClearQuest.IsCompleted)
+            return;
+
+        bool allOthersCompleted = dailyQuests
+            .Where(q => q.Type != QuestType.AllClear)
+            .All(q => q.IsCompleted);
+
+        if (allOthersCompleted)
+        {
+            allClearQuest.IsCompleted = true;
+            SaveQuestProgressToPrefs(allClearQuest);
+            Debug.Log("전체 클리어 보상 퀘스트 완료!");
         }
     }
 }

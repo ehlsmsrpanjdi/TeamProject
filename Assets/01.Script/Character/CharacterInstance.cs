@@ -12,8 +12,8 @@ public class CharacterInstance
     public int key;
     public string charcterName;
     public Sprite characterImage;
-    public int baseAttack;
-    public int baseHealth;
+    public float baseAttack;
+    public float baseHealth;
     public Rank currentRank;
     public int enhancementLevel;
     public List<RankInfo> rankInfo;
@@ -54,7 +54,7 @@ public class CharacterInstance
     /// <summary>
     /// 현재 공격력 계산
     /// </summary>
-    public int GetCurrentAttack()
+    public float GetCurrentAttack()
     {
         var rankInfo = GetCurrentRankInfo();
         if (rankInfo == null) return baseAttack;
@@ -65,12 +65,12 @@ public class CharacterInstance
     /// <summary>
     /// 현재 체력 계산
     /// </summary>
-    public int GetCurrentHealth()
+    public float GetCurrentHealth()
     {
         var rankInfo = GetCurrentRankInfo();
         if (rankInfo == null) return baseHealth;
 
-        return Mathf.RoundToInt(baseHealth * rankInfo.hpMultiplier);
+        return Mathf.RoundToInt(baseHealth * rankInfo.hpMultiplier * GetEnhancementBonus());
     }
 
     /// <summary>

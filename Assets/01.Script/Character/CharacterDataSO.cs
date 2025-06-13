@@ -20,8 +20,8 @@ public class CharacterDataSO : ScriptableObject
     public string characterName;
     public Sprite characterImage; // 캐릭터 이미지
 
-    public int baseAttack; // 기본 공격력
-    public int baseHealth; // 기본 체력
+    public float baseAttack; // 기본 공격력
+    public float baseHealth; // 기본 체력
     public Rank startRank; // 시작 랭크
 
     public GameObject characterPrefab; // 캐릭터 프리팹

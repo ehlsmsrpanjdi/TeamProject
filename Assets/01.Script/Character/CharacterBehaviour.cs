@@ -15,6 +15,7 @@ public class CharacterBehaviour : MonoBehaviour
     public void Init(CharacterInstance data)
     {
         charInstance = data;
+
     }
     void Update()
     {
@@ -49,12 +50,11 @@ public class CharacterBehaviour : MonoBehaviour
             IDamageable target = closestEnemy.GetComponent<IDamageable>();
             if (target != null)
             {
-                int damage = charInstance != null ? charInstance.GetCurrentAttack() : 10; // 기본 데미지 10f로 fallback
-                target.TakeDamage(damage, transform.position, knockbackForce:1);
+                float damage = charInstance != null ? charInstance.GetCurrentAttack() : 10; // 기본 데미지 10f로 fallback
+                target.TakeDamage((int)damage, transform.position, knockbackForce:1);
                 Debug.Log($"{charInstance.charcterName}이(가) 공격! 데미지: {damage}");
             }
         }
-
     }
 
     //공격 범위 표시 위한 기즈모

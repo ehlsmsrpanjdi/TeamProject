@@ -16,6 +16,11 @@ public class UIManager : MonoBehaviour
                 {
                     GameObject obj = new GameObject("UIManager");
                     instance = obj.AddComponent<UIManager>();
+                    DontDestroyOnLoad(instance.gameObject);
+                }
+                else
+                {
+                    DontDestroyOnLoad(instance.gameObject);
                 }
             }
             return instance;
@@ -39,7 +44,7 @@ public class UIManager : MonoBehaviour
         if (mainCanvas == null)
         {
             mainCanvas = GameObject.Find(MainCanvasName)?.GetComponent<Canvas>();
-            AllUI = mainCanvas.GetComponentsInChildren<UIBase>();
+            AllUI = mainCanvas.GetComponentsInChildren<UIBase>(true);
             foreach (UIBase UI in AllUI)
             {
                 UIDictionary[UI.GetType()] = UI;

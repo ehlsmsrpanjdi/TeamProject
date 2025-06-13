@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UIOptionImage : BaseImage, IPointerClickHandler
+public class OnClickImage : BaseImage, IPointerClickHandler
 {
     public Action OnClick;
 

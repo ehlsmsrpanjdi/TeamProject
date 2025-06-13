@@ -10,15 +10,20 @@ public struct DrawResult
     public Rank rank;
 }
 
+public enum GachaFailReason
+{
+    NotEnoughDiamond,
+    InventoryFull,
+}
+
 public class GachaManager : MonoBehaviour
 {
     public static GachaManager Instance;
     public CharacterDataBase characterDataBase;
     public event Action<DrawResult> OnCharacterDraw; // 캐릭터 뽑기 시 호출되는 이벤트
+    public event Action<GachaFailReason> OnGachaFail;
 
-    private DrawResult lastDrawResult;
-
-    public List<DrawResult> drawnCharacter = new List<DrawResult>(); // DrawResult 구조체로 구성된 새로운 리스트 선언, 뽑은 캐릭터가 저장됨.
+    public int costPerDraw = 100;
 
     private void Awake()
     {
@@ -33,90 +38,99 @@ public class GachaManager : MonoBehaviour
     }
 
     // 가챠 버튼 등을 눌러서 호출
-    public DrawResult DrawCharacter()
+    public List<DrawResult> DrawCharacter(int times)
     {
-        //TODO: 뽑기에 필요한 재화 소모 로직
-
-        // 캐릭터의 랭크를 정함
-        float random = UnityEngine.Random.Range(0f, 100f);
-        Rank rank;
-
-        if (random < 0.1f)
+        if (times <= 0)
         {
-            rank = Rank.SSS; // 0.1%
-        }
-        else if (random < 1f)
-        {
-            rank = Rank.SS; // 0.9%
-        }
-        else if (random < 5f)
-        {
-            rank = Rank.S; // 4%
-        }
-        else if (random < 15f)
-        {
-            rank = Rank.A; // 10%
-        }
-        else if (random < 40f)
-        {
-            rank = Rank.B; // 25%
-        }
-        else
-        {
-            rank = Rank.C; // 60%
-        }
-        // 각 랭크별 확률을 변수로 만들어서 처리할 예정
-
-        List<CharacterDataSO> candidateList = null;
-        switch (rank)
-        {
-            case Rank.SSS:
-                candidateList = characterDataBase.SSSCharacterList;
-                break;
-            case Rank.SS:
-                candidateList = characterDataBase.SSCharacterList;
-                break;
-            case Rank.S:
-                candidateList = characterDataBase.SCharacterList;
-                break;
-            case Rank.A:
-                candidateList = characterDataBase.ACharacterList;
-                break;
-            case Rank.B:
-                candidateList = characterDataBase.BCharacterList;
-                break;
-            case Rank.C:
-                candidateList = characterDataBase.CCharacterList;
-                break;
+            return new List<DrawResult>();
         }
 
-        if (candidateList == null || candidateList.Count == 0)
+        int totalCost = times * costPerDraw;
+
+        bool drawSuccess = Player.Instance.UseDiamond(totalCost);
+
+        if (!drawSuccess)
         {
-            return default;
+            OnGachaFail?.Invoke(GachaFailReason.NotEnoughDiamond);
+            DebugHelper.Log("Not Enough Diamond", this);
+            return new List<DrawResult>();
         }
-        CharacterDataSO drawncharacterSO = candidateList[UnityEngine.Random.Range(0, candidateList.Count)];
 
-        DrawResult result = new DrawResult
-        {
-            character = drawncharacterSO,
-            rank = rank
-        };
-        this.lastDrawResult = result;
-
-        OnCharacterDraw?.Invoke(result);
-        return result;
-    }
-
-    public List<DrawResult> TenTimesDraw()
-    {
         List<DrawResult> resultList = new List<DrawResult>();
 
-        // 가챠 10회 반복
-        for (int i = 0; i < 10; i++)
+
+        for (int i = 0; i < times; i++)
         {
-            resultList.Add(DrawCharacter());
+            // 캐릭터의 랭크를 정함
+            float random = UnityEngine.Random.Range(0f, 100f);
+            Rank rankToDraw;
+
+            if (random < 0.1f)
+            {
+                rankToDraw = Rank.SSS; // 0.1%
+            }
+            else if (random < 1f)
+            {
+                rankToDraw = Rank.SS; // 0.9%
+            }
+            else if (random < 5f)
+            {
+                rankToDraw = Rank.S; // 4%
+            }
+            else if (random < 15f)
+            {
+                rankToDraw = Rank.A; // 10%
+            }
+            else if (random < 40f)
+            {
+                rankToDraw = Rank.B; // 25%
+            }
+            else
+            {
+                rankToDraw = Rank.C; // 60%
+            }
+            // 각 랭크별 확률을 변수로 만들어서 처리할 예정
+
+            List<CharacterDataSO> candidateList = null;
+            switch (rankToDraw)
+            {
+                case Rank.SSS:
+                    candidateList = characterDataBase.SSSCharacterList;
+                    break;
+                case Rank.SS:
+                    candidateList = characterDataBase.SSCharacterList;
+                    break;
+                case Rank.S:
+                    candidateList = characterDataBase.SCharacterList;
+                    break;
+                case Rank.A:
+                    candidateList = characterDataBase.ACharacterList;
+                    break;
+                case Rank.B:
+                    candidateList = characterDataBase.BCharacterList;
+                    break;
+                case Rank.C:
+                    candidateList = characterDataBase.CCharacterList;
+                    break;
+            }
+
+            if (candidateList == null || candidateList.Count == 0)
+            {
+                continue;
+            }
+
+            CharacterDataSO drawncharacterSO = candidateList[UnityEngine.Random.Range(0, candidateList.Count)];
+
+            DrawResult result = new DrawResult
+            {
+                character = drawncharacterSO,
+                rank = rankToDraw
+            };
+
+            resultList.Add(result);
+            OnCharacterDraw?.Invoke(result);
+            DebugHelper.Log($"Draw {drawncharacterSO.characterName} {rankToDraw}", this);
         }
         return resultList;
     }
-
 }

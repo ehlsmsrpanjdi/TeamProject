@@ -37,13 +37,13 @@ public class CharacterInventory : MonoBehaviour
         ownedCharacters.Add(newInstance);
     }
 
-    public void CheckInventory()
-    {
-        foreach (var character in ownedCharacters)
-        {
-            Debug.Log($"이름: {character.characterData.characterName}, 랭크: {character.currentRank}, 공격력: {character.CurrentAttack}");
-        }
-    }
+    // public void CheckInventory()
+    // {
+    //     foreach (var character in ownedCharacters)
+    //     {
+    //         Debug.Log($"이름: {character.characterData.characterName}, 랭크: {character.currentRank}, 공격력: {character.CurrentAttack}");
+    //     }
+    // }
 
     public List<CharacterInstance> GetOwnedCharacters()
     {

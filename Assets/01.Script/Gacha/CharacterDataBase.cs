@@ -5,5 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "CharacterDataBase", menuName = "ScriptableObjects/CharacterDataBase")]
 public class CharacterDataBase : ScriptableObject
 {
-    public List<CharacterData> CharacterList; // CharacterData로 구성된 데이터베이스
+    public List<CharacterDataSO> SSSCharacterList;
+    public List<CharacterDataSO> SSCharacterList;
+    public List<CharacterDataSO> SCharacterList;
+    public List<CharacterDataSO> ACharacterList;
+    public List<CharacterDataSO> BCharacterList;
+    public List<CharacterDataSO> CCharacterList;
 }

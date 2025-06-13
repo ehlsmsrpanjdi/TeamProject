@@ -326,7 +326,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
     // 넉백 효과 코루틴
     private IEnumerator ApplyKnockback(Vector3 attackerPosition, float force)
     {
-        if (rb == null) yield break;
+        if (rb == null || currentState == State.Die) yield break;
 
         isKnockback = true;
         agent.enabled = false;
@@ -337,6 +337,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         rb.AddForce(dir * force, ForceMode.Impulse);
 
         yield return new WaitForSeconds(knockbackRecoverTime);
+        if (currentState == State.Die) yield break;
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero; // 회전 문제 방지
@@ -358,6 +359,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
     // 좀비 사망 처리
     public void Die()
     {
+        StopAllCoroutines();
         if (currentState == State.Die) return;
 
         ChangeState(State.Die);
@@ -370,7 +372,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
         if (rb != null)
         {
-            rb.velocity = Vector3.zero;
             rb.isKinematic = true;
         }
 

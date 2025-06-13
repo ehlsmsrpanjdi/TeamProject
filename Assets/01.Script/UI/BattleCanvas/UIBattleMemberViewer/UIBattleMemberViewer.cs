@@ -16,7 +16,10 @@ public class UIBattleMemberViewer : UIBase
 
     public void AddMember()
     {
-        Instantiate(memberPrefab, transform);
+        GameObject battleMemberUI = Instantiate(memberPrefab, transform);
+        BattleMember component = battleMemberUI.GetComponent<BattleMember>();
+
+        battleMembers.Add(component);
     }
 
 }

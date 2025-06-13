@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class CharacterBehaviour : MonoBehaviour
 {
-    public CharacterInstance _charInstance;
-
     [SerializeField] private float attackRange; //공격 사거리
     [SerializeField] private float attackDelay; //공격 딜레이
     [SerializeField] private float duration; //피격 딜레이
@@ -30,17 +28,17 @@ public class CharacterBehaviour : MonoBehaviour
             }
         }
 
-        // if (closestEnemy != null)
-        // {
-        //     EnemyBehaviour enemy = closestEnemy.GetComponent<EnemyBehaviour>(); //EnemyBehaviour 는 임시 클래스.
-        //     if (enemy != null)
-        //     {
-        //         enemy.TakeDamage(//좀비 데미지); //피격 인터페이스 사용 예정
-        //         Debug.Log($"{_charInstance.characterData.characterName}이(가) {enemy.name}을(를) 공격!");
-        //     }
-        // }
-
-    }
+    //     if (closestEnemy != null)
+    //     {
+    //         ZombieStatHandler enemy = closestEnemy.GetComponent<ZombieStatHandler>(); //EnemyBehaviour 는 임시 클래스.
+    //         if (enemy != null)
+    //         {
+    //             enemy.TakeDamage(CharacterData.instance.); //피격 인터페이스 사용 예정
+    //             Debug.Log($"{_charInstance.characterData.characterName}이(가) {enemy.name}을(를) 공격!");
+    //         }
+    //     }
+    //
+     }
 
     //스킬사용 (액티브로 하기로 했음)
     public void UseSkill()

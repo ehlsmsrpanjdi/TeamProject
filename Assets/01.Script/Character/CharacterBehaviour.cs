@@ -12,9 +12,9 @@ public class CharacterBehaviour : MonoBehaviour
 
     private CharacterInstance charInstance;
 
-    public void Init(CharacterInstance instance)
+    public void Init(CharacterInstance data)
     {
-        charInstance = instance;
+        charInstance = data;
     }
     void Update()
     {
@@ -34,7 +34,7 @@ public class CharacterBehaviour : MonoBehaviour
         Collider closestEnemy = null; // 콜라이더에 몬스터 없음.
         float closestDistance = Mathf.Infinity;
 
-        foreach (var enemyCollider in hitEnemies)
+        foreach (var enemyCollider in hitEnemies) // 가장 가까운 적을 우선적으로 공격
         {
             float distance = Vector3.Distance(transform.position, enemyCollider.transform.position);
             if (distance < closestDistance)
@@ -46,15 +46,22 @@ public class CharacterBehaviour : MonoBehaviour
 
         if (closestEnemy != null)
         {
-            ZombieStatHandler target = closestEnemy.GetComponent<ZombieStatHandler>();
+            IDamageable target = closestEnemy.GetComponent<IDamageable>();
             if (target != null)
             {
                 int damage = charInstance != null ? charInstance.GetCurrentAttack() : 10; // 기본 데미지 10f로 fallback
-                target.TakeDamage(damage);
+                target.TakeDamage(damage, transform.position, knockbackForce:1);
                 Debug.Log($"{charInstance.charcterName}이(가) 공격! 데미지: {damage}");
             }
         }
 
+    }
+
+    //공격 범위 표시 위한 기즈모
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
     //스킬사용 (액티브로 하기로 했음)
@@ -63,7 +70,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     }
 
-    //죽음 (실제로는 죽지 않지만)
+    //죽음. 바리게이트와 캐릭터의 체력을 연결 시킬 예정.
     void Die()
     {
 

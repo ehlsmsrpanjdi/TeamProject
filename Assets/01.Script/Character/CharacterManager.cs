@@ -97,9 +97,9 @@ public class CharacterManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 참전 제거
+    /// 참전 리스트에서 제거
     /// </summary>
-    public bool RemoveDeployedCharacter(int key)
+    public bool RemoveParticipate(int key)
     {
         var character = participated.FirstOrDefault(c => c.key == key);
         if (character != null)
@@ -111,13 +111,17 @@ public class CharacterManager : MonoBehaviour
     }
 
     /// <summary>
-    ///
+    /// 참전 리스트 불러오기 >> 실제로 전투에 참여할 캐릭터들
     /// </summary>
-    /// <returns></returns>
     public List<CharacterInstance> GetParticipateCharacters()
     {
         return participated;
     }
+
+
+    /// <summary>
+    /// 실제로 전투에 참여할 캐릭터 스폰 함수
+    /// </summary>
     public void SpawnParticipateCharacters()
     {
         var deployed = GetParticipateCharacters();
@@ -125,7 +129,7 @@ public class CharacterManager : MonoBehaviour
         for (int i = 0; i < deployed.Count; i++)
         {
             CharacterInstance charInstance = deployed[i];
-            //Transform spawnPoint = spawnPoints[i]; //스폰 포인트
+            //Transform spawnPoint = spawnPoints[i]; //스폰 포인트가 필요할 것으로 보여짐.
 
             GameObject go = Instantiate(charInstance.charPrefab, transform.position , Quaternion.identity); // 스폰포인트 안넣었음.
 

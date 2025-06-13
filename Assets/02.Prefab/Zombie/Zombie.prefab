@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96eea7a17f571e140ba48d5ae307775e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaxHealth: 100
+  defaultMaxHealth: 200
   defaultDamage: 10
   defaultMoveSpeed: 3
   defaultAttackDelay: 1.5

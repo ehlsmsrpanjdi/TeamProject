@@ -18,6 +18,8 @@ MonoBehaviour:
   baseAttack: 150
   baseHealth: 2000
   startRank: 2
+  characterPrefab: {fileID: 1892351455669251049, guid: 75f19c52e13d4a74bada4fa5b38e0584,
+    type: 3}
   enhancementLevel: 0
   rankInfo:
   - rank: 0

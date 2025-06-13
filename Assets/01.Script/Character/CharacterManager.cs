@@ -12,6 +12,7 @@ public class CharacterManager : MonoBehaviour
     public static CharacterManager instance;
 
     private Dictionary<int, CharacterInstance> characters = new();
+    private List<CharacterInstance> participated = new();
 
     private void Awake()
     {
@@ -73,5 +74,66 @@ public class CharacterManager : MonoBehaviour
     public List<CharacterInstance> GetAllCharacters()
     {
         return characters.Values.ToList();
+    }
+
+    /// <summary>
+    /// 참전 리스트에 넣기
+    /// </summary>
+     public bool SelectParticipate(int key)
+    {
+        if (characters.TryGetValue(key, out var character))
+        {
+            if (!participated.Contains(character))
+            {
+                participated.Add(character);
+                return true; // 참전
+            }
+            else
+            {
+                return false; // 이미 참전 중
+            }
+        }
+        return false; // 캐릭터 없음
+    }
+
+    /// <summary>
+    /// 참전 제거
+    /// </summary>
+    public bool RemoveDeployedCharacter(int key)
+    {
+        var character = participated.FirstOrDefault(c => c.key == key);
+        if (character != null)
+        {
+            participated.Remove(character);
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    public List<CharacterInstance> GetParticipateCharacters()
+    {
+        return participated;
+    }
+    public void SpawnParticipateCharacters()
+    {
+        var deployed = GetParticipateCharacters();
+
+        for (int i = 0; i < deployed.Count; i++)
+        {
+            CharacterInstance charInstance = deployed[i];
+            //Transform spawnPoint = spawnPoints[i]; //스폰 포인트
+
+            GameObject go = Instantiate(charInstance.charPrefab, transform.position , Quaternion.identity); // 스폰포인트 안넣었음.
+
+            CharacterBehaviour behaviour = go.GetComponent<CharacterBehaviour>();
+            if (behaviour != null)
+            {
+                behaviour.Init(charInstance); // 캐릭터 데이터 전달
+            }
+        }
     }
 }

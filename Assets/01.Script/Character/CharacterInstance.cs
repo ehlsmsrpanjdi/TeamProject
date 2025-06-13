@@ -18,6 +18,7 @@ public class CharacterInstance
     public int enhancementLevel;
     public List<RankInfo> rankInfo;
     public List<Skill> learnedSkills;
+    public GameObject charPrefab;
 
     public CharacterInstance(CharacterDataSO data)
     {
@@ -28,6 +29,7 @@ public class CharacterInstance
         this.baseHealth = data.baseHealth;
         this.currentRank = data.startRank;
         this.enhancementLevel = data.enhancementLevel;
+        charPrefab = data.characterPrefab;
 
         learnedSkills = LearnSkillByRank(currentRank);
     }

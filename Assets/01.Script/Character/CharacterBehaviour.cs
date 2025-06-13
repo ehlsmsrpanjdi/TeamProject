@@ -11,12 +11,11 @@ public class CharacterBehaviour : MonoBehaviour
     private float lastAttackTime;
 
     private CharacterInstance charInstance;
-    private void Start()
-    {
-        // 예시로 CharacterManager에서 생성된 캐릭터 할당
-        charInstance = CharacterManager.instance.GetCharacter(1001); // key 1001번 캐릭터 가져오기
-    }
 
+    public void Init(CharacterInstance instance)
+    {
+        charInstance = instance;
+    }
     void Update()
     {
         if (Time.time - lastAttackTime >= attackDelay)
@@ -47,12 +46,12 @@ public class CharacterBehaviour : MonoBehaviour
 
         if (closestEnemy != null)
         {
-            ZombieStatHandler enemy = closestEnemy.GetComponent<ZombieStatHandler>();
-            if (enemy != null)
+            ZombieStatHandler target = closestEnemy.GetComponent<ZombieStatHandler>();
+            if (target != null)
             {
                 int damage = charInstance != null ? charInstance.GetCurrentAttack() : 10; // 기본 데미지 10f로 fallback
-                enemy.TakeDamage(damage);
-                Debug.Log($"{charInstance.charcterName}이(가) {enemy.name}을(를) 공격! 데미지: {damage}");
+                target.TakeDamage(damage);
+                Debug.Log($"{charInstance.charcterName}이(가) 공격! 데미지: {damage}");
             }
         }
 

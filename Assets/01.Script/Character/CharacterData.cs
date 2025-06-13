@@ -9,6 +9,7 @@ using UnityEngine;
 public class CharacterData : MonoBehaviour
 {
     [SerializeField] private List<CharacterDataSO> characterList;
+
     private Dictionary<int, CharacterDataSO> Data = new Dictionary<int, CharacterDataSO>();
     public static CharacterData instance;
 
@@ -29,6 +30,8 @@ public class CharacterData : MonoBehaviour
         {
             Data.Add(characterData.key, characterData);
         }
+
+        characterList = null;
     }
 
     public CharacterDataSO GetData(int key)

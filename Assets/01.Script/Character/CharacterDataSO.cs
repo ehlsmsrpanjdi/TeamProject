@@ -24,7 +24,9 @@ public class CharacterDataSO : ScriptableObject
     public int baseHealth; // 기본 체력
     public Rank startRank; // 시작 랭크
 
-    public int enhancementLevel; //강화 수치
+    public GameObject characterPrefab; // 캐릭터 프리팹
+
+    public int enhancementLevel; // 강화 수치
 
     public List<RankInfo> rankInfo;
 }

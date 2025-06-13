@@ -64,7 +64,18 @@ public class QuestManager : MonoBehaviour
                 CurrentValue = 0,
                 IsCompleted = false,
                 IsClaimed = false
-            }
+            },
+            new QuestData
+            {
+                Id = 3,
+                Title = "전체 클리어 보상",
+                Description = "다른 일반퀘스트를 모두 클리어하세요",
+                Type = QuestType.AllClear,
+                TargetValue = 0,
+                CurrentValue = 0,
+                IsCompleted = false,
+                IsClaimed = false
+            },
         };
     }
 

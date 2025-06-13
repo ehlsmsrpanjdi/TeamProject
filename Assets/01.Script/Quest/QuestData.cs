@@ -3,9 +3,10 @@ using UnityEngine;
 
 public enum QuestType
 {
-    IncreaseAttackLevel, // 우선 공격력 업만 테스트
+    IncreaseAttackLevel,
     DailyLogin,
     Play30Minute,
+    AllClear,
 }
 
 [System.Serializable]

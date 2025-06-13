@@ -7,10 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public Player player;
-    public CurrencyManager currency;
     public GachaManager gacha;
-    public UIManager ui;
-    public WaveManager wave;
 
     private void Awake()
     {
@@ -20,10 +17,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             player = FindObjectOfType<Player>();
-            currency = FindObjectOfType<CurrencyManager>();
             gacha = FindObjectOfType<GachaManager>();
-            ui = FindObjectOfType<UIManager>();
-            wave = FindObjectOfType<WaveManager>();
         }
         else
         {

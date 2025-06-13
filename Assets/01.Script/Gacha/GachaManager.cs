@@ -47,11 +47,12 @@ public class GachaManager : MonoBehaviour
 
         int totalCost = times * costPerDraw;
 
-        bool drawSuccess = GameManager.Instance.currency.UseDiamond(totalCost);
+        bool drawSuccess = Player.Instance.UseDiamond(totalCost);
 
         if (!drawSuccess)
         {
             OnGachaFail?.Invoke(GachaFailReason.NotEnoughDiamond);
+            DebugHelper.Log("Not Enough Diamond", this);
             return new List<DrawResult>();
         }
 
@@ -128,6 +129,7 @@ public class GachaManager : MonoBehaviour
 
             resultList.Add(result);
             OnCharacterDraw?.Invoke(result);
+            DebugHelper.Log($"Draw {drawncharacterSO.characterName} {rankToDraw}", this);
         }
         return resultList;
     }

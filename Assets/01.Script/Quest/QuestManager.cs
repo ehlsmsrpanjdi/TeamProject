@@ -43,7 +43,7 @@ public class QuestManager : MonoBehaviour
         public string lastLoginDate;
     } // Json에 저장할 데이터들
 
-    public Action<float> OnQuestUpdated; // 공격력 강화와 접속시간을 반환.
+    public Action<int, float> OnQuestUpdated; // 공격력 강화와 접속시간을 반환.
 
     public Action<float> OnQuestCompleted; // 모든 일퀘 ui에서 사용. 각 일퀘 클리어 시 값 반환
 
@@ -259,7 +259,7 @@ public class QuestManager : MonoBehaviour
             return;
 
         attackQuest.CurrentValue++;
-        OnQuestUpdated?.Invoke((float)attackQuest.CurrentValue / (float) attackQuest.TargetValue);
+        OnQuestUpdated?.Invoke(attackQuest.Id, (float) attackQuest.CurrentValue / (float) attackQuest.TargetValue);
         // Debug.Log($"강화 횟수: {attackQuest.CurrentValue} / {attackQuest.TargetValue}");
 
         if (attackQuest.CurrentValue >= attackQuest.TargetValue)
@@ -311,7 +311,7 @@ public class QuestManager : MonoBehaviour
         if (playQuest != null && !playQuest.IsCompleted)
         {
             playTimeSeconds += 60; // 1분 증가
-            OnQuestUpdated?.Invoke((float)playQuest.CurrentValue / (float) playQuest.TargetValue);
+            OnQuestUpdated?.Invoke(playQuest.Id, (float)playQuest.CurrentValue / (float) playQuest.TargetValue);
             // Debug.Log($"플레이 시간 업데이트: {playTimeSeconds}초 / {playQuest.TargetValue}초");
 
             if (playTimeSeconds >= playQuest.TargetValue)

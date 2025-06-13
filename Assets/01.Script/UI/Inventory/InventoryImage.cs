@@ -1,10 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InventoryImage : BaseImage
 {
+    [SerializeField] public int Index { get; protected set; }
+
+    public void Init(int _Index)
+    {
+        Index = _Index;
+    }
+
     public override void OnPointerEnter(PointerEventData eventData)
     {
         base.OnPointerEnter(eventData);
@@ -13,5 +18,14 @@ public class InventoryImage : BaseImage
     public override void OnPointerExit(PointerEventData eventData)
     {
         base.OnPointerExit(eventData);
+    }
+
+    public void SetSprite(Sprite sprite)
+    {
+        if (sprite != null)
+        {
+            this.sprite = sprite;
+            SetNativeSize();
+        }
     }
 }

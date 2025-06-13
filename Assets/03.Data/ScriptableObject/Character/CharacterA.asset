@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 851cfaf6313d0d444b04d97021f7ec7e, type: 3}
   m_Name: CharacterA
   m_EditorClassIdentifier: 
+  key: 1001
   characterName: CharacterA
   characterImage: {fileID: 0}
   baseAttack: 100
   baseHealth: 1000
   startRank: 0
+  characterPrefab: {fileID: 2032603545545568627, guid: 68ec5abbd3652de4ebeda1a00f67b493,
+    type: 3}
+  enhancementLevel: 0
   rankInfo:
   - rank: 0
     attackMultiplier: 1

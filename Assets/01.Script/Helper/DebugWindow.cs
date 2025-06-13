@@ -24,6 +24,11 @@ public class DebugWindow : EditorWindow
         if (GUILayout.Button("테스트 버튼"))
         {
 
+
+        }
+        if (GUILayout.Button("스폰 버튼"))
+        {
+            CharacterManager.instance.EditorFunction();
         }
 
         #region QuestTest

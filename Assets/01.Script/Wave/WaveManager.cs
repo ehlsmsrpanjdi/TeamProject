@@ -44,7 +44,7 @@ public class WaveManager : MonoBehaviour
 
             spawner.SpawnWave(countToSpawn); // 좀비 소환
             Debug.Log($"[WaveManager] {i + 1}/{spawnBatch}차 소환 - {countToSpawn}마리");
-            yield return new WaitForSeconds(1f); // 다음 소환까지 대기
+            yield return new WaitForSeconds(0.1f); // 다음 소환까지 대기
         }
 
         aliveZombies = totalCount; // 총 좀비 수 등록

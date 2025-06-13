@@ -31,6 +31,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
     private ZombieStatHandler statHandler; // 좀비 스탯 핸들러
     private ZombiePool pool; // 좀비 풀
     private WaveManager waveManager; // 웨이브 매니저
+    private Coroutine knockbackCoroutine;
 
     [Header("공격타입")]
     public AttackType attackType = AttackType.Melee;
@@ -309,7 +310,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         else
         {
             StartCoroutine(FlashRed());
-            StartCoroutine(ApplyKnockback(attackerPosition, knockbackForce));
+            StartKnockback(attackerPosition, knockbackForce);
         }
     }
 
@@ -326,7 +327,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
     // 넉백 효과 코루틴
     private IEnumerator ApplyKnockback(Vector3 attackerPosition, float force)
     {
-        if (rb == null) yield break;
+        if (rb == null || currentState == State.Die) yield break;
 
         isKnockback = true;
         agent.enabled = false;
@@ -337,6 +338,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         rb.AddForce(dir * force, ForceMode.Impulse);
 
         yield return new WaitForSeconds(knockbackRecoverTime);
+        if (currentState == State.Die) yield break;
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero; // 회전 문제 방지
@@ -358,6 +360,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
     // 좀비 사망 처리
     public void Die()
     {
+        StopKnockback();
         if (currentState == State.Die) return;
 
         ChangeState(State.Die);
@@ -370,7 +373,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
         if (rb != null)
         {
-            rb.velocity = Vector3.zero;
             rb.isKinematic = true;
         }
 
@@ -394,5 +396,22 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
         // 안전을 위해 웨이브 매니저에 추가 사망 알림
         FindObjectOfType<WaveManager>()?.OnZombieDied();
+    }
+
+
+    public void StartKnockback(Vector3 attackerPosition, float force)
+    {
+        if (knockbackCoroutine != null)
+            StopCoroutine(knockbackCoroutine);
+        knockbackCoroutine = StartCoroutine(ApplyKnockback(attackerPosition, force));
+    }
+
+    public void StopKnockback()
+    {
+        if (knockbackCoroutine != null)
+        {
+            StopCoroutine(knockbackCoroutine);
+            knockbackCoroutine = null;
+        }
     }
 }

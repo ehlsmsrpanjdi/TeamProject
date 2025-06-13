@@ -10,12 +10,20 @@ public struct DrawResult
     public Rank rank;
 }
 
+public enum GachaFailReason
+{
+    NotEnoughDiamond,
+    InventoryFull,
+}
+
 public class GachaManager : MonoBehaviour
 {
     public static GachaManager Instance;
     public CharacterDataBase characterDataBase;
     public event Action<DrawResult> OnCharacterDraw; // 캐릭터 뽑기 시 호출되는 이벤트
+    public event Action<GachaFailReason> OnGachaFail;
 
+    public int costPerDraw = 100;
 
     private void Awake()
     {
@@ -34,6 +42,16 @@ public class GachaManager : MonoBehaviour
     {
         if (times <= 0)
         {
+            return new List<DrawResult>();
+        }
+
+        int totalCost = times * costPerDraw;
+
+        bool drawSuccess = GameManager.Instance.currency.UseDiamond(totalCost);
+
+        if (!drawSuccess)
+        {
+            OnGachaFail?.Invoke(GachaFailReason.NotEnoughDiamond);
             return new List<DrawResult>();
         }
 

@@ -51,6 +51,11 @@ public class CharacterManager : MonoBehaviour
     public CharacterInstance GetCharacter(int index)
     {
         //index 예외처리
+        if (index < 0 || index >= characters.Count)
+        {
+            return null;
+        }
+
         return characters[index];
     }
 
@@ -60,6 +65,10 @@ public class CharacterManager : MonoBehaviour
     public void RemoveCharacter(int index)
     {
         //index 예외처리
+        if (index < 0 || index >= characters.Count)
+        {
+            return;
+        }
         characters.RemoveAt(index);
     }
 

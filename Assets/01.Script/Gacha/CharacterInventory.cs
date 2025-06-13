@@ -7,7 +7,8 @@ public class CharacterInventory : MonoBehaviour
 {
     public static CharacterInventory Instance;
 
-    public List<DrawResult> ownedCharacters = new List<DrawResult>(); // DrawResult 구조체로 구성된 새로운 리스트 선언, 뽑은 캐릭터가 저장됨.
+    public List<CharacterInstance> ownedCharacters = new List<CharacterInstance>();
+
 
     private void Awake()
     {
@@ -26,32 +27,27 @@ public class CharacterInventory : MonoBehaviour
         GachaManager.Instance.OnCharacterDraw += AddCharacter; // OnCharacterDraw 이벤트 구독
     }
 
-    private void AddCharacter (DrawResult newCharacter)
+    private void AddCharacter (DrawResult drawResult)
     {
-        ownedCharacters.Add(newCharacter); // DrawCharacter로 뽑힌 result를 이벤트를 통해 전달받고 newCharacter 매개변수를 통해 ownedCharacters 리스트에 추가
+        if (drawResult.character == null)
+            return;
+
+        CharacterInstance newInstance = new CharacterInstance(drawResult.character);
+
+        ownedCharacters.Add(newInstance);
     }
+
     public void CheckInventory()
     {
-        Debug.Log($"보유캐릭터 {ownedCharacters.Count}");
-        foreach (var characters in ownedCharacters)
+        foreach (var character in ownedCharacters)
         {
-            // 보유한 모든 캐릭터의 정보를 콘솔에 출력
-            Debug.Log($"{characters.character.Name}, 등급: {characters.rank}");
+            Debug.Log($"이름: {character.characterData.characterName}, 랭크: {character.currentRank}, 공격력: {character.CurrentAttack}");
         }
     }
 
-    /*public DrawResult GetOwnedCharacter(int index)
+    public List<CharacterInstance> GetOwnedCharacters()
     {
-        if (index >= 0 && index < ownedCharacters.Count)
-        {
-            return ownedCharacters[index];
-        }
-        return default(DrawResult);
-    }*/
-
-    public List<DrawResult> GetOwnedCharacters()
-    {
-        return new List<DrawResult>(ownedCharacters);
+        return new List<CharacterInstance>(ownedCharacters);
     }
 
     private void OnDestroy()

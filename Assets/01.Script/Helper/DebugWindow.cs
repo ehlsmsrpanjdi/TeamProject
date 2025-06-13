@@ -24,7 +24,6 @@ public class DebugWindow : EditorWindow
         if (GUILayout.Button("테스트 버튼"))
         {
 
-
         }
         if (GUILayout.Button("스폰 버튼"))
         {
@@ -71,6 +70,9 @@ public class DebugWindow : EditorWindow
             {
                 Debug.LogWarning("플레이 모드에서만 실행할 수 있습니다.");
             }
+
+            UIManager.Instance.GetUI<UIBattleMemberViewer>().AddMember();
+
         }
 
         if (GUILayout.Button("일퀘 완료 테스트 - 접속"))

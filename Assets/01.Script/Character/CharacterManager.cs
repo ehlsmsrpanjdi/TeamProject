@@ -11,8 +11,8 @@ public class CharacterManager : MonoBehaviour
 {
     public static CharacterManager instance;
 
-    private Dictionary<int, CharacterInstance> characters = new();
-    private List<CharacterInstance> participated = new();
+    private List<CharacterInstance> characters = new();
+    private Dictionary<int, CharacterInstance> participated = new();
 
     private void Awake()
     {
@@ -36,36 +36,31 @@ public class CharacterManager : MonoBehaviour
 
         if (data == null)
         {
+            Debug.Log("Error");
             return null;
         }
-
-        if (characters.ContainsKey(key))
-        {
-            return characters[key];
-        }
-
         CharacterInstance newCharacter = new CharacterInstance(data);
-        characters.Add(key, newCharacter);
+        characters.Add(newCharacter);
 
         return newCharacter;
     }
 
     /// <summary>
-    /// 특정 키의 캐릭터 인스턴스를 반환
+    /// 특정 슬롯의 캐릭터 인스턴스를 반환
     /// </summary>
-    public CharacterInstance GetCharacter(int key)
+    public CharacterInstance GetCharacter(int index)
     {
-        characters.TryGetValue(key, out var character);
-        return character;
+        //index 예외처리
+        return characters[index];
     }
 
     /// <summary>
     /// 특정 캐릭터 삭제
     /// </summary>
-    public void RemoveCharacter(int key)
+    public void RemoveCharacter(int index)
     {
-        if (characters.ContainsKey(key))
-            characters.Remove(key);
+        //index 예외처리
+        characters.RemoveAt(index);
     }
 
     /// <summary>
@@ -73,19 +68,19 @@ public class CharacterManager : MonoBehaviour
     /// </summary>
     public List<CharacterInstance> GetAllCharacters()
     {
-        return characters.Values.ToList();
+        return characters;
     }
 
     /// <summary>
     /// 참전 리스트에 넣기
     /// </summary>
-     public bool SelectParticipate(int key)
+     public bool SelectParticipate(int index)
     {
-        if (characters.TryGetValue(key, out var character))
+        if (characters[index] != null)
         {
-            if (!participated.Contains(character))
+            if (!participated.ContainsKey(index))
             {
-                participated.Add(character);
+                participated.Add(index, characters[index]);
                 return true; // 참전
             }
             else
@@ -99,12 +94,12 @@ public class CharacterManager : MonoBehaviour
     /// <summary>
     /// 참전 리스트에서 제거
     /// </summary>
-    public bool RemoveParticipate(int key)
+    public bool RemoveParticipate(int index)
     {
-        var character = participated.FirstOrDefault(c => c.key == key);
+        var character = participated[index];
         if (character != null)
         {
-            participated.Remove(character);
+            participated.Remove(index);
             return true;
         }
         return false;
@@ -115,7 +110,7 @@ public class CharacterManager : MonoBehaviour
     /// </summary>
     public List<CharacterInstance> GetParticipateCharacters()
     {
-        return participated;
+        return participated.Values.ToList();
     }
 
 
@@ -140,4 +135,18 @@ public class CharacterManager : MonoBehaviour
             }
         }
     }
+
+    #if UNITY_EDITOR
+    public void EditorFunction()
+    {
+        CreateCharacter(1001);
+        CreateCharacter(1002);
+
+        SelectParticipate(0);
+        SelectParticipate(1);
+
+        SpawnParticipateCharacters(); // 스폰 호출
+
+    }
+    #endif
 }

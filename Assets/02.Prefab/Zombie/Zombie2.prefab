@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 4701850994735214092}
   - component: {fileID: -8187227789254039245}
   m_Layer: 3
-  m_Name: Zombie
+  m_Name: Zombie2
   m_TagString: Zombie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -194,11 +194,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96eea7a17f571e140ba48d5ae307775e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaxHealth: 100
-  defaultDamage: 10
-  defaultMoveSpeed: 3
-  defaultAttackDelay: 1.5
-  defaultAttackRange: 2
+  defaultMaxHealth: 50
+  defaultDamage: 5
+  defaultMoveSpeed: 1
+  defaultAttackDelay: 3
+  defaultAttackRange: 10
 --- !u!114 &-8187227789254039245
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,7 +7,8 @@ using UnityEngine;
 public class QuestManager : MonoBehaviour
 {
     public List<QuestData> dailyQuests = new();
-    private int playTimeSeconds = 0;
+
+    private int playTimeSeconds = 0; // 접속시간 계산.
 
     private static QuestManager instance;
     public static QuestManager Instance
@@ -32,79 +33,55 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    private string SaveFilePath => Path.Combine(Application.persistentDataPath, "DailyQuests.json"); //프리펩 -> JSON 변환 준비(저장 경로)
+    private string SaveFilePath => Path.Combine(Application.persistentDataPath, "DailyQuests.json"); // JSON 변환 준비(저장 경로)
+    // Application.persistentDataPath = 플랫폼 별 안전 저장 장소. pc = C:\Users\Admin\AppData\LocalLow\DefaultCompany\TeamProject.
 
-    [Serializable] //유니티의 JsonUtility는 List 직접 직렬화 불가능. Wrapper 클래스가 필요함.
+    [Serializable] // 유니티의 JsonUtility는 List 직접 직렬화 불가능해서 감싸줄 클래스가 필요함.
     private class SaveData
     {
         public List<QuestData> Quests;
         public string lastLoginDate;
-    }
-
-    private void SaveQuestsToJson()
-    {
-        var data = LoadQuestsFromJson();
-        data.Quests = dailyQuests;
-        data.lastLoginDate = DateTime.Today.ToString("yyyy-MM-dd");
-
-        string json = JsonUtility.ToJson(data,true);
-        // string encryptedJson = Encode.Encrypt(json);
-        File.WriteAllText(SaveFilePath, json);
-    }
-
-    private SaveData CreateDefaultSaveData()
-    {
-        return new SaveData
-        {
-            Quests = new List<QuestData>(),
-            lastLoginDate = DateTime.Today.ToString("yyyy-MM-dd")
-        };
-    }
-
-    private SaveData LoadQuestsFromJson()
-    {
-        if (!File.Exists(SaveFilePath))
-        {
-            DebugHelper.LogWarrning("파일이 존재하지 않습니다.", this);
-            return CreateDefaultSaveData();
-        }
-        string json = File.ReadAllText(SaveFilePath);
-        // string decryptedJson = Encode.Decrypt(json);
-        SaveData data = JsonUtility.FromJson<SaveData>(json);
-
-        if (data == null)
-        {
-            DebugHelper.LogWarrning("SaveData가 존재하지 않습니다.", this);
-            return CreateDefaultSaveData();
-        }
-
-        return data;
-    }
+    } // Json에 저장할 데이터들
 
     private void Start()
+     {
+         InitializeDailyQuests(); // 퀘스트 구조 생성
+
+         if (!IsSameDay()) // 오늘 첫 접속 시
+         {
+             ResetDailyQuests(); // 이전 일퀘 데이터(현재값, 클리어 여부, 보상 획득 여부) 리셋.
+         }
+         else // 첫 접속이 아니면
+         {
+             var loadedData = LoadQuestsFromJson(); // 데이터 불러와서
+             ApplySavedProgress(loadedData.Quests); // 불러온 데이터 적용.
+         }
+
+         CheckAllDailyQuests(); // 초기화 및 로드 후 퀘스트 상태 점검
+
+         InvokeRepeating(nameof(UpdatePlayTime), 60f, 60f); // 1분 뒤 시작, 1분마다 플레이 시간 업데이트
+     }
+
+    public List<QuestDisplayInfo> GetQuestDisplayInfos()
     {
-        InitializeDailyQuests(); // 퀘스트 데이터 정의
+        List<QuestDisplayInfo> displayInfos = new();
 
-         // ResetDailyQuests(); // 테스트용 리셋.
-        if (!IsSameDay()) // 오늘 첫 접속 시
+        foreach (var quest in dailyQuests)
         {
-            ResetDailyQuests(); // 일퀘 리셋
-            // SetLastLoginDate(); // 접속기록 갱신
-        }
-        else
-        {
-            LoadQuestsFromJson();
+            displayInfos.Add(new QuestDisplayInfo(
+                quest.Id,
+                quest.Title,
+                quest.Description,
+                quest.IsCompleted,
+                quest.IsClaimed
+            ));
         }
 
-        // 초기화 및 로드 후 퀘스트 상태 점검
-        CheckAllDailyQuests();
-
-        // 1분마다 플레이 시간 업데이트 시작
-        InvokeRepeating(nameof(UpdatePlayTime), 60f, 60f);
+        return displayInfos;
     }
+    #region InitializeData
 
-    // 일퀘 목록 생성 (QuestData 생성자 사용)
-    private void InitializeDailyQuests()
+    private void InitializeDailyQuests() // 일퀘 목록 생성
     {
         dailyQuests.Clear();
 
@@ -138,31 +115,103 @@ public class QuestManager : MonoBehaviour
         ));
     }
 
-    // 일퀘 클리어 여부 확인.
-    private void CheckAllDailyQuests()
+    private SaveData CreateDefaultSaveData() // 초기 데이터 없으면 불러오기.
+    {
+        return new SaveData
+        {
+            Quests = new List<QuestData>(),
+            lastLoginDate = DateTime.Today.ToString("yyyy-MM-dd")
+        };
+    }
+
+    public void ResetDailyQuests() // 매일 처음 접속 시 퀘스트 클리어 조건 리셋. 현재 test 버튼 연결로 public, 이후 private로 변경 예정.
+    {
+        foreach (var quest in dailyQuests)
+        {
+            quest.CurrentValue = 0;
+            quest.IsCompleted = false;
+            quest.IsClaimed = false;
+        }
+        SaveQuestsToJson();
+        // Debug.Log("일일 퀘스트가 초기화되었습니다.");
+    }
+
+    #endregion
+
+    #region DataSaveAndLoad
+
+    private void SaveQuestsToJson() // 데이터 저장
+    {
+        var data = new SaveData
+        {
+            Quests = dailyQuests,
+            lastLoginDate = DateTime.Today.ToString("yyyy-MM-dd")
+        };
+
+        string json = JsonUtility.ToJson(data, true);
+        string encryptedJson = Encode.Encrypt(json);
+        File.WriteAllText(SaveFilePath, encryptedJson);
+    }
+
+    private SaveData LoadQuestsFromJson() // json으로 저장된 데이터 복호화 & 불러오기
+    {
+        if (!File.Exists(SaveFilePath))
+        {
+//            DebugHelper.LogWarrning("파일이 존재하지 않습니다.", this);
+            return CreateDefaultSaveData();
+        }
+        string json = File.ReadAllText(SaveFilePath);
+        string decryptedJson = Encode.Decrypt(json);
+        SaveData data = JsonUtility.FromJson<SaveData>(decryptedJson);
+
+        if (data == null)
+        {
+//            DebugHelper.LogWarrning("SaveData가 존재하지 않습니다.", this);
+            return CreateDefaultSaveData();
+        }
+
+        return data;
+    }
+
+    private void ApplySavedProgress(List<QuestData> savedQuests) // 불러온 데이터 적용
+    {
+        foreach (var saved in savedQuests)
+        {
+            var quest = dailyQuests.Find(q => q.Id == saved.Id && q.Type == saved.Type);
+            if (quest != null)
+            {
+                quest.CurrentValue = saved.CurrentValue;
+                quest.IsCompleted = saved.IsCompleted;
+                quest.IsClaimed = saved.IsClaimed;
+            }
+        }
+    }
+
+    #endregion
+
+    #region AboutClear
+
+    private void CheckAllDailyQuests() // 일퀘 클리어 여부 확인.
     {
         var loginQuest = dailyQuests.Find(q => q.Type == QuestType.DailyLogin);
 
         if (loginQuest != null && !loginQuest.IsCompleted)
         {
             loginQuest.IsCompleted = true;
-            // SaveQuestProgressToPrefs(loginQuest);
             SaveQuestsToJson();
-            Debug.Log($"접속 퀘스트 자동 완료");
+            // Debug.Log($"접속 퀘스트 자동 완료");
         }
 
         CheckAllClearQuest(); // 전체 클리어 퀘스트 상태 갱신
     }
 
-    // 퀘스트 클리어 버튼과 연결, 보상 수령.
-    public void ClaimReward(QuestData quest)
+    public void ClaimReward(QuestData quest) // 퀘스트 클리어 버튼과 연결, 보상 수령.
     {
         if (quest.IsCompleted && !quest.IsClaimed)
         {
             quest.IsClaimed = true;
-            // SaveQuestProgressToPrefs(quest);
             SaveQuestsToJson();
-            Debug.Log($"보상 수령: {quest.Title}");
+            // Debug.Log($"보상 수령: {quest.Title}");
 
             // 보상 지급 로직 및 UI 업데이트 로직 추가 예정.
         }
@@ -172,119 +221,26 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    // 일일 접속 여부 확인
-    private bool IsSameDay()
-    {
-        SaveData data = LoadQuestsFromJson();
-        string last = data?.lastLoginDate ?? "";
-        return DateTime.TryParse(last, out var lastDate) && lastDate.Date == DateTime.Today;
-
-        // 문자열 last를 DateTime 형식으로 변환 시도해서 true/false 반환.
-        // lastDate.Date과 DateTime.Today는 날자는 해당값, 시간은 00으로 넣어서 가져옴 = 비교가능.
-    }
-
-    // 매일 처음 접속 시 접속일 갱신
-    // private void SetLastLoginDate()
-    // {
-    //     PlayerPrefs.SetString("LastLoginDate", DateTime.Today.ToString("yyyy-MM-dd"));
-    //     PlayerPrefs.Save();
-    // }
-
-    // 매일 처음 접속 시 퀘스트 클리어 조건 리셋
-    private void ResetDailyQuests()
-    {
-        foreach (var quest in dailyQuests)
-        {
-            quest.CurrentValue = 0;
-            quest.IsCompleted = false;
-            quest.IsClaimed = false;
-
-            // PlayerPrefs에 저장된 퀘스트 상태 삭제 (초기화)
-            // PlayerPrefs.DeleteKey($"Quest_{quest.Id}_IsCompleted");
-            // PlayerPrefs.DeleteKey($"Quest_{quest.Id}_IsClaimed");
-            // PlayerPrefs.DeleteKey($"Quest_{quest.Id}_CurrentValue");
-        }
-        // PlayerPrefs.Save();
-        SaveQuestsToJson();
-        Debug.Log("일일 퀘스트가 초기화되었습니다.");
-    }
-
-    // 공격력 강화 버튼 클릭 시 호출
-    public void OnEnchantButtonPressed()
+    public void OnEnchantButtonPressed() // 공격력 강화 버튼 클릭 시 호출
     {
         var attackQuest = dailyQuests.Find(q => q.Type == QuestType.IncreaseAttackLevel);
         if (attackQuest == null || attackQuest.IsCompleted)
             return;
 
         attackQuest.CurrentValue++;
-        // SaveQuestProgressToPrefs(attackQuest);
-        Debug.Log($"강화 횟수: {attackQuest.CurrentValue} / {attackQuest.TargetValue}");
+        // Debug.Log($"강화 횟수: {attackQuest.CurrentValue} / {attackQuest.TargetValue}");
 
         if (attackQuest.CurrentValue >= attackQuest.TargetValue)
         {
             attackQuest.IsCompleted = true;
-            // SaveQuestProgressToPrefs(attackQuest);
-            Debug.Log($"공격력 강화 퀘스트 완료!");
+            // Debug.Log($"공격력 강화 퀘스트 완료!");
             CheckAllClearQuest();
         }
 
         SaveQuestsToJson();
     }
 
-    // PlayerPrefs에서 퀘스트 진행 상황 로드
-    // private void LoadQuestProgressFromPrefs()
-    // {
-    //     foreach (var quest in dailyQuests)
-    //     {
-    //         string completedKey = $"Quest_{quest.Id}_IsCompleted";
-    //         string claimedKey = $"Quest_{quest.Id}_IsClaimed";
-    //         string currentValueKey = $"Quest_{quest.Id}_CurrentValue";
-    //
-    //         quest.IsCompleted = PlayerPrefs.GetInt(completedKey, 0) == 1;
-    //         quest.IsClaimed = PlayerPrefs.GetInt(claimedKey, 0) == 1;
-    //         quest.CurrentValue = PlayerPrefs.GetInt(currentValueKey, 0);
-    //
-    //         Debug.Log($"퀘스트 '{quest.Title}' 로드됨: 현재 값={quest.CurrentValue}, 완료됨={quest.IsCompleted}, 보상 수령={quest.IsClaimed}");
-    //     }
-    // }
-
-    // PlayerPrefs에 퀘스트 상태 저장 및 캡슐화
-    // private void SaveQuestProgressToPrefs(QuestData quest)
-    // {
-    //     string completedKey = $"Quest_{quest.Id}_IsCompleted";
-    //     string claimedKey = $"Quest_{quest.Id}_IsClaimed";
-    //     string currentValueKey = $"Quest_{quest.Id}_CurrentValue";
-    //
-    //     PlayerPrefs.SetInt(completedKey, quest.IsCompleted ? 1 : 0);
-    //     PlayerPrefs.SetInt(claimedKey, quest.IsClaimed ? 1 : 0);
-    //     PlayerPrefs.SetInt(currentValueKey, quest.CurrentValue);
-    //     PlayerPrefs.Save();
-    // }
-
-    // 플레이 시간 업데이트 (1분마다 호출)
-    private void UpdatePlayTime()
-    {
-        var playQuest = dailyQuests.Find(q => q.Type == QuestType.Play10Minute);
-
-        if (playQuest != null && !playQuest.IsCompleted)
-        {
-            playTimeSeconds += 60; // 1분 증가
-            Debug.Log($"플레이 시간 업데이트: {playTimeSeconds}초 / {playQuest.TargetValue}초");
-
-            if (playTimeSeconds >= playQuest.TargetValue)
-            {
-                playQuest.IsCompleted = true;
-                // SaveQuestProgressToPrefs(playQuest);
-                CheckAllClearQuest();
-                Debug.Log($"10분 이상 플레이 퀘스트 완료!");
-            }
-
-            SaveQuestsToJson();
-        }
-    }
-
-    // '전체 클리어' 퀘스트 확인
-    private void CheckAllClearQuest()
+    private void CheckAllClearQuest() // '모든 일퀘 클리어' 퀘스트 확인
     {
         var allClearQuest = dailyQuests.Find(q => q.Type == QuestType.AllClear);
         if (allClearQuest == null || allClearQuest.IsCompleted)
@@ -298,9 +254,43 @@ public class QuestManager : MonoBehaviour
         if (allOthersCompleted)
         {
             allClearQuest.IsCompleted = true;
-            // SaveQuestProgressToPrefs(allClearQuest);
             SaveQuestsToJson();
-            Debug.Log("전체 클리어 보상 퀘스트 완료!");
+//            Debug.Log("전체 클리어 보상 퀘스트 완료!");
         }
     }
+
+    #endregion
+
+    #region AboutTime
+
+    private bool IsSameDay() // 일일 접속 여부 확인
+    {
+        SaveData data = LoadQuestsFromJson();
+        string last = data?.lastLoginDate ?? "";
+        return DateTime.TryParse(last, out var lastDate) && lastDate.Date == DateTime.Today;
+        // 문자열 last를 DateTime 형식으로 변환 시도해서 true/false 반환.
+        // lastDate.Date과 DateTime.Today는 날자는 해당값, 시간은 00으로 넣어서 가져옴 = 비교가능.
+    }
+
+    private void UpdatePlayTime() // 플레이 시간 업데이트 (1분마다 호출)
+    {
+        var playQuest = dailyQuests.Find(q => q.Type == QuestType.Play10Minute);
+
+        if (playQuest != null && !playQuest.IsCompleted)
+        {
+            playTimeSeconds += 60; // 1분 증가
+            // Debug.Log($"플레이 시간 업데이트: {playTimeSeconds}초 / {playQuest.TargetValue}초");
+
+            if (playTimeSeconds >= playQuest.TargetValue)
+            {
+                playQuest.IsCompleted = true;
+                CheckAllClearQuest();
+                // Debug.Log($"10분 이상 플레이 퀘스트 완료!");
+            }
+
+            SaveQuestsToJson();
+        }
+    }
+
+    #endregion
 }

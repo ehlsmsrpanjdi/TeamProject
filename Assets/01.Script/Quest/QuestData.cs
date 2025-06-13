@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum QuestType
@@ -57,27 +58,23 @@ public class QuestData
         this.isCompleted = false;
         this.isClaimed = false;
     }
-
-    // // PlayerPrefs에서 로드할 때 사용하는 생성자 (또는 로드 메서드)
-    // public QuestData(int id, string title, string description, QuestType type, int targetValue, int currentValue, bool isCompleted, bool isClaimed)
-    //     : this(id, title, description, type, targetValue) // 기본 생성자 호출
-    // {
-    //     this.currentValue = currentValue;
-    //     this.isCompleted = isCompleted;
-    //     this.isClaimed = isClaimed;
-    // }
 }
 
-// [System.Serializable]
-// public class QuestData // 퀘스트 데이터
-// {
-//     public int Id;
-//     public string Title;         // 퀘스트 제목
-//     public string Description;  // 퀘스트 설명
-//     public QuestType Type;      // 퀘스트 타입
-//     public int TargetValue;     // 목표치(공격력 퀘스트에서, 달성 목표 = 시작값 + 목표치 * n번째 퀘스트 진행중)
-//     public int CurrentValue;    // 현재 퀘스트 수치.
-//
-//     public bool IsCompleted;    // 조건 만족 여부
-//     public bool IsClaimed;      // 보상 수령 여부
-// }
+[Serializable]
+public class QuestDisplayInfo
+{
+    public int Id;
+    public string Title;
+    public string Description;
+    public bool IsCompleted;
+    public bool IsClaimed;
+
+    public QuestDisplayInfo(int id, string title, string description, bool isCompleted, bool isClaimed)
+    {
+        Id = id;
+        Title = title;
+        Description = description;
+        IsCompleted = isCompleted;
+        IsClaimed = isClaimed;
+    }
+}

@@ -128,6 +128,26 @@ public class DebugWindow : EditorWindow
             }
         }
 
+        if (GUILayout.Button("퀘스트 강제 리셋"))
+        {
+            if (Application.isPlaying)
+            {
+                QuestManager qm = FindObjectOfType<QuestManager>();
+                if (qm != null)
+                {
+                    qm.ResetDailyQuests();
+                }
+                else
+                {
+                    Debug.LogWarning("QuestManager가 씬에서 발견되지 않았습니다.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("플레이 모드에서만 실행할 수 있습니다.");
+            }
+        }
+
         #endregion
     }
 }

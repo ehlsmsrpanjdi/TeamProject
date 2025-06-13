@@ -244,6 +244,7 @@ public class QuestManager : MonoBehaviour
                 default:
                     break;
             }
+            HandleQuestCompleted();
         }
         else
         {

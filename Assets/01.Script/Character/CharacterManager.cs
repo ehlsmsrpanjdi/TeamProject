@@ -17,12 +17,12 @@ public class CharacterManager : MonoBehaviour
     {
         if (instance == null)
         {
-            instance = new GameObject("CharacterManager").AddComponent<CharacterManager>();
-            DontDestroyOnLoad(this.gameObject);
+            instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
 

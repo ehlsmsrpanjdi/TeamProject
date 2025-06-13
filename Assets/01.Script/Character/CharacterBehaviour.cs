@@ -8,6 +8,23 @@ public class CharacterBehaviour : MonoBehaviour
     [SerializeField] private float attackDelay; //공격 딜레이
     [SerializeField] private float duration; //피격 딜레이
 
+    private float lastAttackTime;
+
+    private CharacterInstance charInstance;
+    private void Start()
+    {
+        // 예시로 CharacterManager에서 생성된 캐릭터 할당
+        charInstance = CharacterManager.instance.GetCharacter(1001); // key 1001번 캐릭터 가져오기
+    }
+
+    void Update()
+    {
+        if (Time.time - lastAttackTime >= attackDelay)
+        {
+            Attack();
+            lastAttackTime = Time.time;
+        }
+    }
     //공격
     void Attack()
     {
@@ -28,17 +45,18 @@ public class CharacterBehaviour : MonoBehaviour
             }
         }
 
-    //     if (closestEnemy != null)
-    //     {
-    //         ZombieStatHandler enemy = closestEnemy.GetComponent<ZombieStatHandler>(); //EnemyBehaviour 는 임시 클래스.
-    //         if (enemy != null)
-    //         {
-    //             enemy.TakeDamage(CharacterData.instance.); //피격 인터페이스 사용 예정
-    //             Debug.Log($"{_charInstance.characterData.characterName}이(가) {enemy.name}을(를) 공격!");
-    //         }
-    //     }
-    //
-     }
+        if (closestEnemy != null)
+        {
+            ZombieStatHandler enemy = closestEnemy.GetComponent<ZombieStatHandler>();
+            if (enemy != null)
+            {
+                int damage = charInstance != null ? charInstance.GetCurrentAttack() : 10; // 기본 데미지 10f로 fallback
+                enemy.TakeDamage(damage);
+                Debug.Log($"{charInstance.charcterName}이(가) {enemy.name}을(를) 공격! 데미지: {damage}");
+            }
+        }
+
+    }
 
     //스킬사용 (액티브로 하기로 했음)
     public void UseSkill()

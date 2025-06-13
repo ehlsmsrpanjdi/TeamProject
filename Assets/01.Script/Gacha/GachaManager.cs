@@ -2,21 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Rendering;
 
 public struct DrawResult
 {
-    public CharacterData character;
+    public CharacterDataSO character;
     public Rank rank;
 }
 
 public class GachaManager : MonoBehaviour
 {
-
     public static GachaManager Instance;
-
     public CharacterDataBase characterDataBase;
-
     public event Action<DrawResult> OnCharacterDraw; // 캐릭터 뽑기 시 호출되는 이벤트
+
+    private DrawResult lastDrawResult;
+
+    public List<DrawResult> drawnCharacter = new List<DrawResult>(); // DrawResult 구조체로 구성된 새로운 리스트 선언, 뽑은 캐릭터가 저장됨.
 
     private void Awake()
     {
@@ -31,7 +33,7 @@ public class GachaManager : MonoBehaviour
     }
 
     // 가챠 버튼 등을 눌러서 호출
-    public void DrawCharacter()
+    public DrawResult DrawCharacter()
     {
         //TODO: 뽑기에 필요한 재화 소모 로직
 
@@ -65,15 +67,56 @@ public class GachaManager : MonoBehaviour
         }
         // 각 랭크별 확률을 변수로 만들어서 처리할 예정
 
-        CharacterData character = characterDataBase.CharacterList[UnityEngine.Random.Range(0, characterDataBase.CharacterList.Count)]; // 캐릭터DB안에 있는 캐릭터데이터 중 랜덤으로 하나 뽑고
+        List<CharacterDataSO> candidateList = null;
+        switch (rank)
+        {
+            case Rank.SSS:
+                candidateList = characterDataBase.SSSCharacterList;
+                break;
+            case Rank.SS:
+                candidateList = characterDataBase.SSCharacterList;
+                break;
+            case Rank.S:
+                candidateList = characterDataBase.SCharacterList;
+                break;
+            case Rank.A:
+                candidateList = characterDataBase.ACharacterList;
+                break;
+            case Rank.B:
+                candidateList = characterDataBase.BCharacterList;
+                break;
+            case Rank.C:
+                candidateList = characterDataBase.CCharacterList;
+                break;
+        }
+
+        if (candidateList == null || candidateList.Count == 0)
+        {
+            return default;
+        }
+        CharacterDataSO drawncharacterSO = candidateList[UnityEngine.Random.Range(0, candidateList.Count)];
 
         DrawResult result = new DrawResult
         {
-            // 뽑은 데이터와 랭크를 가진 결과값 구조체를 만들어서
-            character = character,
+            character = drawncharacterSO,
             rank = rank
         };
+        this.lastDrawResult = result;
 
-        OnCharacterDraw?.Invoke(result); // 이벤트를 구독하고 있는 외부에 결과 전달
+        OnCharacterDraw?.Invoke(result);
+        return result;
     }
+
+    public List<DrawResult> TenTimesDraw()
+    {
+        List<DrawResult> resultList = new List<DrawResult>();
+
+        // 가챠 10회 반복
+        for (int i = 0; i < 10; i++)
+        {
+            resultList.Add(DrawCharacter());
+        }
+        return resultList;
+    }
+
 }

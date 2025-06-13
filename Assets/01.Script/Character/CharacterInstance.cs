@@ -30,6 +30,7 @@ public class CharacterInstance
         this.currentRank = data.startRank;
         this.enhancementLevel = data.enhancementLevel;
         charPrefab = data.characterPrefab;
+        rankInfo = new List<RankInfo>(data.rankInfo);
 
         learnedSkills = LearnSkillByRank(currentRank);
     }

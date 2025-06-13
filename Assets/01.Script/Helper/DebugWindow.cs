@@ -23,7 +23,7 @@ public class DebugWindow : EditorWindow
 
         if (GUILayout.Button("테스트 버튼"))
         {
-
+            UIManager.Instance.GetUI<UIBattleMemberViewer>().AddMember();
         }
     }
 }

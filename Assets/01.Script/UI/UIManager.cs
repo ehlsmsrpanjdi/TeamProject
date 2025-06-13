@@ -28,34 +28,60 @@ public class UIManager : MonoBehaviour
     }
 
     Dictionary<Type, UIBase> UIDictionary = new Dictionary<Type, UIBase>();
-    [SerializeField] UIBase[] AllUI;
+    [SerializeField] UIBase[] MainUI;
+    [SerializeField] UIBase[] BattleUI;
 
     [SerializeField] Canvas mainCanvas;
     const string MainCanvasName = "MainCanvas";
+    [SerializeField] Canvas battleCanvas;
+    const string BattleCanvasName = "BattleCanvas";
 
     private void Reset()
     {
         mainCanvas = GameObject.Find(MainCanvasName)?.GetComponent<Canvas>();
-        AllUI = mainCanvas.GetComponentsInChildren<UIBase>(true);
+        MainUI = mainCanvas.GetComponentsInChildren<UIBase>(true);
+
+        battleCanvas = GameObject.Find(BattleCanvasName)?.GetComponent<Canvas>();
+        BattleUI = battleCanvas.GetComponentsInChildren<UIBase>(true);
     }
 
     private void Awake()
     {
-        if (mainCanvas == null)
-        {
-            mainCanvas = GameObject.Find(MainCanvasName)?.GetComponent<Canvas>();
-            AllUI = mainCanvas.GetComponentsInChildren<UIBase>(true);
-            foreach (UIBase UI in AllUI)
-            {
-                UIDictionary[UI.GetType()] = UI;
-            }
-            return;
-        }
-        foreach (UIBase UI in AllUI)
+        CheakCanvas();
+        foreach (UIBase UI in BattleUI)
         {
             UIDictionary[UI.GetType()] = UI;
         }
-        AllUI = null;
+
+        foreach (UIBase UI in MainUI)
+        {
+            UIDictionary[UI.GetType()] = UI;
+        }
+        MainUI = null;
+        BattleUI = null;
+    }
+
+    public void CheakCanvas()
+    {
+        if (battleCanvas == null)
+        {
+            battleCanvas = GameObject.Find(BattleCanvasName)?.GetComponent<Canvas>();
+            BattleUI = battleCanvas.GetComponentsInChildren<UIBase>(true);
+            foreach (UIBase UI in BattleUI)
+            {
+                UIDictionary[UI.GetType()] = UI;
+            }
+        }
+
+        if (mainCanvas == null)
+        {
+            mainCanvas = GameObject.Find(MainCanvasName)?.GetComponent<Canvas>();
+            MainUI = mainCanvas.GetComponentsInChildren<UIBase>(true);
+            foreach (UIBase UI in MainUI)
+            {
+                UIDictionary[UI.GetType()] = UI;
+            }
+        }
     }
 
     public T Add<T>() where T : UIBase

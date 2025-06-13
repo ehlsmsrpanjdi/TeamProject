@@ -26,7 +26,7 @@ public class DebugWindow : EditorWindow
 
         }
 
-        #region Quest
+        #region QuestTest
 
         if (GUILayout.Button("공격력과 연결된 버튼"))
         {

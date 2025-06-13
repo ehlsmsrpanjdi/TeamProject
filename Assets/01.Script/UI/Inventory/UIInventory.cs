@@ -18,11 +18,11 @@ public class UIInventory : MonoBehaviour
 
     public void SetSprite()
     {
-        List<DrawResult> CharacterDatas = CharacterInventory.Instance.GetOwnedCharacters();
-        for (int CharacterCount = 0; CharacterCount < CharacterDatas.Count; ++CharacterCount)
-        {
-            inventoryImages[CharacterCount].SetSprite(CharacterDatas[CharacterCount].character.Sprite);
-        }
+        //List<DrawResult> CharacterDatas = CharacterInventory.Instance.GetOwnedCharacters();
+        //for (int CharacterCount = 0; CharacterCount < CharacterDatas.Count; ++CharacterCount)
+        //{
+        //    inventoryImages[CharacterCount].SetSprite(CharacterDatas[CharacterCount].character.Sprite);
+        //}
     }
 
     private void Awake()

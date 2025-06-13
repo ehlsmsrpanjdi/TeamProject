@@ -27,10 +27,15 @@ public class ZombieSpawner : MonoBehaviour
                 continue; // 유효 위치를 찾지 못했으면 스킵
             }
 
-            GameObject zombie = zombiePool.GetZombie(randomPos); // 풀에서 좀비 꺼냄
+            // 10% 확률로 좀비 2종 타입 선택
+            int zombieType = 1;
+            if (Random.value <= 0.1f)
+                zombieType = 2;
+
+            GameObject zombie = zombiePool.GetZombie(zombieType, randomPos); // 타입과 위치 인자 전달
             if (zombie == null) break; // 풀이 비어있으면 중단
 
-            zombie.transform.position = randomPos; // 위치 설정
+            // 위치 설정은 GetZombie 내부에서 처리되므로 제거
         }
     }
 

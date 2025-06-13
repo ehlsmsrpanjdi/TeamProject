@@ -141,6 +141,7 @@ public class DebugWindow : EditorWindow
                 if (qm != null)
                 {
                     qm.ResetDailyQuests();
+                    qm.CheckAllDailyQuests();
                 }
                 else
                 {

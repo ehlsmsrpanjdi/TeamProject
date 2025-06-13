@@ -43,6 +43,10 @@ public class QuestManager : MonoBehaviour
         public string lastLoginDate;
     } // Json에 저장할 데이터들
 
+    public Action<float> OnQuestUpdated; // 공격력 강화와 접속시간을 반환.
+
+    public Action<float> OnQuestCompleted; // 모든 일퀘 ui에서 사용. 각 일퀘 클리어 시 값 반환
+
     private void Start()
      {
          InitializeDailyQuests(); // 퀘스트 구조 생성
@@ -62,6 +66,19 @@ public class QuestManager : MonoBehaviour
          InvokeRepeating(nameof(UpdatePlayTime), 60f, 60f); // 1분 뒤 시작, 1분마다 플레이 시간 업데이트
      }
 
+    #region Action
+
+    private void HandleQuestCompleted()
+    {
+        // 전체 완료된 퀘스트 수 계산
+        int completedCount = dailyQuests.Count(q => q.IsCompleted);
+        float progress = (float)completedCount / dailyQuests.Count;
+
+        // 액션으로 진행도 전달
+        OnQuestCompleted?.Invoke(progress);
+    }
+
+    #endregion
     public List<QuestDisplayInfo> GetQuestDisplayInfos()
     {
         List<QuestDisplayInfo> displayInfos = new();
@@ -73,7 +90,9 @@ public class QuestManager : MonoBehaviour
                 quest.Title,
                 quest.Description,
                 quest.IsCompleted,
-                quest.IsClaimed
+                quest.IsClaimed,
+                quest.TargetValue,
+                quest.CurrentValue
             ));
         }
 
@@ -191,7 +210,7 @@ public class QuestManager : MonoBehaviour
 
     #region AboutClear
 
-    private void CheckAllDailyQuests() // 일퀘 클리어 여부 확인.
+    public void CheckAllDailyQuests() // 일퀘 클리어 여부 확인. 이것도 확인 끝나면 private로 변환;
     {
         var loginQuest = dailyQuests.Find(q => q.Type == QuestType.DailyLogin);
 
@@ -199,7 +218,6 @@ public class QuestManager : MonoBehaviour
         {
             loginQuest.IsCompleted = true;
             SaveQuestsToJson();
-            // Debug.Log($"접속 퀘스트 자동 완료");
         }
 
         CheckAllClearQuest(); // 전체 클리어 퀘스트 상태 갱신
@@ -213,7 +231,19 @@ public class QuestManager : MonoBehaviour
             SaveQuestsToJson();
             // Debug.Log($"보상 수령: {quest.Title}");
 
-            // 보상 지급 로직 및 UI 업데이트 로직 추가 예정.
+            switch (quest.Id)
+            {
+                case 0:
+                case 1:
+                case 2:
+                    Player.Instance.AddGold(500);
+                    break;
+                case 3:
+                    Player.Instance.AddDiamond(1000);
+                    break;
+                default:
+                    break;
+            }
         }
         else
         {
@@ -228,6 +258,7 @@ public class QuestManager : MonoBehaviour
             return;
 
         attackQuest.CurrentValue++;
+        OnQuestUpdated?.Invoke((float)attackQuest.CurrentValue / (float) attackQuest.TargetValue);
         // Debug.Log($"강화 횟수: {attackQuest.CurrentValue} / {attackQuest.TargetValue}");
 
         if (attackQuest.CurrentValue >= attackQuest.TargetValue)
@@ -279,6 +310,7 @@ public class QuestManager : MonoBehaviour
         if (playQuest != null && !playQuest.IsCompleted)
         {
             playTimeSeconds += 60; // 1분 증가
+            OnQuestUpdated?.Invoke((float)playQuest.CurrentValue / (float) playQuest.TargetValue);
             // Debug.Log($"플레이 시간 업데이트: {playTimeSeconds}초 / {playQuest.TargetValue}초");
 
             if (playTimeSeconds >= playQuest.TargetValue)

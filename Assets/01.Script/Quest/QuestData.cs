@@ -68,13 +68,17 @@ public class QuestDisplayInfo
     public string Description;
     public bool IsCompleted;
     public bool IsClaimed;
+    public int TargetValue;
+    public int CurrentValue;
 
-    public QuestDisplayInfo(int id, string title, string description, bool isCompleted, bool isClaimed)
+    public QuestDisplayInfo(int id, string title, string description, bool isCompleted, bool isClaimed, int targetValue, int currentValue)
     {
         Id = id;
         Title = title;
         Description = description;
         IsCompleted = isCompleted;
         IsClaimed = isClaimed;
+        TargetValue = targetValue;
+        CurrentValue = currentValue;
     }
 }

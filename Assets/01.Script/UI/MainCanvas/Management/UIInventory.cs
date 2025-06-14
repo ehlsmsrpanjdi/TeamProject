@@ -16,6 +16,15 @@ public class UIInventory : MonoBehaviour
         }
     }
 
+    public void OnParticipate(int _index)
+    {
+
+    }
+
+    public void OffParticipate(int _index)
+    {
+
+    }
 
     public void OnInventoryOpen(List<Sprite> _Sprites)
     {

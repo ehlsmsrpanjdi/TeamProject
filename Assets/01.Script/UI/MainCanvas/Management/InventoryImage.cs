@@ -1,9 +1,16 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InventoryImage : BaseImage
+public class InventoryImage : BaseImage, IPointerClickHandler
 {
     Sprite currentSprite;
+    public Action OnClickAction;
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        OnClickAction?.Invoke();
+    }
 
     public override void OnPointerEnter(PointerEventData eventData)
     {

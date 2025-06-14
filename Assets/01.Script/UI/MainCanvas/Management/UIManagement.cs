@@ -38,6 +38,10 @@ public class UIManagement : UIBase
         }
     }
 
+    public void SetStatusView(int _index)
+    {
+        characterStatus.SetStatusView(_index);
+    }
 
     void CloseButtonOn()
     {

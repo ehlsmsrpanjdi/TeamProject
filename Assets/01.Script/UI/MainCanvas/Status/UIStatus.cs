@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -23,11 +20,21 @@ public class UIStatus : UIBase
     private void Awake()
     {
         OptionButton.OnClick = OnOptionClick;
+        Player player = Player.Instance;
+
+        player.OnGoldChanged += SetGold;
+        player.OnDiamondChanged += SetGold;
+
+        SetGold(player.Data.gold);
+        SetDia(player.Data.diamond);
     }
 
     public void OnOptionClick()
     {
-        OptionButton.OnClick = UIManager.Instance.OpenUI<UIOption>;
+        if (false == UIManager.Instance.GetUI<UIOption>().gameObject.activeSelf)
+        {
+            OptionButton.OnClick = UIManager.Instance.OpenUI<UIOption>;
+        }
     }
 
     public void SetGold(int _Gold)

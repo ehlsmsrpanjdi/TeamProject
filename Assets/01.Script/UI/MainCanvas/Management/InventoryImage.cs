@@ -1,13 +1,15 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InventoryImage : BaseImage
+public class InventoryImage : BaseImage, IPointerClickHandler
 {
-    [SerializeField] public int Index { get; protected set; }
+    Sprite currentSprite;
+    public Action OnClickAction;
 
-    public void Init(int _Index)
+    public void OnPointerClick(PointerEventData eventData)
     {
-        Index = _Index;
+        OnClickAction?.Invoke();
     }
 
     public override void OnPointerEnter(PointerEventData eventData)
@@ -24,8 +26,15 @@ public class InventoryImage : BaseImage
     {
         if (sprite != null)
         {
+            currentSprite = this.sprite;
             this.sprite = sprite;
             SetNativeSize();
         }
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        this.sprite = currentSprite;
     }
 }

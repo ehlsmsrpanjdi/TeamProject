@@ -27,7 +27,7 @@ public class DebugWindow : EditorWindow
         }
         if (GUILayout.Button("스폰 버튼"))
         {
-            CharacterManager.instance.EditorFunction();
+            CharacterManager.Instance.EditorFunction();
         }
 
         #region //팀장자리

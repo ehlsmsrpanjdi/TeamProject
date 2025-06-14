@@ -25,6 +25,7 @@ public class GachaManager : MonoBehaviour
 
     public int costPerDraw = 100;
 
+
     private void Awake()
     {
         if (Instance == null)

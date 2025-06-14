@@ -148,6 +148,10 @@ public class CharacterManager
         return participated;
     }
 
+    public bool IsParticipating(int index)
+    {
+        return participated.ContainsKey(index);
+    }
 
     /// <summary>
     /// 실제로 전투에 참여할 캐릭터 스폰 함수

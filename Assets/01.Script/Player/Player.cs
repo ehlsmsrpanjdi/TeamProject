@@ -4,9 +4,22 @@ using UnityEngine;
 using System.IO;
 using System;
 
-public class Player : MonoBehaviour
+public class Player
 {
-    public static Player Instance;
+    private static Player instance;
+
+    public static Player Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new Player();
+                instance.Init();
+            }
+            return instance;
+        }
+    }
 
     public PlayerData Data { get; private set; }
 
@@ -15,20 +28,11 @@ public class Player : MonoBehaviour
 
     //private string saveFilePath;
 
-    private void Awake()
+    private void Init()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            //saveFilePath = Path.Combine(Application.persistentDataPath, "PlayerData.json");
-            //LoadPlayerData();
-            Data = new PlayerData();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        //saveFilePath = Path.Combine(Application.persistentDataPath, "PlayerData.json");
+        //LoadPlayerData();
+        Data = new PlayerData();
     }
 
     public void AddGold(int amount)
@@ -89,9 +93,4 @@ public class Player : MonoBehaviour
         string json = JsonUtility.ToJson(Data);
         File.WriteAllText(saveFilePath, json);
     }*/
-
-    //private void OnApplicationQuit()
-    //{
-    //    SavePlayerData();
-    //}
 }

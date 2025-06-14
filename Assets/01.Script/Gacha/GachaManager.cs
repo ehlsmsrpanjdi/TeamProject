@@ -15,9 +15,24 @@ public enum GachaFailReason
     InventoryFull,
 }
 
-public class GachaManager : MonoBehaviour
+public class GachaManager
 {
-    public static GachaManager Instance;
+    private static GachaManager instance;
+
+    public static GachaManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new GachaManager();
+                instance.Init();
+            }
+            return instance;
+        }
+        set { instance = value; }
+    }
+
     public CharacterDataBase gachaDataBase;
     public event Action<DrawResult> OnCharacterDraw; // 캐릭터 뽑기 시 호출되는 이벤트
     public event Action<GachaFailReason> OnGachaFail;
@@ -25,16 +40,9 @@ public class GachaManager : MonoBehaviour
     public int costPerDraw = 100;
 
 
-    private void Awake()
+    public void Init()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        gachaDataBase = Resources.Load<CharacterDataBase>("Gacha/CharacterDataBase");
     }
 
 
@@ -52,7 +60,6 @@ public class GachaManager : MonoBehaviour
         if (!drawSuccess)
         {
             OnGachaFail?.Invoke(GachaFailReason.NotEnoughDiamond);
-            DebugHelper.Log("Not Enough Diamond", this);
             return new List<DrawResult>();
         }
 
@@ -104,7 +111,6 @@ public class GachaManager : MonoBehaviour
 
             if (candidateList == null || candidateList.Count == 0)
             {
-                DebugHelper.Log("No Character", this);
                 continue;
             }
 
@@ -116,7 +122,6 @@ public class GachaManager : MonoBehaviour
             }
             else
             {
-                DebugHelper.Log("CharacterManager is null", this);
             }
 
             DrawResult result = new DrawResult
@@ -126,9 +131,10 @@ public class GachaManager : MonoBehaviour
             };
 
             resultList.Add(result);
+            DebugHelper.Log($"뽑기 결과: {result.character.characterName} {result.rank}", result.character);
             OnCharacterDraw?.Invoke(result);
-            DebugHelper.Log($"Draw {drawncharacterSO.characterName} {rankToDraw}", this);
         }
         return resultList;
     }
+
 }

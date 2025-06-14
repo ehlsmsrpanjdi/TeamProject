@@ -7,27 +7,31 @@ using UnityEngine;
 /// <summary>
 /// 캐릭터의 생성, 삭제 등의 관리를 위한 클래스
 /// </summary>
-public class CharacterManager : MonoBehaviour
+public class CharacterManager
 {
-    public static CharacterManager instance;
+    private static CharacterManager instance;
+
+    public static CharacterManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new CharacterManager();
+                instance.Init();
+            }
+            return instance;
+        }
+        set { instance = value; }
+    }
+
+    public void Init()
+    {
+        GachaManager.Instance.OnCharacterDraw += CreateCharacterOndraw;
+    }
 
     private List<CharacterInstance> characters = new();
     private Dictionary<int, CharacterInstance> participated = new();
-
-
-
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     /// <summary>
     /// 캐릭터 데이터를 기반으로 인스턴스를 생성하고 등록
@@ -38,13 +42,25 @@ public class CharacterManager : MonoBehaviour
 
         if (data == null)
         {
-            Debug.Log("Error");
+            DebugHelper.Log("data is null", data);
             return null;
         }
         CharacterInstance newCharacter = new CharacterInstance(data);
         characters.Add(newCharacter);
 
         return newCharacter;
+    }
+
+    public void CreateCharacterOndraw(DrawResult result)
+    {
+        CharacterDataSO data = result.character;
+
+        if (data == null)
+        {
+            DebugHelper.Log("data is null", data);
+        }
+        CharacterInstance newCharacter = new CharacterInstance(data);
+        characters.Add(newCharacter);
     }
 
     /// <summary>
@@ -136,7 +152,7 @@ public class CharacterManager : MonoBehaviour
     /// <summary>
     /// 실제로 전투에 참여할 캐릭터 스폰 함수
     /// </summary>
-    public void SpawnParticipateCharacters()
+    public void SpawnParticipateCharacters(Vector3 position)
     {
         var deployed = GetParticipateCharacters();
 
@@ -145,7 +161,7 @@ public class CharacterManager : MonoBehaviour
             CharacterInstance charInstance = deployed[i];
             //Transform spawnPoint = spawnPoints[i]; //스폰 포인트가 필요할 것으로 보여짐.
 
-            GameObject go = Instantiate(charInstance.charPrefab, transform.position , Quaternion.identity); // 스폰포인트 안넣었음.
+            GameObject go = GameObject.Instantiate(charInstance.charPrefab, position , Quaternion.identity); // 스폰포인트 안넣었음.
 
             CharacterBehaviour behaviour = go.GetComponent<CharacterBehaviour>();
             if (behaviour != null)
@@ -164,8 +180,7 @@ public class CharacterManager : MonoBehaviour
         SelectParticipate(0);
         SelectParticipate(1);
 
-        SpawnParticipateCharacters(); // 스폰 호출
-
+        SpawnParticipateCharacters(Vector3.zero); // 스폰 호출
     }
     #endif
 }

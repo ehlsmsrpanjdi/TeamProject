@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.Rendering;
 
 public struct DrawResult
 {
@@ -19,7 +18,7 @@ public enum GachaFailReason
 public class GachaManager : MonoBehaviour
 {
     public static GachaManager Instance;
-    public CharacterDataBase characterDataBase;
+    public CharacterDataBase gachaDataBase;
     public event Action<DrawResult> OnCharacterDraw; // 캐릭터 뽑기 시 호출되는 이벤트
     public event Action<GachaFailReason> OnGachaFail;
 
@@ -38,6 +37,7 @@ public class GachaManager : MonoBehaviour
         }
     }
 
+
     // 가챠 버튼 등을 눌러서 호출
     public List<DrawResult> DrawCharacter(int times)
     {
@@ -47,7 +47,6 @@ public class GachaManager : MonoBehaviour
         }
 
         int totalCost = times * costPerDraw;
-
         bool drawSuccess = Player.Instance.UseDiamond(totalCost);
 
         if (!drawSuccess)
@@ -95,32 +94,30 @@ public class GachaManager : MonoBehaviour
             List<CharacterDataSO> candidateList = null;
             switch (rankToDraw)
             {
-                case Rank.SSS:
-                    candidateList = characterDataBase.SSSCharacterList;
-                    break;
-                case Rank.SS:
-                    candidateList = characterDataBase.SSCharacterList;
-                    break;
-                case Rank.S:
-                    candidateList = characterDataBase.SCharacterList;
-                    break;
-                case Rank.A:
-                    candidateList = characterDataBase.ACharacterList;
-                    break;
-                case Rank.B:
-                    candidateList = characterDataBase.BCharacterList;
-                    break;
-                case Rank.C:
-                    candidateList = characterDataBase.CCharacterList;
-                    break;
+                case Rank.SSS: candidateList = gachaDataBase.SSSCharacterList; break;
+                case Rank.SS: candidateList = gachaDataBase.SSCharacterList; break;
+                case Rank.S: candidateList = gachaDataBase.SCharacterList; break;
+                case Rank.A: candidateList = gachaDataBase.ACharacterList; break;
+                case Rank.B: candidateList = gachaDataBase.BCharacterList; break;
+                case Rank.C: candidateList = gachaDataBase.CCharacterList; break;
             }
 
             if (candidateList == null || candidateList.Count == 0)
             {
+                DebugHelper.Log("No Character", this);
                 continue;
             }
 
             CharacterDataSO drawncharacterSO = candidateList[UnityEngine.Random.Range(0, candidateList.Count)];
+
+            if (CharacterManager.Instance != null)
+            {
+                CharacterManager.Instance.CreateCharacter(drawncharacterSO.key);
+            }
+            else
+            {
+                DebugHelper.Log("CharacterManager is null", this);
+            }
 
             DrawResult result = new DrawResult
             {

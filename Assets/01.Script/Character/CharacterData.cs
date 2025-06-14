@@ -34,6 +34,11 @@ public class CharacterData : MonoBehaviour
         characterList = null;
     }
 
+    private void Reset()
+    {
+        characterList = new List<CharacterDataSO>(Resources.LoadAll<CharacterDataSO>("CharacterData"));
+    }
+
     public CharacterDataSO GetData(int key)
     {
         Data.TryGetValue(key,out CharacterDataSO data);

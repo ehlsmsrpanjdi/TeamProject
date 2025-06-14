@@ -108,7 +108,7 @@ public class CharacterManager
             return false;
         }
 
-        if (index < 0 || index >= participated.Count)
+        if (index < 0 || index >= characters.Count)
         {
             return false;
         }
@@ -192,6 +192,8 @@ public class CharacterManager
         SelectParticipate(1);
 
         SpawnParticipateCharacters(Vector3.zero); // 스폰 호출
+
+
     }
     #endif
 }

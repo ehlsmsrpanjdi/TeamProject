@@ -15,6 +15,8 @@ public class CharacterStatus : MonoBehaviour
 
     const string Img_Character = "Img_Character";
 
+    const string Img_Join = "Img_Join";
+
     [SerializeField] TextMeshProUGUI Attack_Text;
     [SerializeField] TextMeshProUGUI HP_Text;
 
@@ -25,6 +27,10 @@ public class CharacterStatus : MonoBehaviour
     [SerializeField] Image AwakenImage;
 
     [SerializeField] Image CharacterImage;
+
+    [SerializeField] OnClickImage Join_Button;
+
+    int Selected_Index;
 
 
     private void Reset()
@@ -39,6 +45,13 @@ public class CharacterStatus : MonoBehaviour
         AwakenImage = this.TryFindChild(Img_AwakenImage).GetComponent<Image>();
 
         CharacterImage = this.TryFindChild(Img_Character).GetComponent<Image>();
+
+        Join_Button = this.TryFindChild(Img_Join).GetComponent<OnClickImage>();
+    }
+
+    private void Awake()
+    {
+        Join_Button.OnClick = OnClickJoin;
     }
 
     public void SetAttackValue(int value)
@@ -49,6 +62,29 @@ public class CharacterStatus : MonoBehaviour
     public void SetHPValue(int value)
     {
         HP_Text.text = value.ToString();
+    }
+
+    //여기를 보고 필요한 이미지를 넣으시고, 추가로 너무 심심한데 이것좀 넣어주세요
+    public void SetStatusView(CharacterInstance _instance)
+    {
+        CharacterImage.sprite = _instance.characterImage;
+        AwakenImage.sprite = _instance.characterImage;
+        WeaponImage.sprite = _instance.characterImage;
+
+        SetAttackValue(((int)_instance.GetCurrentAttack()));
+        SetHPValue(((int)_instance.GetCurrentHealth()));
+    }
+
+    public void SetStatusView(int _index)
+    {
+        Selected_Index = _index;
+         CharacterInstance instance = CharacterManager.Instance.GetCharacter(_index);
+        SetStatusView(instance);
+    }
+
+    public void OnClickJoin()
+    {
+        CharacterManager.Instance.SelectParticipate(Selected_Index);
     }
 
 }

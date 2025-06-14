@@ -27,23 +27,21 @@ public class UIHireScroll : UIBase
         ReturnButton.OnClick = UIManager.Instance.CloseUI<UIHireScroll>;
     }
 
-    private void Start()
+    private void OnDisable()
     {
-        AddHire();
-        AddHire();
-        AddHire();
-        AddHire();
-        AddHire();
-        AddHire();
-        AddHire();
-        AddHire();
+        foreach(HireLog log in HireList)
+        {
+            Destroy(log.gameObject);
+        }
+        HireList.Clear();
     }
 
-    public void AddHire()
+    public void AddHire(DrawResult _Result)
     {
         GameObject logObject = Instantiate(hireLogPrefab);
         logObject.transform.SetParent(contentObject.transform);
         HireLog log = logObject.GetComponent<HireLog>();
+        log.SetHireImage(_Result.character.characterImage);
         HireList.Add(log);
     }
 }

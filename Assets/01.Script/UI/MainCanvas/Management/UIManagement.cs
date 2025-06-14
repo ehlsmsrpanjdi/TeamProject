@@ -9,6 +9,8 @@ public class UIManagement : UIBase
     [SerializeField] UIInventory Inventory;
     [SerializeField] CharacterStatus characterStatus;
 
+    List<Sprite> sprites = new List<Sprite>();
+
     const string Img_Close = "Img_Close";
 
     private void Reset()
@@ -21,6 +23,24 @@ public class UIManagement : UIBase
     private void Awake()
     {
         Close_Button.OnClick = CloseButtonOn;
+    }
+
+    public override void Open()
+    {
+        base.Open();
+        List<CharacterInstance> list = CharacterManager.Instance.GetAllCharacters();
+
+        foreach (CharacterInstance character in list)
+        {
+            CharacterDataSO So = CharacterData.instance.GetData(character.key);
+            sprites.Add(So.characterImage);
+            Inventory.OnInventoryOpen(sprites);
+        }
+    }
+
+    public void SetStatusView(int _index)
+    {
+        characterStatus.SetStatusView(_index);
     }
 
     void CloseButtonOn()

@@ -3,12 +3,7 @@ using UnityEngine.EventSystems;
 
 public class InventoryImage : BaseImage
 {
-    [SerializeField] public int Index { get; protected set; }
-
-    public void Init(int _Index)
-    {
-        Index = _Index;
-    }
+    Sprite currentSprite;
 
     public override void OnPointerEnter(PointerEventData eventData)
     {
@@ -24,8 +19,15 @@ public class InventoryImage : BaseImage
     {
         if (sprite != null)
         {
+            currentSprite = this.sprite;
             this.sprite = sprite;
             SetNativeSize();
         }
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        this.sprite = currentSprite;
     }
 }

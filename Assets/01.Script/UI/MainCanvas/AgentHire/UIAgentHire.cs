@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class UIAgentHire : UIBase
@@ -10,6 +11,9 @@ public class UIAgentHire : UIBase
     [SerializeField] OnClickImage HireButton;
     [SerializeField] OnClickImage HireMultiButton;
     [SerializeField] OnClickImage ReturnButton;
+
+    UIHireScroll uiHireScroll;
+
     private void Reset()
     {
         HireButton = transform.Find(Img_Hire).GetComponent<OnClickImage>();
@@ -21,10 +25,49 @@ public class UIAgentHire : UIBase
         HireButton.Init();
         HireMultiButton.Init();
 
-        HireButton.OnClick = Hire;
-        HireMultiButton.OnClick = HireMulti;
+        HireButton.OnClick = ClickGachaOneTime;
+        HireMultiButton.OnClick = ClickGachaTenTime;
+
+        GachaManager.Instance.OnCharacterDraw += Hire;
 
         ReturnButton.OnClick = ReturnButtonOn;
+    }
+
+    private void Start()
+    {
+        uiHireScroll = UIManager.Instance.GetUI<UIHireScroll>();
+        if(uiHireScroll == null)
+        {
+            DebugHelper.Log("uihirescroll is NONO", this);
+        }
+    }
+
+    void ClickGachaOneTime()
+    {
+        if(true == uiHireScroll.gameObject.activeSelf)
+        {
+            return;
+        }
+
+        List<DrawResult> list = GachaManager.Instance.DrawCharacter(1);
+        if(list.Count != 0)
+        {
+            uiHireScroll.Open();
+        }
+    }
+
+    void ClickGachaTenTime()
+    {
+        if (true == uiHireScroll.gameObject.activeSelf)
+        {
+            return;
+        }
+
+        List<DrawResult> list = GachaManager.Instance.DrawCharacter(10);
+        if (list.Count != 0)
+        {
+            uiHireScroll.Open();
+        }
     }
 
     void ReturnButtonOn()
@@ -33,12 +76,8 @@ public class UIAgentHire : UIBase
         UIManager.Instance.OpenUI<UILobby>();
     }
 
-    void HireMulti()
+    void Hire(DrawResult _Result)
     {
-        UIManager.Instance.OpenUI<UIHireScroll>();
-    }
-    void Hire()
-    {
-        UIManager.Instance.OpenUI<UIHireScroll>();
+        uiHireScroll.AddHire(_Result);
     }
 }

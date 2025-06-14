@@ -30,6 +30,14 @@ public class DebugWindow : EditorWindow
             CharacterManager.instance.EditorFunction();
         }
 
+        #region //팀장자리
+        if (GUILayout.Button("다이아 1000개 획득"))
+        {
+            Player.Instance.AddDiamond(1000);
+        }
+        #endregion
+
+
         #region QuestTest
 
         if (GUILayout.Button("공격력과 연결된 버튼"))

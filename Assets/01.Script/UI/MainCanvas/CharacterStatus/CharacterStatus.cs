@@ -17,8 +17,11 @@ public class CharacterStatus : MonoBehaviour
 
     const string Img_Join = "Img_Join";
 
+    const string Join_Text = "Join_Text";
+
     [SerializeField] TextMeshProUGUI Attack_Text;
     [SerializeField] TextMeshProUGUI HP_Text;
+    [SerializeField] TextMeshProUGUI JoinText;
 
     [SerializeField] OnClickImage WeaponUpgrade_Button;
     [SerializeField] OnClickImage AwakenUpgrade_Button;
@@ -47,6 +50,7 @@ public class CharacterStatus : MonoBehaviour
         CharacterImage = this.TryFindChild(Img_Character).GetComponent<Image>();
 
         Join_Button = this.TryFindChild(Img_Join).GetComponent<OnClickImage>();
+        JoinText = this.TryFindChild(Join_Text).GetComponent<TextMeshProUGUI>();
     }
 
     private void Awake()
@@ -64,6 +68,18 @@ public class CharacterStatus : MonoBehaviour
         HP_Text.text = value.ToString();
     }
 
+    public void IsJoin(bool _Value)
+    {
+        if (true == _Value)
+        {
+            JoinText.SetText("Pop");
+        }
+        else
+        {
+            JoinText.SetText("Join");
+        }
+    }
+
     //여기를 보고 필요한 이미지를 넣으시고, 추가로 너무 심심한데 이것좀 넣어주세요
     public void SetStatusView(CharacterInstance _instance)
     {
@@ -75,16 +91,39 @@ public class CharacterStatus : MonoBehaviour
         SetHPValue(((int)_instance.GetCurrentHealth()));
     }
 
+    public void NoneView()
+    {
+        CharacterImage.sprite = null;
+        AwakenImage.sprite = null;
+        WeaponImage.sprite = null;
+
+        SetAttackValue(0);
+        SetHPValue(0);
+    }
+
     public void SetStatusView(int _index)
     {
         Selected_Index = _index;
-         CharacterInstance instance = CharacterManager.Instance.GetCharacter(_index);
+        CharacterInstance instance = CharacterManager.Instance.GetCharacter(_index);
         SetStatusView(instance);
     }
 
     public void OnClickJoin()
     {
-        CharacterManager.Instance.SelectParticipate(Selected_Index);
+        bool IsParticipated = CharacterManager.Instance.IsParticipating(Selected_Index);
+        if (true == IsParticipated)
+        {
+            IsJoin(!IsParticipated);
+            CharacterManager.Instance.RemoveParticipate(Selected_Index);
+            UIManager.Instance.GetUI<UIManagement>().OffClickJoin(Selected_Index);
+        }
+        else
+        {
+            CharacterManager.Instance.SelectParticipate(Selected_Index);
+            UIManager.Instance.GetUI<UIManagement>().OnClickJoin(Selected_Index);
+            IsJoin(!IsParticipated);
+        }
     }
+
 
 }

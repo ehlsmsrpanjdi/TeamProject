@@ -35,6 +35,27 @@ public class DebugWindow : EditorWindow
         {
             Player.Instance.AddDiamond(1000);
         }
+
+        if (GUILayout.Button("battle canvas 열기"))
+        {
+            UIManager.Instance.OpenBattleCanvas();
+        }
+
+        if (GUILayout.Button("battle canvas 닫기"))
+        {
+            UIManager.Instance.CloseBattleCanvas();
+        }
+
+        if (GUILayout.Button("main canvas 열기"))
+        {
+            UIManager.Instance.OpenMainCanvas();
+        }
+
+        if (GUILayout.Button("main canvas 열기"))
+        {
+            UIManager.Instance.CloseMainCanvas();
+        }
+
         #endregion
 
 

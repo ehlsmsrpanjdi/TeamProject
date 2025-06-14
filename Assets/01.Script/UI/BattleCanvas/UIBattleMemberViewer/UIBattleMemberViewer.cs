@@ -14,11 +14,29 @@ public class UIBattleMemberViewer : UIBase
         memberPrefab = Resources.Load<GameObject>("UI/BattleMember");
     }
 
-    public void AddMember()
+    public void OnEnable()
+    {
+        List<CharacterInstance> characterList = CharacterManager.Instance.GetParticipateCharacters();
+        foreach (CharacterInstance character in characterList)
+        {
+            AddMember(character);
+        }
+    }
+
+    public void OnDisable()
+    {
+        foreach(BattleMember member in battleMembers)
+        {
+            Destroy(member.gameObject);
+        }
+        battleMembers.Clear();
+    }
+
+    public void AddMember(CharacterInstance _instance)
     {
         GameObject battleMemberUI = Instantiate(memberPrefab, transform);
         BattleMember component = battleMemberUI.GetComponent<BattleMember>();
-
+        component.OnMemberSet(_instance);
         battleMembers.Add(component);
     }
 

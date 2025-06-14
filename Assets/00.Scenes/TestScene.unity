@@ -1136,11 +1136,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterData
       objectReference: {fileID: 0}
-    - target: {fileID: 5169853640856272303, guid: ad02e9d289e199f4497ac38e255d1e8f,
-        type: 3}
-      propertyPath: characterList.Array.size
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 6127550043101437953, guid: ad02e9d289e199f4497ac38e255d1e8f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1226,7 +1221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e43bb91739870142a51cac50cfc8dd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterDataBase: {fileID: 11400000, guid: b781fb84c1b40c04da26e29aee834028, type: 2}
+  characterDataBase: {fileID: 0}
   costPerDraw: 100
 --- !u!4 &1811413063
 Transform:

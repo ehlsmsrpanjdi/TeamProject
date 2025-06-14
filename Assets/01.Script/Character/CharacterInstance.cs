@@ -20,8 +20,6 @@ public class CharacterInstance
     public List<Skill> learnedSkills;
     public GameObject charPrefab;
 
-
-
     public CharacterInstance(CharacterDataSO data)
     {
         this.key = data.key;
@@ -32,6 +30,7 @@ public class CharacterInstance
         this.currentRank = data.startRank;
         this.enhancementLevel = data.enhancementLevel;
         charPrefab = data.characterPrefab;
+        this.rankInfo = data.rankInfo;
 
         learnedSkills = new List<Skill>(); //스킬 리스트초기화
 

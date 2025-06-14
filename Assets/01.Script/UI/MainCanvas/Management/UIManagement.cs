@@ -28,7 +28,7 @@ public class UIManagement : UIBase
     public override void Open()
     {
         base.Open();
-        List<CharacterInstance> list = CharacterManager.instance.GetAllCharacters();
+        List<CharacterInstance> list = CharacterManager.Instance.GetAllCharacters();
 
         foreach (CharacterInstance character in list)
         {

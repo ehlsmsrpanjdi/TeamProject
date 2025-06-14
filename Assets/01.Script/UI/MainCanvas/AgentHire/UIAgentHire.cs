@@ -40,6 +40,7 @@ public class UIAgentHire : UIBase
         {
             DebugHelper.Log("uihirescroll is NONO", this);
         }
+        CharacterManager inst = CharacterManager.Instance;
     }
 
     void ClickGachaOneTime()

@@ -110,9 +110,9 @@ public class GachaManager : MonoBehaviour
 
             CharacterDataSO drawncharacterSO = candidateList[UnityEngine.Random.Range(0, candidateList.Count)];
 
-            if (CharacterManager.instance != null)
+            if (CharacterManager.Instance != null)
             {
-                CharacterManager.instance.CreateCharacter(drawncharacterSO.key);
+                CharacterManager.Instance.CreateCharacter(drawncharacterSO.key);
             }
             else
             {

@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6706076207563702298}
   - component: {fileID: 387555848558337159}
   - component: {fileID: -7562270502257895529}
-  - component: {fileID: -376985652383929975}
   m_Layer: 0
   m_Name: DummyPlayer
   m_TagString: Player
@@ -122,22 +121,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1000
---- !u!114 &-376985652383929975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 945555528487280985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edf8f852252c59f4ca886254963669a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 3
-  interval: 0.5
-  knockbackForce: 5
-  knockbackDamage: 0
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 8

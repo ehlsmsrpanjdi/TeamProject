@@ -44,6 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83640d67f9c7f034ba541e00bd4a5465, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zombiePrefab: {fileID: 8850365060977371982, guid: 6ae4665cf501c6e47ad19a37c19b2364,
+  zombie1Prefab: {fileID: 8850365060977371982, guid: 6ae4665cf501c6e47ad19a37c19b2364,
     type: 3}
-  poolSize: 50
+  zombie2Prefab: {fileID: 8850365060977371982, guid: fc96083695b180342a4b0b1e894cb4e1,
+    type: 3}
+  zombie1PoolSize: 50
+  zombie2PoolSize: 25

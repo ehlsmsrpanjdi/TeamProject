@@ -24,11 +24,138 @@ public class DebugWindow : EditorWindow
         if (GUILayout.Button("테스트 버튼"))
         {
 
-
         }
         if (GUILayout.Button("스폰 버튼"))
         {
-            CharacterManager.instance.EditorFunction();
+            CharacterManager.Instance.EditorFunction();
         }
+
+        #region QuestTest
+
+        if (GUILayout.Button("공격력과 연결된 버튼"))
+        {
+            if (Application.isPlaying)
+            {
+                QuestManager qm = FindObjectOfType<QuestManager>();
+                if (qm != null)
+                {
+                    qm.OnEnchantButtonPressed();
+                }
+                else
+                {
+                    Debug.LogWarning("QuestManager가 씬에서 발견되지 않았습니다.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("플레이 모드에서만 실행할 수 있습니다.");
+            }
+        }
+
+        if (GUILayout.Button("일퀘 완료 테스트 - 공격력"))
+        {
+            if (Application.isPlaying)
+            {
+                QuestManager qm = FindObjectOfType<QuestManager>();
+                if (qm != null)
+                {
+                    qm.ClaimReward(qm.dailyQuests[0]);
+                }
+                else
+                {
+                    Debug.LogWarning("QuestManager가 씬에서 발견되지 않았습니다.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("플레이 모드에서만 실행할 수 있습니다.");
+            }
+
+            UIManager.Instance.GetUI<UIBattleMemberViewer>().AddMember();
+
+        }
+
+        if (GUILayout.Button("일퀘 완료 테스트 - 접속"))
+        {
+            if (Application.isPlaying)
+            {
+                QuestManager qm = FindObjectOfType<QuestManager>();
+                if (qm != null)
+                {
+                    qm.ClaimReward(qm.dailyQuests[1]);
+                }
+                else
+                {
+                    Debug.LogWarning("QuestManager가 씬에서 발견되지 않았습니다.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("플레이 모드에서만 실행할 수 있습니다.");
+            }
+        }
+
+        if (GUILayout.Button("일퀘 완료 테스트 - 10분 접속"))
+        {
+            if (Application.isPlaying)
+            {
+                QuestManager qm = FindObjectOfType<QuestManager>();
+                if (qm != null)
+                {
+                    qm.ClaimReward(qm.dailyQuests[2]);
+                }
+                else
+                {
+                    Debug.LogWarning("QuestManager가 씬에서 발견되지 않았습니다.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("플레이 모드에서만 실행할 수 있습니다.");
+            }
+        }
+
+        if (GUILayout.Button("일퀘 완료 테스트 - 전체"))
+        {
+            if (Application.isPlaying)
+            {
+                QuestManager qm = FindObjectOfType<QuestManager>();
+                if (qm != null)
+                {
+                    qm.ClaimReward(qm.dailyQuests[3]);
+                }
+                else
+                {
+                    Debug.LogWarning("QuestManager가 씬에서 발견되지 않았습니다.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("플레이 모드에서만 실행할 수 있습니다.");
+            }
+        }
+
+        if (GUILayout.Button("퀘스트 강제 리셋"))
+        {
+            if (Application.isPlaying)
+            {
+                QuestManager qm = FindObjectOfType<QuestManager>();
+                if (qm != null)
+                {
+                    qm.ResetDailyQuests();
+                    qm.CheckAllDailyQuests();
+                }
+                else
+                {
+                    Debug.LogWarning("QuestManager가 씬에서 발견되지 않았습니다.");
+                }
+            }
+            else
+            {
+                Debug.LogWarning("플레이 모드에서만 실행할 수 있습니다.");
+            }
+        }
+
+        #endregion
     }
 }

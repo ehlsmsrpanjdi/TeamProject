@@ -14,6 +14,8 @@ public class CharacterManager : MonoBehaviour
     private List<CharacterInstance> characters = new();
     private Dictionary<int, CharacterInstance> participated = new();
 
+
+
     private void Awake()
     {
         if (instance == null)
@@ -120,6 +122,14 @@ public class CharacterManager : MonoBehaviour
     public List<CharacterInstance> GetParticipateCharacters()
     {
         return participated.Values.ToList();
+    }
+
+    /// <summary>
+    /// 딕셔너리로 참전 캐릭터 모두 볼 수 있게
+    /// </summary>
+    public Dictionary<int, CharacterInstance> GetParticipateCharactersAsDictionary()
+    {
+        return participated;
     }
 
 

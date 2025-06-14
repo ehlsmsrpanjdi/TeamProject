@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: 1002
   characterName: CharacterB
-  characterImage: {fileID: 0}
+  characterImage: {fileID: 7482667652216324306, guid: 4ce341789717e47409781d1c93213bb4,
+    type: 3}
   baseAttack: 130
   baseHealth: 1500
   startRank: 1

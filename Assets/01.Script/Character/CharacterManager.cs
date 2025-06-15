@@ -185,7 +185,7 @@ public class CharacterManager
     #if UNITY_EDITOR
     public void EditorFunction()
     {
-        CreateCharacter(1005);
+        CreateCharacter(1004);
 
         SelectParticipate(0);
   

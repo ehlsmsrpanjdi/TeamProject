@@ -29,7 +29,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
     private Renderer zombieRenderer; // 렌더러 (피격 시 색변경용)
     private Transform target; // 플레이어 Transform
     private ZombieStatHandler statHandler; // 좀비 스탯 핸들러
-    private ZombiePool pool; // 좀비 풀
     private WaveManager waveManager; // 웨이브 매니저
     private Coroutine knockbackCoroutine;
 
@@ -97,7 +96,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
             originalColor = zombieRenderer.material.color;
 
         // 시작 시 참조 캐싱
-        pool = FindObjectOfType<ZombiePool>();
         statHandler = GetComponent<ZombieStatHandler>();
     }
 
@@ -170,51 +168,54 @@ public class ZombieAI : MonoBehaviour, IDamageable
                     10f * Time.deltaTime);
         }
     }
+
     // 플레이어 공격
     private void Attack()
     {
-        if (target == null || isKnockback) return;
+    if (target == null || isKnockback) return;
 
-        // 플레이어와의 거리 계산
-        float dist = Vector3.Distance(transform.position, target.position);
+    // 플레이어와의 거리 계산
+    float dist = Vector3.Distance(transform.position, target.position);
 
-        // 공격 범위 밖이면 추적 상태로 전환하고 공격 중단
-        if (dist > statHandler.AttackRange)
+    // 공격 범위 밖이면 추적 상태로 전환하고 공격 중단
+    if (dist > statHandler.AttackRange)
+    {
+        ChangeState(State.Chase);
+        return;
+    }
+
+    agent.ResetPath(); // 이동 경로 초기화
+
+    // 애니메이터가 있고, 컨트롤러가 할당된 경우 애니메이션 이동 중지 처리
+    if (animator != null && animator.runtimeAnimatorController != null)
+        animator.SetBool("IsMoving", false);
+
+    transform.LookAt(target); // 플레이어를 바라봄
+
+    attackTimer += Time.deltaTime;
+
+    // 공격 딜레이가 지나면 공격 실행
+    if (attackTimer >= statHandler.AttackDelay)
+    {
+        Debug.Log("[ZombieAI] 공격 시도");
+
+        // 공격 타입에 따라 근접 또는 투사체 공격 분기 처리
+        if (attackType == AttackType.Melee)
         {
-            ChangeState(State.Chase);
-            return;
-        }
-
-        agent.ResetPath(); // 이동 경로 초기화
-
-        // 애니메이터가 있고, 컨트롤러가 할당된 경우 애니메이션 이동 중지 처리
-        if (animator != null && animator.runtimeAnimatorController != null)
-            animator.SetBool("IsMoving", false);
-
-        transform.LookAt(target); // 플레이어를 바라봄
-
-        attackTimer += Time.deltaTime;
-
-        // 공격 딜레이가 지나면 공격 실행
-        if (attackTimer >= statHandler.AttackDelay)
-        {
-            Debug.Log("[ZombieAI] 공격 시도");
-
-            // 공격 타입에 따라 근접 또는 투사체 공격 분기 처리
-            if (attackType == AttackType.Melee)
+            // 근접 공격 처리
+            IDamageable damageTarget = target.GetComponent<IDamageable>();
+            if (damageTarget != null)
             {
-                // 근접 공격 처리
-                IDamageable damageTarget = target.GetComponent<IDamageable>();
-                if (damageTarget != null)
-                {
-                    Debug.Log("[ZombieAI] 근접 대미지 전달");
-                    damageTarget.TakeDamage(statHandler.Damage, transform.position, 0f);
-                }
-                else
-                {
-                    Debug.LogWarning("[ZombieAI] 대상이 IDamageable 아님");
-                }
+                Debug.Log("[ZombieAI] 근접 대미지 전달");
+                damageTarget.TakeDamage(statHandler.Damage, transform.position, 0f);
             }
+            else
+            {
+                Debug.LogWarning("[ZombieAI] 대상이 IDamageable 아님");
+            }
+        }
+        else if (attackType == AttackType.Projectile)
+        {
             // 원거리 공격
             if (firePoint != null && target != null)
             {
@@ -226,28 +227,31 @@ public class ZombieAI : MonoBehaviour, IDamageable
                     velocity = (target.position - firePoint.position).normalized * 20f;
                 }
 
-                GameObject proj = ZombieProjectilePool.Instance.GetProjectile(
-                    firePoint.position,
-                    Quaternion.LookRotation(velocity),
-                    statHandler.Damage,
-                    gameObject,
-                    velocity
-                );
-
-                ZombieProjectile projScript = proj.GetComponent<ZombieProjectile>();
-                if (projScript != null)
+                ZombieProjectile proj = Pool.Instance.Get<ZombieProjectile>();
+                if (proj != null)
                 {
-                    projScript.gameObject.SetActive(true);
-                    projScript.Launch(velocity);
+                    proj.transform.position = firePoint.position;
+                    proj.transform.rotation = Quaternion.LookRotation(velocity);
+                    proj.SetDamage(statHandler.Damage);
+                    proj.SetShooter(gameObject);
+                    proj.gameObject.SetActive(true);
+                    proj.Launch(velocity);
+                }
+                else
+                {
+                    Debug.LogWarning("[ZombieAI] ZombieProjectile 풀에서 꺼내기 실패");
                 }
             }
             else
             {
-                Debug.LogWarning("[ZombieAI] 투사체 풀 또는 발사 위치 또는 타겟이 설정되지 않음");
+                Debug.LogWarning("[ZombieAI] 투사체 발사 실패: firePoint 또는 target이 null");
             }
+        }
             attackTimer = 0f; // 타이머 초기화
         }
     }
+
+
     // 원거리 공격 포물선 계산
     private Vector3 CalculateProjectileVelocity(Vector3 origin, Vector3 target)
     {
@@ -283,8 +287,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Vector3 center = transform.position + transform.forward * (debugAttackRange * 0.5f);
-        Gizmos.DrawWireSphere(center, debugAttackRange);
+        Gizmos.DrawWireSphere(transform.position, statHandler.AttackRange);
     }
 
     // 상태 변경
@@ -384,15 +387,18 @@ public class ZombieAI : MonoBehaviour, IDamageable
         waveManager?.OnZombieDied();
 
         // 풀에 반환 대기 시작
-        int type = (attackType == AttackType.Projectile) ? 2 : 1;
-        StartCoroutine(ReturnToPoolAfterDelay(2f, type));
+        string zombieKey = (attackType == AttackType.Projectile) ? "Zombie2" : "Zombie1";
+        StartCoroutine(ReturnToPoolAfterDelay(2f, zombieKey));
     }
 
+
     // 지정 시간 후 풀에 좀비 반환
-    private IEnumerator ReturnToPoolAfterDelay(float delay, int type)
+    private IEnumerator ReturnToPoolAfterDelay(float delay, string key)
     {
         yield return new WaitForSeconds(delay);
-        pool.ReturnZombie(type, gameObject);
+
+        // ZombieAI는 Zombie를 상속하지 않으므로, GetComponent로 명시적 참조
+        Pool.Instance.ReturnZombie(key, GetComponent<Zombie>());
 
         // 안전을 위해 웨이브 매니저에 추가 사망 알림
         FindObjectOfType<WaveManager>()?.OnZombieDied();

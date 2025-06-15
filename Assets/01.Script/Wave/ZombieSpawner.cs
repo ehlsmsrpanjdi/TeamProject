@@ -2,44 +2,41 @@ using UnityEngine;
 
 public class ZombieSpawner : MonoBehaviour
 {
-    [Header("좀비 풀링")]
-    public ZombiePool zombiePool;
-    [Header("스폰 위치")]
+    [Header("스폰 위치 중심")]
     public Transform spawnAreaCenter;
-    [Header("스폰 크기")]
+
+    [Header("스폰 범위 크기 (X,Z)")]
     public Vector2 spawnAreaSize = new Vector2(10f, 10f);
 
-    // 지정된 수만큼 좀비를 소환
+    // 좀비 n마리 소환
     public void SpawnWave(int zombieCount)
     {
         for (int i = 0; i < zombieCount; i++)
         {
-            Vector3 randomPos = GetRandomPositionInArea(); // 랜덤 위치 계산
+            Vector3 randomPos = GetRandomPositionInArea();
 
-            // NavMesh 위의 유효한 위치로 보정
+            // NavMesh 위로 위치 보정
             if (UnityEngine.AI.NavMesh.SamplePosition(randomPos, out UnityEngine.AI.NavMeshHit hit, 1f, UnityEngine.AI.NavMesh.AllAreas))
             {
-                randomPos = hit.position; // 유효 위치로 보정
+                randomPos = hit.position;
             }
             else
             {
-                Debug.LogWarning("[ZombieSpawner] NavMesh 위에서 위치를 찾지 못했습니다");
-                continue; // 유효 위치를 찾지 못했으면 스킵
+                Debug.LogWarning("[ZombieSpawner] NavMesh 위 위치를 찾지 못해 스킵됨");
+                continue;
             }
 
-            // 10% 확률로 좀비 2종 타입 선택
-            int zombieType = 1;
-            if (Random.value <= 0.1f)
-                zombieType = 2;
+            // 10% 확률로 Zombie2, 아니면 Zombie1
+            string zombieKey = (Random.value <= 0.1f) ? "Zombie2" : "Zombie1";
 
-            GameObject zombie = zombiePool.GetZombie(zombieType, randomPos); // 타입과 위치 인자 전달
-            if (zombie == null) break; // 풀이 비어있으면 중단
+            Zombie zombie = Pool.Instance.GetZombie(zombieKey);
+            if (zombie == null) continue;
 
-            // 위치 설정은 GetZombie 내부에서 처리되므로 제거
+            zombie.transform.position = randomPos;
         }
     }
 
-    // 소환 구역 내에서 무작위 위치를 반환
+    // 소환 구역 내 랜덤 위치 계산
     private Vector3 GetRandomPositionInArea()
     {
         Vector3 center = spawnAreaCenter.position;
@@ -52,7 +49,7 @@ public class ZombieSpawner : MonoBehaviour
         return new Vector3(center.x + randX, center.y, center.z + randZ);
     }
 
-    // 에디터에서 소환 구역을 시각적으로 표시
+    // 에디터에서 스폰 구역 시각화
     private void OnDrawGizmos()
     {
         if (spawnAreaCenter == null) return;

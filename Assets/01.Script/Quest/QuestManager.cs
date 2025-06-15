@@ -218,6 +218,18 @@ public class QuestManager : MonoBehaviour
     {
         QuestData quest = dailyQuests.Find(q => q.Id == index);
 
+        if (dailyQuests == null)
+        {
+            DebugHelper.LogWarrning($"dailyQuests 리스트가 생성되지 않았습니다.", this);
+            return;
+        }
+
+        if (quest == null)
+        {
+            DebugHelper.LogWarrning($"퀘스트 인덱스 {index}가 잘못되었습니다.", this);
+            return;
+        }
+
         if (quest.IsCompleted && !quest.IsClaimed)
         {
             quest.IsClaimed = true;
@@ -241,7 +253,7 @@ public class QuestManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"{quest.Title} 보상 수령 실패, 조건 여부: {quest.IsCompleted}, 수령 여부: {quest.IsClaimed}");
+            DebugHelper.LogWarrning($"{quest.Title} 보상 수령 실패, 조건 여부: {quest.IsCompleted}, 수령 여부: {quest.IsClaimed}", this);
         }
     }
 

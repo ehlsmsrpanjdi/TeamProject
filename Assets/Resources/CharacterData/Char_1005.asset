@@ -17,9 +17,9 @@ MonoBehaviour:
   characterImage: {fileID: 7482667652216324306, guid: 3b8ca5fa2cd380d4f96044b857ffe539,
     type: 3}
   baseAttack: 70
-  baseHealth: 1050
+  baseHealth: 750
   startRank: 1
-  characterPrefab: {fileID: 8043735512981051254, guid: fcc7ac0fb448027439ad28d675674373,
+  characterPrefab: {fileID: 1374702107769640116, guid: fcc7ac0fb448027439ad28d675674373,
     type: 3}
   enhancementLevel: 0
   rankInfo:

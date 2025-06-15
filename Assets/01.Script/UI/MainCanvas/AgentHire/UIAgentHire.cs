@@ -16,9 +16,9 @@ public class UIAgentHire : UIBase
 
     private void Reset()
     {
-        HireButton = transform.Find(Img_Hire).GetComponent<OnClickImage>();
-        HireMultiButton = transform.Find(Img_Hire_Multi).GetComponent<OnClickImage>();
-        ReturnButton = transform.Find(Img_Return).GetComponent<OnClickImage>();
+        HireButton = this.TryFindChild(Img_Hire).GetComponent<OnClickImage>();
+        HireMultiButton = this.TryFindChild(Img_Hire_Multi).GetComponent<OnClickImage>();
+        ReturnButton = this.TryFindChild(Img_Return).GetComponent<OnClickImage>();
     }
     private void Awake()
     {

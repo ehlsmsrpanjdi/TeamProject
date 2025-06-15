@@ -10,48 +10,40 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 851cfaf6313d0d444b04d97021f7ec7e, type: 3}
-  m_Name: CharacterA
+  m_Name: Char_1002
   m_EditorClassIdentifier: 
-  key: 1001
-  characterName: CharacterA
-  characterImage: {fileID: -2413806693520163455, guid: 818405179ecd90b4b9fb0ae5f02aeb56,
+  key: 1002
+  characterName: "\uCC30\uC2A4"
+  characterImage: {fileID: 7482667652216324306, guid: 4ce341789717e47409781d1c93213bb4,
     type: 3}
-  baseAttack: 100
-  baseHealth: 1000
+  baseAttack: 65
+  baseHealth: 900
   startRank: 0
-  characterPrefab: {fileID: 4317157609767113266, guid: 68ec5abbd3652de4ebeda1a00f67b493,
+  characterPrefab: {fileID: 9158713236848796802, guid: 75f19c52e13d4a74bada4fa5b38e0584,
     type: 3}
   enhancementLevel: 0
   rankInfo:
   - rank: 0
     attackMultiplier: 1
     hpMultiplier: 1
-    Skills: []
     requiredOwnedCount: 2
   - rank: 1
     attackMultiplier: 1.2
     hpMultiplier: 1.2
-    Skills:
-    - {fileID: 11400000, guid: 913ecd1374d155146987b54019edc847, type: 2}
     requiredOwnedCount: 2
   - rank: 2
     attackMultiplier: 1.3
     hpMultiplier: 1.3
-    Skills:
-    - {fileID: 11400000, guid: 3b56fd40bd386a24bb756b67bd90abdd, type: 2}
     requiredOwnedCount: 2
   - rank: 3
     attackMultiplier: 1.4
     hpMultiplier: 1.4
-    Skills: []
     requiredOwnedCount: 2
   - rank: 4
     attackMultiplier: 1.5
     hpMultiplier: 1.5
-    Skills: []
     requiredOwnedCount: 2
   - rank: 5
     attackMultiplier: 1.6
     hpMultiplier: 1.6
-    Skills: []
     requiredOwnedCount: 0

@@ -185,11 +185,10 @@ public class CharacterManager
     #if UNITY_EDITOR
     public void EditorFunction()
     {
-        CreateCharacter(1001);
-        CreateCharacter(1002);
+        CreateCharacter(1005);
 
         SelectParticipate(0);
-        SelectParticipate(1);
+  
 
         SpawnParticipateCharacters(Vector3.zero); // 스폰 호출
 

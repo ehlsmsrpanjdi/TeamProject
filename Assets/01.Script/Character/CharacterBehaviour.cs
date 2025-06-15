@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,22 +13,52 @@ public class CharacterBehaviour : MonoBehaviour
 
     private CharacterInstance charInstance;
 
+    private CharAnimController animController;
+    public Animator animator;
+
+    public bool isAttacking;
+
     public void Init(CharacterInstance data)
     {
         charInstance = data;
         var usableSkills = charInstance.GetActiveSkills(); // 현재 활성화 되어있는 스킬만 사용 가능한 스킬에 들어감.
+
+        animator = GetComponent<Animator>();
+        animController = new CharAnimController(animator);
+        
+
+        animController.SetAttack(true);
     }
     void Update()
     {
         if (Time.time - lastAttackTime >= attackDelay)
         {
-            Attack();
+            animController.Attacking(CheckEnemyInRange());
             lastAttackTime = Time.time;
+
         }
     }
-    //공격
-    void Attack()
+
+    /// <summary>
+    /// 범위 내에 적이 들어왔는지 확인해서 공격 애니메이션에 전달하기 위함.
+    /// </summary>
+    bool CheckEnemyInRange()
     {
+        Collider[] hitEnemies = Physics.OverlapSphere(transform.position, attackRange, LayerMask.GetMask("Zombie")); //캐릭터 기준 콜라이더 확인.
+        if (hitEnemies.Length > 0)
+        {
+            isAttacking = true;
+        }
+        else
+        {
+            isAttacking = false;
+        }
+        return isAttacking;
+    }
+    public void Attack()
+    {
+        if (!CheckEnemyInRange()) return;
+        
         Collider[] hitEnemies = Physics.OverlapSphere(transform.position, attackRange, LayerMask.GetMask("Zombie")); //캐릭터 기준 콜라이더 확인.
 
         if (hitEnemies.Length == 0) return; // 공격범위 내에 몬스터 없으면 땡.

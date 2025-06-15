@@ -1136,6 +1136,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterData
       objectReference: {fileID: 0}
+    - target: {fileID: 5169853640856272303, guid: ad02e9d289e199f4497ac38e255d1e8f,
+        type: 3}
+      propertyPath: characterList.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5169853640856272303, guid: ad02e9d289e199f4497ac38e255d1e8f,
+        type: 3}
+      propertyPath: characterList.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 769d92a178fb7f940b78c823bd764c77,
+        type: 2}
+    - target: {fileID: 5169853640856272303, guid: ad02e9d289e199f4497ac38e255d1e8f,
+        type: 3}
+      propertyPath: characterList.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 70224e4e564a6834c9f22c951f3bbcb3,
+        type: 2}
+    - target: {fileID: 5169853640856272303, guid: ad02e9d289e199f4497ac38e255d1e8f,
+        type: 3}
+      propertyPath: characterList.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7066db08416b29b41a1777e33e7932ed,
+        type: 2}
     - target: {fileID: 6127550043101437953, guid: ad02e9d289e199f4497ac38e255d1e8f,
         type: 3}
       propertyPath: m_LocalPosition.x

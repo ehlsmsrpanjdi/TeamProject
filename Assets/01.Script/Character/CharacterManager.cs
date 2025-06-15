@@ -99,20 +99,26 @@ public class CharacterManager
     }
 
     /// <summary>
-    /// 참전 리스트에 넣기
+    /// 참전 리스트에 넣기. 최대인원 4명 제한.
     /// </summary>
      public bool SelectParticipate(int index)
     {
+        if (participated.Count >= 4)
+        {
+            return false;
+        }
+
+        if (index < 0 || index >= characters.Count)
+        {
+            return false;
+        }
+
         if (characters[index] != null)
         {
             if (!participated.ContainsKey(index))
             {
                 participated.Add(index, characters[index]);
                 return true; // 참전
-            }
-            else
-            {
-                return false; // 이미 참전 중
             }
         }
         return false; // 캐릭터 없음
@@ -175,6 +181,7 @@ public class CharacterManager
         }
     }
 
+
     #if UNITY_EDITOR
     public void EditorFunction()
     {
@@ -185,6 +192,8 @@ public class CharacterManager
         SelectParticipate(1);
 
         SpawnParticipateCharacters(Vector3.zero); // 스폰 호출
+
+
     }
     #endif
 }

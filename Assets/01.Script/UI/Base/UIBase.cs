@@ -18,12 +18,6 @@ public class UIBase : MonoBehaviour
 
     public virtual void Close()
     {
-        if (false == gameObject.activeSelf)
-        {
-            transform.KillDoTween();
-            gameObject.SetActive(true);
-            return;
-        }
         gameObject.SetActive(false);
     }
 }

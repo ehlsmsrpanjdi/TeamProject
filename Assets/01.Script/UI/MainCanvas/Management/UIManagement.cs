@@ -9,8 +9,6 @@ public class UIManagement : UIBase
     [SerializeField] UIInventory Inventory;
     [SerializeField] CharacterStatus characterStatus;
 
-    [SerializeField] BackGroundHelper backGroundHelper;
-
     List<Sprite> sprites = new List<Sprite>();
 
     const string Img_Close = "Img_Close";
@@ -21,7 +19,6 @@ public class UIManagement : UIBase
         Inventory = GetComponentInChildren<UIInventory>(true);
         characterStatus = GetComponentInChildren<CharacterStatus>(true);
 
-        backGroundHelper = gameObject.transform.parent.GetComponent<BackGroundHelper>();
     }
 
     public void IsJoin(bool _Value)
@@ -47,7 +44,6 @@ public class UIManagement : UIBase
         Inventory.OnInventoryOpen(sprites);
         sprites.Clear();
         transform.FadeOutXY();
-        backGroundHelper.gameObject.SetActive(true);
     }
 
     public override void Close()
@@ -56,7 +52,6 @@ public class UIManagement : UIBase
         tween.OnComplete(() =>
         {
             base.Close();
-            backGroundHelper.gameObject.SetActive(false);
         });
     }
 

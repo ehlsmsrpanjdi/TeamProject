@@ -12,7 +12,6 @@ public class UIQuestScroll : UIBase
 
     [SerializeField] OnClickImage ReturnButton;
 
-    [SerializeField] BackGroundHelper backGroundHelper;
 
     const string QuestLog = "UI/QuestLog";
 
@@ -23,7 +22,6 @@ public class UIQuestScroll : UIBase
 
         ReturnButton = GetComponentInChildren<OnClickImage>();
 
-        backGroundHelper = gameObject.transform.parent.GetComponent<BackGroundHelper>();
     }
 
     private void Awake()
@@ -44,7 +42,6 @@ public class UIQuestScroll : UIBase
             AddQuest(info);
         }
         transform.FadeOutXY();
-        backGroundHelper.gameObject.SetActive(true);
     }
 
     public override void Close()
@@ -53,7 +50,6 @@ public class UIQuestScroll : UIBase
         tween.OnComplete(() =>
         {
             base.Close();
-            backGroundHelper.gameObject.SetActive(false);
         });
     }
 

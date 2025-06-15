@@ -12,7 +12,6 @@ public class UIHireScroll : UIBase
 
     [SerializeField] OnClickImage ReturnButton;
 
-    [SerializeField] BackGroundHelper backGroundHelper;
 
     const string HireLog = "UI/HireLog";
 
@@ -23,7 +22,6 @@ public class UIHireScroll : UIBase
 
         ReturnButton = GetComponentInChildren<OnClickImage>();
 
-        backGroundHelper = gameObject.transform.parent.GetComponent<BackGroundHelper>();
     }
 
     private void Awake()
@@ -46,6 +44,7 @@ public class UIHireScroll : UIBase
         logObject.transform.SetParent(contentObject.transform);
         HireLog log = logObject.GetComponent<HireLog>();
         log.SetHireImage(_Result.character.characterImage);
+        logObject.transform.localScale = new Vector3(1, 1, 1);
         HireList.Add(log);
     }
 
@@ -53,7 +52,6 @@ public class UIHireScroll : UIBase
     {
         base.Open();
         transform.FadeOutXY();
-        backGroundHelper.gameObject.SetActive(true);
     }
 
     public override void Close()
@@ -62,7 +60,6 @@ public class UIHireScroll : UIBase
         tween.OnComplete(() =>
         {
             base.Close();
-            backGroundHelper.gameObject.SetActive(false);
         });
     }
 }

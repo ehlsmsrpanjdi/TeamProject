@@ -6,7 +6,6 @@ public class UIGacha : UIBase
 {
     [SerializeField] GameObject GachaCameraObject;
     [SerializeField] OnClickImage OnClickBackGround;
-    [SerializeField] BackGroundHelper backGroundHelper;
 
     GameObject SpawnBox;
 
@@ -21,7 +20,6 @@ public class UIGacha : UIBase
     {
         GachaCameraObject = GameObject.Find(GachaCamera);
         OnClickBackGround = GetComponentInChildren<OnClickImage>();
-        backGroundHelper = gameObject.transform.parent.GetComponent<BackGroundHelper>();
     }
 
     public void Awake()
@@ -42,7 +40,6 @@ public class UIGacha : UIBase
         gameObject.transform.FadeOutXY();
         GachaCamera GachaComponent = GachaCameraObject.GetComponent<GachaCamera>();
         SpawnBox = GachaComponent.SpawnNormalBox();
-        backGroundHelper.gameObject.SetActive(true);
     }
 
     public override void Close()
@@ -50,7 +47,8 @@ public class UIGacha : UIBase
         base.Close();
         UIHireScroll HireScroll = UIManager.Instance.GetUI<UIHireScroll>();
         HireScroll.Open();
-        backGroundHelper.gameObject?.SetActive(false);
+        IsOpening = false;
+        IsOpen = false;
     }
 
     void OnClickGachaUI()
@@ -65,8 +63,11 @@ public class UIGacha : UIBase
             Tween tween = SpawnBox.transform.ScaleUp(1.5f);
             tween.OnComplete(() =>
         {
-            Destroy(SpawnBox);
-            CloseCoroutineValue = StartCoroutine(CloseCoroutine());
+            if(true == gameObject.activeSelf)
+            {
+                Destroy(SpawnBox);
+                CloseCoroutineValue = StartCoroutine(CloseCoroutine());
+            }
         });
 
             IsOpen = true;
@@ -78,6 +79,7 @@ public class UIGacha : UIBase
                 StopCoroutine(CloseCoroutineValue);
                 CloseCoroutineValue = null;
             }
+            Destroy(SpawnBox);
             Close();
         }
     }

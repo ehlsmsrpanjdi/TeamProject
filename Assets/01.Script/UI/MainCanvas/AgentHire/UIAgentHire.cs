@@ -10,7 +10,6 @@ public class UIAgentHire : UIBase
     [SerializeField] OnClickImage HireButton;
     [SerializeField] OnClickImage HireMultiButton;
     [SerializeField] OnClickImage ReturnButton;
-    [SerializeField] BackGroundHelper backGroundHelper;
 
     UIHireScroll uiHireScroll;
 
@@ -19,7 +18,6 @@ public class UIAgentHire : UIBase
         HireButton = this.TryFindChild(Img_Hire).GetComponent<OnClickImage>();
         HireMultiButton = this.TryFindChild(Img_Hire_Multi).GetComponent<OnClickImage>();
         ReturnButton = this.TryFindChild(Img_Return).GetComponent<OnClickImage>();
-        backGroundHelper = gameObject.transform.parent.GetComponent<BackGroundHelper>();
     }
     private void Awake()
     {
@@ -52,6 +50,10 @@ public class UIAgentHire : UIBase
 
     void ClickGachaOneTime()
     {
+        if(true == UIManager.Instance.GetUI<UIGacha>().gameObject.activeSelf)
+        {
+            return;
+        }
         if (true == uiHireScroll.gameObject.activeSelf)
         {
             return;
@@ -68,6 +70,10 @@ public class UIAgentHire : UIBase
 
     void ClickGachaTenTime()
     {
+        if (true == UIManager.Instance.GetUI<UIGacha>().gameObject.activeSelf)
+        {
+            return;
+        }
         if (true == uiHireScroll.gameObject.activeSelf)
         {
             return;
@@ -79,8 +85,6 @@ public class UIAgentHire : UIBase
         {
             UIManager.Instance.OpenUI<UIGacha>();
         }
-
-        UIManager.Instance.OpenUI<UIGacha>();
     }
 
     void ReturnButtonOn()
@@ -116,7 +120,6 @@ public class UIAgentHire : UIBase
     public override void Open()
     {
         base.Open();
-        backGroundHelper.gameObject.SetActive(true);
         transform.FadeOutXY();
     }
 
@@ -126,7 +129,6 @@ public class UIAgentHire : UIBase
         tween.OnComplete(() =>
         {
             base.Close();
-            backGroundHelper.gameObject.SetActive(false);
         });
     }
 }

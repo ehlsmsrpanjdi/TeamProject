@@ -1,6 +1,5 @@
-using System.Collections;
+using DG.Tweening;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public class UIAgentHire : UIBase
@@ -11,6 +10,7 @@ public class UIAgentHire : UIBase
     [SerializeField] OnClickImage HireButton;
     [SerializeField] OnClickImage HireMultiButton;
     [SerializeField] OnClickImage ReturnButton;
+    [SerializeField] BackGroundHelper backGroundHelper;
 
     UIHireScroll uiHireScroll;
 
@@ -19,6 +19,7 @@ public class UIAgentHire : UIBase
         HireButton = this.TryFindChild(Img_Hire).GetComponent<OnClickImage>();
         HireMultiButton = this.TryFindChild(Img_Hire_Multi).GetComponent<OnClickImage>();
         ReturnButton = this.TryFindChild(Img_Return).GetComponent<OnClickImage>();
+        backGroundHelper = gameObject.transform.parent.GetComponent<BackGroundHelper>();
     }
     private void Awake()
     {
@@ -36,7 +37,7 @@ public class UIAgentHire : UIBase
     private void Start()
     {
         uiHireScroll = UIManager.Instance.GetUI<UIHireScroll>();
-        if(uiHireScroll == null)
+        if (uiHireScroll == null)
         {
             DebugHelper.Log("uihirescroll is NONO", this);
         }
@@ -51,16 +52,18 @@ public class UIAgentHire : UIBase
 
     void ClickGachaOneTime()
     {
-        if(true == uiHireScroll.gameObject.activeSelf)
+        if (true == uiHireScroll.gameObject.activeSelf)
         {
             return;
         }
 
         List<DrawResult> list = GachaManager.Instance.DrawCharacter(1);
-        if(list.Count != 0)
+
+        if (list.Count != 0)
         {
-            uiHireScroll.Open();
+            UIManager.Instance.OpenUI<UIGacha>();
         }
+
     }
 
     void ClickGachaTenTime()
@@ -71,16 +74,18 @@ public class UIAgentHire : UIBase
         }
 
         List<DrawResult> list = GachaManager.Instance.DrawCharacter(10);
+
         if (list.Count != 0)
         {
-            uiHireScroll.Open();
+            UIManager.Instance.OpenUI<UIGacha>();
         }
+
+        UIManager.Instance.OpenUI<UIGacha>();
     }
 
     void ReturnButtonOn()
     {
         UIManager.Instance.CloseUI<UIAgentHire>();
-        UIManager.Instance.OpenUI<UILobby>();
     }
 
     void Hire(DrawResult _Result)
@@ -106,5 +111,22 @@ public class UIAgentHire : UIBase
             _Image.transform.rotation = Quaternion.identity;
         }
         _Image.OnMouseExitAction = OnMouseOut;
+    }
+
+    public override void Open()
+    {
+        base.Open();
+        backGroundHelper.gameObject.SetActive(true);
+        transform.FadeOutXY();
+    }
+
+    public override void Close()
+    {
+        Tween tween = transform.FadeInXY();
+        tween.OnComplete(() =>
+        {
+            base.Close();
+            backGroundHelper.gameObject.SetActive(false);
+        });
     }
 }

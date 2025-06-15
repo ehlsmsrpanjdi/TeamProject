@@ -31,10 +31,7 @@ public class UIStatus : UIBase
 
     public void OnOptionClick()
     {
-        if (false == UIManager.Instance.GetUI<UIOption>().gameObject.activeSelf)
-        {
-            OptionButton.OnClick = UIManager.Instance.OpenUI<UIOption>;
-        }
+        UIManager.Instance.OpenUI<UIOption>();
     }
 
     public void SetGold(int _Gold)

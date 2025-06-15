@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIOption : UIBase
 {
@@ -11,12 +12,14 @@ public class UIOption : UIBase
     [SerializeField] OnClickImage Continue;
     [SerializeField] OnClickImage Exit;
     [SerializeField] OnClickImage Option;
+    [SerializeField] BackGroundHelper backGroundHelper;
 
     private void Reset()
     {
         Continue = this.TryFindChild(Img_Continue).GetComponent<OnClickImage>();
         Exit = this.TryFindChild(Img_Exit).GetComponent<OnClickImage>();
         Option = this.TryFindChild(Img_Option).GetComponent<OnClickImage>();
+        backGroundHelper = gameObject.transform.parent.GetComponent<BackGroundHelper>();
     }
 
     private void Awake()
@@ -32,7 +35,14 @@ public class UIOption : UIBase
     public override void Open()
     {
         base.Open();
+        backGroundHelper.gameObject.SetActive(true);
         transform.FadeOutXY();
+    }
+
+    public override void Close()
+    {
+        base.Close();
+        backGroundHelper.gameObject.SetActive(false);
     }
 
     void OnOptionClick()

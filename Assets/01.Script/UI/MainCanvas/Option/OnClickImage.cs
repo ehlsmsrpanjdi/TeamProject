@@ -14,6 +14,11 @@ public class OnClickImage : BaseImage, IPointerClickHandler
         ChangeColor = Color.yellow;
     }
 
+    public void NoHoverColor()
+    {
+        ChangeColor = color;
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         OnClick?.Invoke();

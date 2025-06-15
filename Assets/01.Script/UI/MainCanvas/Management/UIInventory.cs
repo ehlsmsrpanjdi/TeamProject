@@ -46,7 +46,7 @@ public class UIInventory : MonoBehaviour
         }
         else
         {
-             UIManagement management = UIManager.Instance.GetUI<UIManagement>();
+            UIManagement management = UIManager.Instance.GetUI<UIManagement>();
             management.NoneView();
         }
     }

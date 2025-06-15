@@ -49,7 +49,7 @@ public class UILobby : UIBase
     private void Awake()
     {
         Agent_Button.OnClick = OnAgentClick;
-        Quest_Button.OnClick = UIManager.Instance.OpenUI<UIQuestScroll>;
+        Quest_Button.OnClick = OnQuestClick;
         //BattleField_Button .OnClick = UIManager.Instance.OpenUI<UIBattleField>;
         Management_Button.OnClick = OnManagementClick;
         //Shop_Button .OnClick = UIManager.Instance.OpenUI<UIShop>;
@@ -74,13 +74,25 @@ public class UILobby : UIBase
     void OnManagementClick()
     {
         UIManager.Instance.OpenUI<UIManagement>();
-        UIManager.Instance.CloseUI<UILobby>();
+        Management_Button.transform.KillDoTween();
+        ManagementBackGround.transform.KillDoTween();
+        ManagementBackGround.transform.FadeInX();
+    }
+
+    void OnQuestClick()
+    {
+        UIManager.Instance.OpenUI<UIQuestScroll>();
+        Quest_Button.transform.KillDoTween();
+        QuestBackGround.transform.KillDoTween();
+        QuestBackGround.transform.FadeInX();
     }
 
     void OnAgentClick()
     {
         UIManager.Instance.OpenUI<UIAgentHire>();
-        UIManager.Instance.CloseUI<UILobby>();
+        Agent_Button.transform.KillDoTween();
+        AgentBackGround.transform.KillDoTween();
+        AgentBackGround.transform.FadeInX();
     }
 
     void OnLobbyImageMouseEnter(BaseImage _Image, Image _BackgroundImg)

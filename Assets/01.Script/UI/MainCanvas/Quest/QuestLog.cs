@@ -11,15 +11,16 @@ public class QuestLog : MonoBehaviour
 
     const string QuestNameText = "QuestNameText";
     const string QuestDescriptionText = "QuestDescriptionText";
+    const string Img_Btn = "Img_Btn";
 
     [SerializeField] TextMeshProUGUI QuestName;
     [SerializeField] TextMeshProUGUI QuestDescription;
 
     private void Reset()
     {
-        QuestName = transform.Find(QuestNameText).GetComponent<TextMeshProUGUI>();
-        QuestDescription = transform.Find(QuestDescriptionText).GetComponent<TextMeshProUGUI>();
-        ConfirmButton = GetComponentInChildren<OnClickImage>();
+        QuestName = this.TryFindChild(QuestNameText).GetComponent<TextMeshProUGUI>();
+        QuestDescription = this.TryFindChild(QuestDescriptionText).GetComponent<TextMeshProUGUI>();
+        ConfirmButton = this.TryFindChild(Img_Btn).GetComponent<OnClickImage>();
     }
 
     public void SetQuestName(string name)

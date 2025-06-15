@@ -105,7 +105,10 @@ public class CharacterStatus : MonoBehaviour
     {
         Selected_Index = _index;
         CharacterInstance instance = CharacterManager.Instance.GetCharacter(_index);
-        SetStatusView(instance);
+        if (instance != null)
+        {
+            SetStatusView(instance);
+        }
     }
 
     public void OnClickJoin()

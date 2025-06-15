@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 
 public static class DoTweenHelper
@@ -7,6 +8,20 @@ public static class DoTweenHelper
     {
         transform
         .DORotate(Vector3.forward * 360, 2f, RotateMode.FastBeyond360)
+        .SetEase(Ease.Linear)
+        .SetRelative()
+        .SetLoops(-1, LoopType.Restart);
+    }
+
+    public static bool IsDoTween(this Transform transform)
+    {
+        return DOTween.IsTweening(transform);
+    }
+
+    public static void RightRotationSpeedLoop(this Transform transform, float _Speed)
+    {
+        transform
+        .DOLocalRotate(Vector3.right * 360 * _Speed, 2f, RotateMode.FastBeyond360)
         .SetEase(Ease.Linear)
         .SetRelative()
         .SetLoops(-1, LoopType.Restart);
@@ -40,6 +55,21 @@ public static class DoTweenHelper
         seq.Append(transform.DOScaleY(1f, 0.5f).From(new Vector3(1f, 0.1f, 1f)).SetEase(Ease.InBack));
 
         return seq;
+    }
+
+    public static Tween ScaleUp(this Transform transform, float _Size)
+    {
+        Vector3 Size = transform.localScale* _Size;
+        return transform.DOScale(Size, 0.5f).SetEase(Ease.InBack);
+    }
+
+    public static Tween AddCallBack(this Tween _Tween, Action _Action)
+    {
+        _Tween.OnComplete(() =>
+         {
+             _Action.Invoke();
+         });
+        return _Tween;
     }
 
     public static void KillDoTween(this Transform transform)

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ public class UIManagement : UIBase
     [SerializeField] UIInventory Inventory;
     [SerializeField] CharacterStatus characterStatus;
 
+    [SerializeField] BackGroundHelper backGroundHelper;
+
     List<Sprite> sprites = new List<Sprite>();
 
     const string Img_Close = "Img_Close";
@@ -17,6 +20,8 @@ public class UIManagement : UIBase
         Close_Button = this.TryFindChild(Img_Close).GetComponent<OnClickImage>();
         Inventory = GetComponentInChildren<UIInventory>(true);
         characterStatus = GetComponentInChildren<CharacterStatus>(true);
+
+        backGroundHelper = gameObject.transform.parent.GetComponent<BackGroundHelper>();
     }
 
     public void IsJoin(bool _Value)
@@ -41,7 +46,20 @@ public class UIManagement : UIBase
         }
         Inventory.OnInventoryOpen(sprites);
         sprites.Clear();
+        transform.FadeOutXY();
+        backGroundHelper.gameObject.SetActive(true);
     }
+
+    public override void Close()
+    {
+        Tween tween = transform.FadeInXY();
+        tween.OnComplete(() =>
+        {
+            base.Close();
+            backGroundHelper.gameObject.SetActive(false);
+        });
+    }
+
 
     public void SetStatusView(int _index)
     {
@@ -51,7 +69,6 @@ public class UIManagement : UIBase
     void CloseButtonOn()
     {
         Close();
-        UIManager.Instance.OpenUI<UILobby>();
     }
 
     public void OnClickJoin(int _index)

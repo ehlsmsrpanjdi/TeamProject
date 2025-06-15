@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.Rendering;
 
 public struct DrawResult
 {
@@ -16,26 +15,36 @@ public enum GachaFailReason
     InventoryFull,
 }
 
-public class GachaManager : MonoBehaviour
+public class GachaManager
 {
-    public static GachaManager Instance;
-    public CharacterDataBase characterDataBase;
+    private static GachaManager instance;
+
+    public static GachaManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new GachaManager();
+                instance.Init();
+            }
+            return instance;
+        }
+        set { instance = value; }
+    }
+
+    public CharacterDataBase gachaDataBase;
     public event Action<DrawResult> OnCharacterDraw; // 캐릭터 뽑기 시 호출되는 이벤트
     public event Action<GachaFailReason> OnGachaFail;
 
     public int costPerDraw = 100;
 
-    private void Awake()
+
+    public void Init()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        gachaDataBase = Resources.Load<CharacterDataBase>("Gacha/CharacterDataBase");
     }
+
 
     // 가챠 버튼 등을 눌러서 호출
     public List<DrawResult> DrawCharacter(int times)
@@ -46,13 +55,11 @@ public class GachaManager : MonoBehaviour
         }
 
         int totalCost = times * costPerDraw;
-
         bool drawSuccess = Player.Instance.UseDiamond(totalCost);
 
         if (!drawSuccess)
         {
             OnGachaFail?.Invoke(GachaFailReason.NotEnoughDiamond);
-            DebugHelper.Log("Not Enough Diamond", this);
             return new List<DrawResult>();
         }
 
@@ -94,24 +101,12 @@ public class GachaManager : MonoBehaviour
             List<CharacterDataSO> candidateList = null;
             switch (rankToDraw)
             {
-                case Rank.SSS:
-                    candidateList = characterDataBase.SSSCharacterList;
-                    break;
-                case Rank.SS:
-                    candidateList = characterDataBase.SSCharacterList;
-                    break;
-                case Rank.S:
-                    candidateList = characterDataBase.SCharacterList;
-                    break;
-                case Rank.A:
-                    candidateList = characterDataBase.ACharacterList;
-                    break;
-                case Rank.B:
-                    candidateList = characterDataBase.BCharacterList;
-                    break;
-                case Rank.C:
-                    candidateList = characterDataBase.CCharacterList;
-                    break;
+                case Rank.SSS: candidateList = gachaDataBase.SSSCharacterList; break;
+                case Rank.SS: candidateList = gachaDataBase.SSCharacterList; break;
+                case Rank.S: candidateList = gachaDataBase.SCharacterList; break;
+                case Rank.A: candidateList = gachaDataBase.ACharacterList; break;
+                case Rank.B: candidateList = gachaDataBase.BCharacterList; break;
+                case Rank.C: candidateList = gachaDataBase.CCharacterList; break;
             }
 
             if (candidateList == null || candidateList.Count == 0)
@@ -121,6 +116,14 @@ public class GachaManager : MonoBehaviour
 
             CharacterDataSO drawncharacterSO = candidateList[UnityEngine.Random.Range(0, candidateList.Count)];
 
+            if (CharacterManager.Instance != null)
+            {
+                CharacterManager.Instance.CreateCharacter(drawncharacterSO.key);
+            }
+            else
+            {
+            }
+
             DrawResult result = new DrawResult
             {
                 character = drawncharacterSO,
@@ -128,9 +131,10 @@ public class GachaManager : MonoBehaviour
             };
 
             resultList.Add(result);
+            DebugHelper.Log($"뽑기 결과: {result.character.characterName} {result.rank}", result.character);
             OnCharacterDraw?.Invoke(result);
-            DebugHelper.Log($"Draw {drawncharacterSO.characterName} {rankToDraw}", this);
         }
         return resultList;
     }
+
 }

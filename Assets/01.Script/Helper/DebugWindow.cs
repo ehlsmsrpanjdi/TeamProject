@@ -25,10 +25,43 @@ public class DebugWindow : EditorWindow
         {
 
         }
+        if (GUILayout.Button("뽑기 버튼"))
+        {
+            GachaManager.Instance.DrawCharacter(1);
+        }
         if (GUILayout.Button("스폰 버튼"))
         {
-            CharacterManager.instance.EditorFunction();
+            CharacterManager.Instance.EditorFunction();
         }
+
+        #region //팀장자리
+        if (GUILayout.Button("다이아 1000개 획득"))
+        {
+            Player.Instance.AddDiamond(1000);
+        }
+
+        if (GUILayout.Button("battle canvas 열기"))
+        {
+            UIManager.Instance.OpenBattleCanvas();
+        }
+
+        if (GUILayout.Button("battle canvas 닫기"))
+        {
+            UIManager.Instance.CloseBattleCanvas();
+        }
+
+        if (GUILayout.Button("main canvas 열기"))
+        {
+            UIManager.Instance.OpenMainCanvas();
+        }
+
+        if (GUILayout.Button("main canvas 열기"))
+        {
+            UIManager.Instance.CloseMainCanvas();
+        }
+
+        #endregion
+
 
         #region QuestTest
 
@@ -70,9 +103,6 @@ public class DebugWindow : EditorWindow
             {
                 Debug.LogWarning("플레이 모드에서만 실행할 수 있습니다.");
             }
-
-            UIManager.Instance.GetUI<UIBattleMemberViewer>().AddMember();
-
         }
 
         if (GUILayout.Button("일퀘 완료 테스트 - 접속"))

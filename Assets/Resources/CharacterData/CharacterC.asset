@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 851cfaf6313d0d444b04d97021f7ec7e, type: 3}
-  m_Name: CharacterB
+  m_Name: CharacterC
   m_EditorClassIdentifier: 
-  key: 1002
-  characterName: CharacterB
-  characterImage: {fileID: 0}
-  baseAttack: 130
-  baseHealth: 1500
-  startRank: 1
-  characterPrefab: {fileID: 5914575922104019265, guid: d3fd7c5c46a3ad042963fbc8f209dc23,
+  key: 1003
+  characterName: CharacterC
+  characterImage: {fileID: 7482667652216324306, guid: 3b8ca5fa2cd380d4f96044b857ffe539,
+    type: 3}
+  baseAttack: 150
+  baseHealth: 2000
+  startRank: 2
+  characterPrefab: {fileID: 1892351455669251049, guid: 75f19c52e13d4a74bada4fa5b38e0584,
     type: 3}
   enhancementLevel: 0
   rankInfo:

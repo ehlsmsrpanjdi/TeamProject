@@ -124,4 +124,24 @@ public class UIManager : MonoBehaviour
     {
         GetUI<T>()?.Close();
     }
+
+    public void OpenMainCanvas()
+    {
+        mainCanvas.gameObject.SetActive(true);
+    }
+
+    public void CloseMainCanvas()
+    {
+        mainCanvas.gameObject.SetActive(false);
+    }
+
+    public void OpenBattleCanvas()
+    {
+        battleCanvas.gameObject.SetActive(true);
+    }
+
+    public void CloseBattleCanvas()
+    {
+        battleCanvas.gameObject.SetActive(false);
+    }
 }

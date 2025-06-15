@@ -78,6 +78,15 @@ public class CharacterBehaviour : MonoBehaviour
 
         if (closestEnemy != null)
         {
+            Vector3 directionToEnemy = closestEnemy.transform.position - transform.position;
+            directionToEnemy.x  = 0f;
+            directionToEnemy.z = 0f;
+            if(directionToEnemy != Vector3.zero)
+            {
+                Quaternion lookRotation = Quaternion.LookRotation(transform.position, directionToEnemy);
+                transform.rotation = lookRotation;
+            }
+
             IDamageable target = closestEnemy.GetComponent<IDamageable>();
             if (target != null)
             {

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +19,11 @@ public class UIManagement : UIBase
         characterStatus = GetComponentInChildren<CharacterStatus>(true);
     }
 
+    public void IsJoin(bool _Value)
+    {
+        characterStatus.IsJoin(_Value);
+    }
+
     private void Awake()
     {
         Close_Button.OnClick = CloseButtonOn;
@@ -34,8 +38,9 @@ public class UIManagement : UIBase
         {
             CharacterDataSO So = CharacterData.instance.GetData(character.key);
             sprites.Add(So.characterImage);
-            Inventory.OnInventoryOpen(sprites);
         }
+        Inventory.OnInventoryOpen(sprites);
+        sprites.Clear();
     }
 
     public void SetStatusView(int _index)
@@ -49,4 +54,18 @@ public class UIManagement : UIBase
         UIManager.Instance.OpenUI<UILobby>();
     }
 
+    public void OnClickJoin(int _index)
+    {
+        Inventory.OnParticipate(_index);
+    }
+
+    public void OffClickJoin(int _index)
+    {
+        Inventory.OffParticipate(_index);
+    }
+
+    public void NoneView()
+    {
+        characterStatus.NoneView();
+    }
 }

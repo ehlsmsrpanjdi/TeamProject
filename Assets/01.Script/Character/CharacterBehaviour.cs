@@ -15,7 +15,7 @@ public class CharacterBehaviour : MonoBehaviour
     public void Init(CharacterInstance data)
     {
         charInstance = data;
-
+        var usableSkills = charInstance.GetActiveSkills(); // 현재 활성화 되어있는 스킬만 사용 가능한 스킬에 들어감.
     }
     void Update()
     {

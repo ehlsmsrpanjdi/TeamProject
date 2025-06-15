@@ -30,9 +30,42 @@ public class CharacterInstance
         this.currentRank = data.startRank;
         this.enhancementLevel = data.enhancementLevel;
         charPrefab = data.characterPrefab;
-        rankInfo = new List<RankInfo>(data.rankInfo);
+        this.rankInfo = data.rankInfo;
 
-        learnedSkills = LearnSkillByRank(currentRank);
+        learnedSkills = new List<Skill>(); //스킬 리스트초기화
+
+        InitializeAllSkills();
+    }
+
+    /// <summary>
+    /// 모든 스킬 습득
+    /// </summary>
+    private void InitializeAllSkills()
+    {
+        foreach (var so in SkillData.Instance.GetAllSkillSO())
+        {
+            var skill = new Skill(so, currentRank);
+            learnedSkills.Add(skill);
+        }
+    }
+
+    /// <summary>
+    /// 랭크에 맞게 스킬 활성화 처리
+    /// </summary>
+    public void UpdateSkillActivation()
+    {
+        foreach (var skill in learnedSkills)
+        {
+            skill.UpdateSkillbyRank(currentRank);
+        }
+    }
+
+    /// <summary>
+    /// 현재 랭크에 맞는 스킬만 활성화 하기 위함.(CharacterBehaviour 에서 사용할 예정)
+    /// </summary>
+    public List<Skill> GetActiveSkills()
+    {
+        return learnedSkills.Where(s => s.isActive).ToList();
     }
 
     /// <summary>
@@ -73,29 +106,38 @@ public class CharacterInstance
         return Mathf.RoundToInt(baseHealth * rankInfo.hpMultiplier * GetEnhancementBonus());
     }
 
-    /// <summary>
-    /// 현재 랭크에 맞는 스킬 배우기
-    /// </summary>
-    public List<Skill> LearnSkillByRank(Rank rank)
-    {
-        var allSkills = new List<Skill>();
+    // <summary>
+    // 현재 랭크에 맞는 스킬 배우기
+    // </summary>
+    // public List<Skill> LearnSkillByRank(Rank rank)
+    // {
+    //     var skillList = new List<Skill>();
+    //     var addedSkillKeys = new HashSet<int>(); // 중복 방지를 위한 키 체크
+    //
+    //     foreach (var info in rankInfo)
+    //     {
+    //         if (info.rank <= rank)
+    //         {
+    //             foreach (var skillKey in info.skillKey)
+    //             {
+    //                 if (!addedSkillKeys.Contains(skillKey))
+    //                 {
+    //                     var skillSO = SkillData.Instance.GetSkill(skillKey);
+    //                     if (skillSO != null)
+    //                     {
+    //                         skillList.Add(new Skill(skillSO));
+    //                         addedSkillKeys.Add(skillKey); // 중복 방지용
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //
+    //     return skillList;
+    // }
 
-        foreach (var info in rankInfo)
-        {
-            if (info.rank <= currentRank)
-            {
-                foreach (var skill in info.Skills)
-                {
-                    if (!allSkills.Contains(skill))
-                        allSkills.Add(skill);
-                }
-            }
-        }
-        return allSkills;
-    }
-
     /// <summary>
-    /// 현재 보유중인 스킬
+    /// 현재 보유중인 스킬 (시작 할 때 모든 스킬을 배우도록 하였음.)
     /// </summary>
    public List<Skill> HasSkill()
     {
@@ -103,12 +145,13 @@ public class CharacterInstance
     }
 
     /// <summary>
-    /// 랭크가 올라갈 시 새롭게 스킬 획득 및 랭크 변환
+    /// 랭크가 올라갈 시 새롭게 스킬 획득 및 랭크 변환. 캐릭터 합성 시 업데이트를 위한 함수.
     /// </summary>
     public void UpdateRank(Rank newRank)
     {
         currentRank = newRank;
-        learnedSkills = LearnSkillByRank(newRank);
+        //learnedSkills = LearnSkillByRank(newRank);
+        UpdateSkillActivation();
     }
 }
 

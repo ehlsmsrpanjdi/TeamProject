@@ -618,7 +618,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 3
   inventoryImage: {fileID: 670101825759518221}
   EquipImg: {fileID: 7761752472573587200}
 --- !u!1 &876365505909971862
@@ -787,7 +787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 1
   inventoryImage: {fileID: 6373764673693029984}
   EquipImg: {fileID: 5719182554994291943}
 --- !u!1 &970666143302304887
@@ -1391,7 +1391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 6
   inventoryImage: {fileID: 5990062663817664610}
   EquipImg: {fileID: 5699078632109993275}
 --- !u!1 &2250976524941385128
@@ -1558,7 +1558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 15
   inventoryImage: {fileID: 4804200180126693755}
   EquipImg: {fileID: 996008635807480054}
 --- !u!1 &2533674716163842803
@@ -1650,7 +1650,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 2
   inventoryImage: {fileID: 2261612290711894986}
   EquipImg: {fileID: 1339214108041165622}
 --- !u!1 &2623364423212182363
@@ -3115,6 +3115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Attack_Text: {fileID: 1837173019115251767}
   HP_Text: {fileID: 3089410897660816851}
+  JoinText: {fileID: 436787490385648089}
   WeaponUpgrade_Button: {fileID: 7250600099625018160}
   AwakenUpgrade_Button: {fileID: 6965173910799180692}
   WeaponImage: {fileID: 2540160718051762781}
@@ -3585,7 +3586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 19
   inventoryImage: {fileID: 389867782255634410}
   EquipImg: {fileID: 7169898055794836424}
 --- !u!1 &5298385422248710773
@@ -3845,7 +3846,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 5
   inventoryImage: {fileID: 6961323510139644162}
   EquipImg: {fileID: 3162416173056308761}
 --- !u!1 &5445725861673725411
@@ -4013,7 +4014,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 13
   inventoryImage: {fileID: 4581403814238621690}
   EquipImg: {fileID: 5394746671782492574}
 --- !u!1 &5736764624783881671
@@ -4105,7 +4106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 16
   inventoryImage: {fileID: 4081513557379380298}
   EquipImg: {fileID: 71831462295407887}
 --- !u!1 &5944841959900816137
@@ -4272,7 +4273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 12
   inventoryImage: {fileID: 5594384328924505371}
   EquipImg: {fileID: 2278357528878440910}
 --- !u!1 &6033691752921823292
@@ -4386,26 +4387,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventorySlots:
   - {fileID: 3643426503503108101}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2698724680478069620}
+  - {fileID: 1252933682235054157}
+  - {fileID: 7750436849927770995}
+  - {fileID: 7135437963130300504}
+  - {fileID: 3431609279347681190}
+  - {fileID: 5914226216522046135}
+  - {fileID: 6393042309731891451}
+  - {fileID: 4647332768608491821}
+  - {fileID: 8840301966786692107}
+  - {fileID: 86529483064022054}
+  - {fileID: 7494614372850643545}
+  - {fileID: 5011257909015268637}
+  - {fileID: 8778940223043645691}
+  - {fileID: 661057770087884066}
+  - {fileID: 8717654826091181625}
+  - {fileID: 899299546222172630}
+  - {fileID: 6317730360715898716}
+  - {fileID: 4098783561161172054}
+  - {fileID: 8461551424230762492}
+  - {fileID: 5965256473877090913}
 --- !u!1 &6420372891674529490
 GameObject:
   m_ObjectHideFlags: 0
@@ -4495,7 +4496,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 7
   inventoryImage: {fileID: 7994765691585494398}
   EquipImg: {fileID: 468619577289844502}
 --- !u!1 &6457556303147564432
@@ -4587,7 +4588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 4
   inventoryImage: {fileID: 5732494276463678365}
   EquipImg: {fileID: 5381647209633844901}
 --- !u!1 &6457775998986001898
@@ -5206,7 +5207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 11
   inventoryImage: {fileID: 7069393795908879464}
   EquipImg: {fileID: 7427830457288123184}
 --- !u!1 &7062770632124351377
@@ -5298,7 +5299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 20
   inventoryImage: {fileID: 4533740164420552018}
   EquipImg: {fileID: 4431221810697349396}
 --- !u!1 &7088229431003336297
@@ -5465,7 +5466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 9
   inventoryImage: {fileID: 3280200333533231343}
   EquipImg: {fileID: 2224768922748601687}
 --- !u!1 &7992909353524258532
@@ -5557,7 +5558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 17
   inventoryImage: {fileID: 4774174773648170713}
   EquipImg: {fileID: 3922809349030342213}
 --- !u!1 &8149311830388863268
@@ -5649,7 +5650,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 8
   inventoryImage: {fileID: 5249117176797275959}
   EquipImg: {fileID: 6365795703921801348}
 --- !u!1 &8301909859453247119
@@ -5741,7 +5742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 14
   inventoryImage: {fileID: 3630151224016857573}
   EquipImg: {fileID: 1044065115930862193}
 --- !u!1 &8599818085761935039
@@ -5909,7 +5910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 18
   inventoryImage: {fileID: 1039892048517648277}
   EquipImg: {fileID: 2513364123863882474}
 --- !u!1 &8926869828044800072
@@ -6183,7 +6184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cebf8869c0cb3414fa74767b232d471c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <index>k__BackingField: 0
+  <index>k__BackingField: 10
   inventoryImage: {fileID: 8809222353506349196}
   EquipImg: {fileID: 1045458069563767925}
 --- !u!1 &9187419614442867909

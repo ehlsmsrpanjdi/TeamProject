@@ -39,6 +39,27 @@ public class DebugWindow : EditorWindow
         {
             Player.Instance.AddDiamond(1000);
         }
+
+        if (GUILayout.Button("battle canvas 열기"))
+        {
+            UIManager.Instance.OpenBattleCanvas();
+        }
+
+        if (GUILayout.Button("battle canvas 닫기"))
+        {
+            UIManager.Instance.CloseBattleCanvas();
+        }
+
+        if (GUILayout.Button("main canvas 열기"))
+        {
+            UIManager.Instance.OpenMainCanvas();
+        }
+
+        if (GUILayout.Button("main canvas 열기"))
+        {
+            UIManager.Instance.CloseMainCanvas();
+        }
+
         #endregion
 
 
@@ -82,9 +103,6 @@ public class DebugWindow : EditorWindow
             {
                 Debug.LogWarning("플레이 모드에서만 실행할 수 있습니다.");
             }
-
-            UIManager.Instance.GetUI<UIBattleMemberViewer>().AddMember();
-
         }
 
         if (GUILayout.Button("일퀘 완료 테스트 - 접속"))

@@ -379,6 +379,15 @@ public class ZombieAI : MonoBehaviour, IDamageable
             rb.isKinematic = true;
         }
 
+        // 골드 보상 지급
+        if (DataManager.Instance != null && DataManager.Instance.data != null)
+        {
+            int currentStage = DataManager.Instance.data.currentStage;
+            int reward = currentStage * 10;
+            DataManager.Instance.AddGold(reward);
+            Debug.Log($"[ZombieAI] 골드 {reward} 획득 (스테이지 {currentStage})");
+        }
+
         // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
         if (animator != null && animator.runtimeAnimatorController != null)
             animator.SetTrigger("");
@@ -405,19 +414,59 @@ public class ZombieAI : MonoBehaviour, IDamageable
     }
 
 
+    // 넉백 시작
     public void StartKnockback(Vector3 attackerPosition, float force)
     {
         if (knockbackCoroutine != null)
-            StopCoroutine(knockbackCoroutine);
-        knockbackCoroutine = StartCoroutine(ApplyKnockback(attackerPosition, force));
+            StopCoroutine(knockbackCoroutine); // 이전 넉백 중단
+
+        knockbackCoroutine = StartCoroutine(ApplyKnockback(attackerPosition, force)); // 새 넉백 시작
     }
 
+    // 넉백 중이라면 즉시 중단
     public void StopKnockback()
     {
         if (knockbackCoroutine != null)
         {
-            StopCoroutine(knockbackCoroutine);
-            knockbackCoroutine = null;
+            StopCoroutine(knockbackCoroutine); // 넉백 코루틴 정지
+            knockbackCoroutine = null;         // 참조 제거
         }
     }
+
+    // 좀비를 강제로 초기화하고 풀로 즉시 반환
+    public void ResetAndReturnToPool(string key)
+    {
+        // 넉백 중이면 정지 (강제 리셋 시 흔들림 제거)
+        StopKnockback();
+
+        // 이동 정지 및 AI 중단
+        if (agent != null && agent.enabled)
+        {
+            agent.isStopped = true;
+            agent.enabled = false;
+        }
+
+        // 리지드바디 물리 속도 제거 및 고정
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
+        }
+
+        // 애니메이션 트리거 및 상태 초기화
+        if (animator != null && animator.runtimeAnimatorController != null)
+        {
+            animator.ResetTrigger("Attack");
+            animator.ResetTrigger("Hit");
+            animator.ResetTrigger("Die");
+            animator.SetBool("IsMoving", false);
+        }
+
+        // 체력, 상태 등 스탯 리셋
+        statHandler?.ResetHealth();
+
+        // 풀로 반환 (즉시 비활성화)
+        Pool.Instance.ReturnZombie(key, GetComponent<Zombie>());
+    }
+
 }

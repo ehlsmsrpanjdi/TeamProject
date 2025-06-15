@@ -23,7 +23,7 @@ public class UIStatus : UIBase
         Player player = Player.Instance;
 
         player.OnGoldChanged += SetGold;
-        player.OnDiamondChanged += SetGold;
+        player.OnDiamondChanged += SetDia;
 
         SetGold(player.Data.gold);
         SetDia(player.Data.diamond);

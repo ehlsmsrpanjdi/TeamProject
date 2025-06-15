@@ -41,6 +41,12 @@ public class UIAgentHire : UIBase
             DebugHelper.Log("uihirescroll is NONO", this);
         }
         CharacterManager inst = CharacterManager.Instance;
+
+        OnImageMouseEnter(HireButton);
+        OnImageMouseEnter(HireMultiButton);
+
+        OnImageMouseExit(HireButton);
+        OnImageMouseExit(HireMultiButton);
     }
 
     void ClickGachaOneTime()
@@ -80,5 +86,25 @@ public class UIAgentHire : UIBase
     void Hire(DrawResult _Result)
     {
         uiHireScroll.AddHire(_Result);
+    }
+
+    void OnImageMouseEnter(BaseImage _Image)
+    {
+        void OnMouseOn()
+        {
+            _Image.transform.RotationLoop();
+        }
+
+        _Image.OnMouseEnterAction = OnMouseOn;
+    }
+
+    void OnImageMouseExit(BaseImage _Image)
+    {
+        void OnMouseOut()
+        {
+            _Image.transform.KillDoTween();
+            _Image.transform.rotation = Quaternion.identity;
+        }
+        _Image.OnMouseExitAction = OnMouseOut;
     }
 }

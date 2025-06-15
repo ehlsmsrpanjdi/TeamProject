@@ -29,6 +29,12 @@ public class UIOption : UIBase
         Option.Init();
     }
 
+    public override void Open()
+    {
+        base.Open();
+        transform.FadeOutXY();
+    }
+
     void OnOptionClick()
     {
         UIManager.Instance.CloseUI<UIOption>();

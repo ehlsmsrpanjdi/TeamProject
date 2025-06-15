@@ -22,6 +22,12 @@ public class UISoundOption : UIBase
         Return.OnClick = ReturnButtonOn;
     }
 
+    public override void Open()
+    {
+        base.Open();
+        transform.FadeOutXY();
+    }
+
     void ReturnButtonOn()
     {
         UIManager.Instance.CloseUI<UISoundOption>();

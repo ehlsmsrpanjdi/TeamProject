@@ -15,6 +15,12 @@ public enum GachaFailReason
     InventoryFull,
 }
 
+public enum GachaType
+{
+    Normal,
+    Premium,
+}
+
 public class GachaManager
 {
     private static GachaManager instance;
@@ -33,7 +39,8 @@ public class GachaManager
         set { instance = value; }
     }
 
-    public CharacterDataBase gachaDataBase;
+    private CharacterDataBase gachaDataBase;
+    private Dictionary<GachaType, GachaTableSO> gachaTableList;
     public event Action<DrawResult> OnCharacterDraw; // 캐릭터 뽑기 시 호출되는 이벤트
     public event Action<GachaFailReason> OnGachaFail;
 
@@ -43,11 +50,14 @@ public class GachaManager
     public void Init()
     {
         gachaDataBase = Resources.Load<CharacterDataBase>("Gacha/CharacterDataBase");
+        var gachaTable = Resources.Load<GachaTableDataBase>("Gacha/GachaTableList");
+
+        gachaTableList = new Dictionary<GachaType, GachaTableSO>();
     }
 
 
     // 가챠 버튼 등을 눌러서 호출
-    public List<DrawResult> DrawCharacter(int times)
+    public List<DrawResult> DrawCharacter(int times) // GachaType type 가챠 타입별로 가챠확률 다르게 만들기?
     {
         if (times <= 0)
         {
@@ -55,6 +65,7 @@ public class GachaManager
         }
 
         int totalCost = times * costPerDraw;
+
         bool drawSuccess = Player.Instance.UseDiamond(totalCost);
 
         if (!drawSuccess)

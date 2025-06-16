@@ -28,8 +28,8 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    [SerializeField] UIBase[] MainUI;
-    [SerializeField] UIBase[] BattleUI;
+    //[SerializeField] UIBase[] MainUI;
+    //[SerializeField] UIBase[] BattleUI;
 
     [SerializeField] Canvas mainCanvas;
     const string MainCanvasName = "MainCanvas";
@@ -48,66 +48,56 @@ public class UIManager : MonoBehaviour
     const string UIGacha = "UI/Canvas/UIGacha";
     const string UILobby = "UI/Canvas/UILobby";
     const string UIOption = "UI/Canvas/UIOption";
+    const string UIPopup = "UI/Canvas/UIPopup";
+    const string BattleCanvas = "UI/Canvas/BattleCanvas";
+    const string MainCanvas = "UI/Canvas/MainCanvas";
 
-    [SerializeField] GameObject BattleMemberViewerPrefab;
-    [SerializeField] GameObject HireAgentPrefab;
-    [SerializeField] GameObject HireScrollPrefab;
-    [SerializeField] GameObject ManagementPrefab;
-    [SerializeField] GameObject QuestScrollPrefab;
-    [SerializeField] GameObject SkillViewerPrefab;
-    [SerializeField] GameObject SoundOptionPrefab;
-    [SerializeField] GameObject Stage_ViewerPrefab;
-    [SerializeField] GameObject StatusPrefab;
-    [SerializeField] GameObject UIGachaPrefab;
-    [SerializeField] GameObject UILobbyPrefab;
-    [SerializeField] GameObject UIOptionPrefab;
+    //[SerializeField] GameObject BattleMemberViewerPrefab;
+    //[SerializeField] GameObject HireAgentPrefab;
+    //[SerializeField] GameObject HireScrollPrefab;
+    //[SerializeField] GameObject ManagementPrefab;
+    //[SerializeField] GameObject QuestScrollPrefab;
+    //[SerializeField] GameObject SkillViewerPrefab;
+    //[SerializeField] GameObject SoundOptionPrefab;
+    //[SerializeField] GameObject Stage_ViewerPrefab;
+    //[SerializeField] GameObject StatusPrefab;
+    //[SerializeField] GameObject UIGachaPrefab;
+    //[SerializeField] GameObject UILobbyPrefab;
+    //[SerializeField] GameObject UIOptionPrefab;
 
     Dictionary<Type, UIBase> UIDictionary = new Dictionary<Type, UIBase>();
-    Dictionary<Type, GameObject> PrefabDictionary = new Dictionary<Type, GameObject>();
+    //Dictionary<Type, GameObject> PrefabDictionary = new Dictionary<Type, GameObject>();
+    Dictionary<Type, string> ResourcesPathDictionary = new Dictionary<Type, string>();
     Dictionary<GameObject, float> UIReleaser = new Dictionary<GameObject, float>();
 
     private void Reset()
     {
-        mainCanvas = GameObject.Find(MainCanvasName)?.GetComponent<Canvas>();
-        MainUI = mainCanvas.GetComponentsInChildren<UIBase>(true);
+        //mainCanvas = GameObject.Find(MainCanvasName)?.GetComponent<Canvas>();
+        //MainUI = mainCanvas.GetComponentsInChildren<UIBase>(true);
 
-        battleCanvas = GameObject.Find(BattleCanvasName)?.GetComponent<Canvas>();
-        BattleUI = battleCanvas.GetComponentsInChildren<UIBase>(true);
-
-        BattleMemberViewerPrefab = Resources.Load<GameObject>(BattleMemberViewer);
-        HireAgentPrefab = Resources.Load<GameObject>(HireAgent);
-        HireScrollPrefab = Resources.Load<GameObject>(HireScroll);
-        ManagementPrefab = Resources.Load<GameObject>(Management);
-        QuestScrollPrefab = Resources.Load<GameObject>(QuestScroll);
-        SkillViewerPrefab = Resources.Load<GameObject>(SkillViewer);
-        SoundOptionPrefab = Resources.Load<GameObject>(SoundOption);
-        Stage_ViewerPrefab = Resources.Load<GameObject>(Stage_Viewer);
-        StatusPrefab = Resources.Load<GameObject>(Status);
-        UIGachaPrefab = Resources.Load<GameObject>(UIGacha);
-        UILobbyPrefab = Resources.Load<GameObject>(UILobby);
-        UIOptionPrefab = Resources.Load<GameObject>(UIOption);
+        //battleCanvas = GameObject.Find(BattleCanvasName)?.GetComponent<Canvas>();
+        //BattleUI = battleCanvas.GetComponentsInChildren<UIBase>(true);
     }
 
     void DictionaryAddFunction()
     {
-        PrefabDictionary.Add(BattleMemberViewerPrefab.GetComponent<UIBase>().GetType(), BattleMemberViewerPrefab);
-        PrefabDictionary.Add(HireAgentPrefab.GetComponent<UIBase>().GetType(), HireAgentPrefab);
-        PrefabDictionary.Add(HireScrollPrefab.GetComponent<UIBase>().GetType(), HireScrollPrefab);
-        PrefabDictionary.Add(ManagementPrefab.GetComponent<UIBase>().GetType(), ManagementPrefab);
-        PrefabDictionary.Add(QuestScrollPrefab.GetComponent<UIBase>().GetType(), QuestScrollPrefab);
-        PrefabDictionary.Add(SkillViewerPrefab.GetComponent<UIBase>().GetType(), SkillViewerPrefab);
-        PrefabDictionary.Add(SoundOptionPrefab.GetComponent<UIBase>().GetType(), SoundOptionPrefab);
-        PrefabDictionary.Add(Stage_ViewerPrefab.GetComponent<UIBase>().GetType(), Stage_ViewerPrefab);
-        PrefabDictionary.Add(StatusPrefab.GetComponent<UIBase>().GetType(), StatusPrefab);
-        PrefabDictionary.Add(UIGachaPrefab.GetComponent<UIBase>().GetType(), UIGachaPrefab);
-        PrefabDictionary.Add(UILobbyPrefab.GetComponent<UIBase>().GetType(), UILobbyPrefab);
-        PrefabDictionary.Add(UIOptionPrefab.GetComponent<UIBase>().GetType(), UIOptionPrefab);
+        ResourcesPathDictionary.Add(typeof(UIBattleMemberViewer), BattleMemberViewer);
+        ResourcesPathDictionary.Add(typeof(UIAgentHire), HireAgent);
+        ResourcesPathDictionary.Add(typeof(UIHireScroll), HireScroll);
+        ResourcesPathDictionary.Add(typeof(UIManagement), Management);
+        ResourcesPathDictionary.Add(typeof(UIQuestScroll), QuestScroll);
+        ResourcesPathDictionary.Add(typeof(UISkillViewer), SkillViewer);
+        ResourcesPathDictionary.Add(typeof(UISoundOption), SoundOption);
+        ResourcesPathDictionary.Add(typeof(UIStage), Stage_Viewer);
+        ResourcesPathDictionary.Add(typeof(UIStatus), Status);
+        ResourcesPathDictionary.Add(typeof(UIGacha), UIGacha);
+        ResourcesPathDictionary.Add(typeof(UILobby), UILobby);
+        ResourcesPathDictionary.Add(typeof(UIOption), UIOption);
+        ResourcesPathDictionary.Add(typeof(UIPopup), UIPopup);
     }
 
     private void Awake()
     {
-        DontDestroyOnLoad(battleCanvas.gameObject);
-        DontDestroyOnLoad(mainCanvas.gameObject);
 
         DictionaryAddFunction();
         //CheakCanvas();
@@ -126,6 +116,16 @@ public class UIManager : MonoBehaviour
 
     public void Start()
     {
+        GameObject mainobj = Resources.Load<GameObject>(MainCanvas);
+        mainCanvas = Instantiate(mainobj).GetComponent<Canvas>();
+
+        GameObject battleobj = Resources.Load<GameObject>(BattleCanvas);
+        battleCanvas = Instantiate(battleobj).GetComponent<Canvas>();
+
+        DontDestroyOnLoad(mainCanvas.gameObject);
+        DontDestroyOnLoad(battleCanvas.gameObject);
+
+
         OpenUI<UILobby>(mainCanvas.gameObject.transform);
         OpenUI<UIStatus>(mainCanvas.gameObject.transform);
     }
@@ -144,7 +144,7 @@ public class UIManager : MonoBehaviour
 
             foreach (var key in keys)
             {
-                if(true == key.activeSelf)
+                if (true == key.activeSelf)
                 {
                     continue;
                 }
@@ -157,28 +157,28 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void CheakCanvas()
-    {
-        if (battleCanvas == null)
-        {
-            battleCanvas = GameObject.Find(BattleCanvasName)?.GetComponent<Canvas>();
-            BattleUI = battleCanvas.GetComponentsInChildren<UIBase>(true);
-            foreach (UIBase UI in BattleUI)
-            {
-                UIDictionary[UI.GetType()] = UI;
-            }
-        }
+    //public void CheakCanvas()
+    //{
+    //    if (battleCanvas == null)
+    //    {
+    //        battleCanvas = GameObject.Find(BattleCanvasName)?.GetComponent<Canvas>();
+    //        BattleUI = battleCanvas.GetComponentsInChildren<UIBase>(true);
+    //        foreach (UIBase UI in BattleUI)
+    //        {
+    //            UIDictionary[UI.GetType()] = UI;
+    //        }
+    //    }
 
-        if (mainCanvas == null)
-        {
-            mainCanvas = GameObject.Find(MainCanvasName)?.GetComponent<Canvas>();
-            MainUI = mainCanvas.GetComponentsInChildren<UIBase>(true);
-            foreach (UIBase UI in MainUI)
-            {
-                UIDictionary[UI.GetType()] = UI;
-            }
-        }
-    }
+    //    if (mainCanvas == null)
+    //    {
+    //        mainCanvas = GameObject.Find(MainCanvasName)?.GetComponent<Canvas>();
+    //        MainUI = mainCanvas.GetComponentsInChildren<UIBase>(true);
+    //        foreach (UIBase UI in MainUI)
+    //        {
+    //            UIDictionary[UI.GetType()] = UI;
+    //        }
+    //    }
+    //}
 
     const float UILifeTime = 10f;
 
@@ -207,8 +207,9 @@ public class UIManager : MonoBehaviour
 
     T Add<T>(Transform _transform) where T : UIBase
     {
-        if (true == PrefabDictionary.TryGetValue(typeof(T), out var obj))
+        if (true == ResourcesPathDictionary.TryGetValue(typeof(T), out var _Path))
         {
+            GameObject obj = Resources.Load<GameObject>(_Path);
             GameObject inst = Instantiate(obj);
             T type = inst.GetComponent<T>();
             AddUIRelease(type);

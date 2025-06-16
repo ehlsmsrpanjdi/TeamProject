@@ -55,6 +55,19 @@ public class UIManagement : UIBase
         });
     }
 
+    public void InventoryReset(int _index)
+    {
+        List<CharacterInstance> list = CharacterManager.Instance.GetAllCharacters();
+
+        foreach (CharacterInstance character in list)
+        {
+            CharacterDataSO So = CharacterData.instance.GetData(character.key);
+            sprites.Add(So.characterImage);
+        }
+        Inventory.OnInventoryOpen(sprites, _index);
+        sprites.Clear();
+    }
+
 
     public void SetStatusView(int _index)
     {

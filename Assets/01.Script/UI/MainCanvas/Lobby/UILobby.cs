@@ -1,8 +1,5 @@
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UILobby : UIBase
@@ -31,6 +28,8 @@ public class UILobby : UIBase
     const string Img_Shop_BackGround = "Img_Shop_BackGround";
     const string Img_Quest_BackGround = "Img_Quest_BackGround";
 
+    const string BattleSceneName = "BattleScene";
+
     private void Reset()
     {
         Agent_Button = this.TryFindChild(Img_Agent).GetComponent<OnClickImage>();
@@ -40,17 +39,17 @@ public class UILobby : UIBase
         Quest_Button = this.TryFindChild(Img_Quest).GetComponent<OnClickImage>();
 
         AgentBackGround = this.TryFindChild(Img_Agent_BackGround).GetComponent<Image>();
-        BattleFieldBackGround= this.TryFindChild(Img_BattleField_BackGround).GetComponent<Image>();
-        ManagementBackGround= this.TryFindChild(Img_Management_BackGround).GetComponent<Image>();
-        ShopBackGround= this.TryFindChild(Img_Shop_BackGround).GetComponent<Image>();
-        QuestBackGround= this.TryFindChild(Img_Quest_BackGround).GetComponent<Image>();
+        BattleFieldBackGround = this.TryFindChild(Img_BattleField_BackGround).GetComponent<Image>();
+        ManagementBackGround = this.TryFindChild(Img_Management_BackGround).GetComponent<Image>();
+        ShopBackGround = this.TryFindChild(Img_Shop_BackGround).GetComponent<Image>();
+        QuestBackGround = this.TryFindChild(Img_Quest_BackGround).GetComponent<Image>();
     }
 
     private void Awake()
     {
         Agent_Button.OnClick = OnAgentClick;
         Quest_Button.OnClick = OnQuestClick;
-        //BattleField_Button .OnClick = UIManager.Instance.OpenUI<UIBattleField>;
+        BattleField_Button.OnClick = OnBattleClick;
         Management_Button.OnClick = OnManagementClick;
         //Shop_Button .OnClick = UIManager.Instance.OpenUI<UIShop>;
 
@@ -93,6 +92,11 @@ public class UILobby : UIBase
         Agent_Button.transform.KillDoTween();
         AgentBackGround.transform.KillDoTween();
         AgentBackGround.transform.FadeInX();
+    }
+
+    void OnBattleClick()
+    {
+        SceneManager.LoadScene(BattleSceneName);
     }
 
     void OnLobbyImageMouseEnter(BaseImage _Image, Image _BackgroundImg)

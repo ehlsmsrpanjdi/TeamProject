@@ -134,6 +134,7 @@ public class GachaManager
             DebugHelper.Log($"뽑기 결과: {result.character.characterName} {result.rank}", result.character);
             OnCharacterDraw?.Invoke(result);
         }
+        SoundManager.Instance.PlaySFX(SfxType.Gacha, -1);
         return resultList;
     }
 

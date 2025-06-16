@@ -247,6 +247,7 @@ public class CharacterManager
             }
 
         }
+        Debug.Log("랭크업 성공");
         GetAllCharacters(); //캐릭터 리스트 업데이트
 
         return true;
@@ -265,21 +266,33 @@ public class CharacterManager
     public void EditorFunction()
     {
         CreateCharacter(1005);
-
-
         SelectParticipate(0);
 
-
-
         SpawnParticipateCharacters(Vector3.zero); // 스폰 호출
-
-
     }
     public void EditorFunctionEnhance()
     {
         EnhanceCharacter(0);
+    }
 
+    public void EditorFunctionCreat()
+    {
+        CreateCharacter(1005);
+        CreateCharacter(1005);
 
+        foreach (var character in characters)
+        {
+            Debug.Log($"생성된 캐릭터 이름: {character.charcterName}\n 생성된 캐릭터 랭크: {character.currentRank}");
+        }
+    }
+
+    public void EditorFunctionRankUp()
+    {
+        RankUpCharacter(0);
+        foreach (var character in characters)
+        {
+            Debug.Log($"캐릭터 이름: {character.charcterName}\n 캐릭터 랭크: {character.currentRank}");
+        }
     }
 
 #endif

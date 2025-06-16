@@ -38,7 +38,14 @@ public class DebugWindow : EditorWindow
             Barricade.instance.SetHealth();
         }
 
-
+        if (GUILayout.Button("캐릭터 뽑기 버튼"))
+        {
+            CharacterManager.Instance.EditorFunctionCreat();
+        }
+        if (GUILayout.Button("캐릭터 랭크업 버튼"))
+        {
+            CharacterManager.Instance.EditorFunctionRankUp();
+        }
 
 
         #region QuestTest

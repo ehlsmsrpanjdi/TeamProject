@@ -154,6 +154,10 @@ public class CharacterInstance
         UpdateSkillActivation();
     }
 
+
+    /// <summary>
+    /// 강화 >> CharacterManager에서 가지고 감.
+    /// </summary>
     public void Enhance()
     {
         var info = GetCurrentRankInfo();
@@ -172,6 +176,21 @@ public class CharacterInstance
 
         enhancementLevel++;
         Debug.Log($"현재 강화 수치 : {enhancementLevel}");
+    }
+
+    /// <summary>
+    /// 캐릭터의 강화 수치 확인
+    /// </summary>
+    public int GetEnhancementLevel()
+    {
+        return enhancementLevel;
+    }
+    /// <summary>
+    /// 랭크업 >> CharacterManager에서 가지고 감.
+    /// </summary>
+    public void RankUp()
+    {
+
     }
 }
 

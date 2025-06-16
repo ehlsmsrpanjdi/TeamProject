@@ -34,6 +34,12 @@ public class DebugWindow : EditorWindow
             CharacterManager.Instance.EditorFunctionEnhance();
         }
 
+        if (GUILayout.Button("체력세팅 버튼"))
+        {
+            
+        }
+        
+
 
 
         #region QuestTest

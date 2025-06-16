@@ -192,7 +192,7 @@ public class CharacterManager
             return false;
         }
 
-        var character = characters[index];
+        CharacterInstance character = characters[index];
         if(character == null)
         {
             return false;
@@ -202,11 +202,48 @@ public class CharacterManager
         return true;
     }
 
+    /// <summary>
+    /// 랭크 업 기능
+    /// </summary>
+    public bool RankUpCharacter(int index)
+    {
+        if(index < 0  || index >= characters.Count)
+        {
+            return false;
+        }
+
+        CharacterInstance character = characters[index];
+        if (character == null)
+        {
+            return false;
+        }
+
+        // 필요한것
+        // 현재 캐릭터의 랭크 정보
+        // 현재 캐릭터의 랭크
+        // 현재 캐릭터의 랭크업에 필요한 요구 수량
+        // 리스트에 동일한 랭크의 캐릭터가 있는지
+        // 랭크업이 됐으면 캐릭터 삭제
+
+        var rankInfo = character.rankInfo;
+
+        character.RankUp();
+        return true;
+
+    }
+
+    /// <summary>
+    /// 참전 캐릭터의 모든 체력 합산 >> 바리게이트에서 가지고 감
+    /// </summary>
+    public float GetTotalHealt()
+    {
+        return participated.Values.Sum(character => character.baseHealth);
+    }
 
     #if UNITY_EDITOR
     public void EditorFunction()
     {
-        CreateCharacter(1001);
+        CreateCharacter(1005);
   
         SelectParticipate(0);
    

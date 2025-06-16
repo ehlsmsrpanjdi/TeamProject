@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6522817379461619511}
   - component: {fileID: 4701850994735214092}
   - component: {fileID: -8187227789254039245}
+  - component: {fileID: 4806424681439193448}
   m_Layer: 3
   m_Name: Zombie
   m_TagString: Zombie
@@ -194,11 +195,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96eea7a17f571e140ba48d5ae307775e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaxHealth: 200
+  defaultMaxHealth: 100
   defaultDamage: 10
   defaultMoveSpeed: 3
   defaultAttackDelay: 1.5
-  defaultAttackRange: 2
+  defaultAttackRange: 2.5
 --- !u!114 &-8187227789254039245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,7 +214,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 0
   firePoint: {fileID: 1709366760422639344}
-  debugAttackRange: 2
-  stopDistance: 2
+  debugAttackRange: 2.5
+  stopDistance: 2.5
   flashDuration: 0.5
   knockbackRecoverTime: 0.3
+--- !u!114 &4806424681439193448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8850365060977371982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb127ed627089c944a377ed2fedb866f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6522817379461619511}
   - component: {fileID: 4701850994735214092}
   - component: {fileID: -8187227789254039245}
+  - component: {fileID: 5400570706436370484}
   m_Layer: 3
   m_Name: Zombie2
   m_TagString: Zombie
@@ -211,9 +212,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3cbfb454e48ce044a82bbec63564b92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 0
+  attackType: 1
   firePoint: {fileID: 1709366760422639344}
-  debugAttackRange: 2
+  debugAttackRange: 10
   stopDistance: 2
   flashDuration: 0.5
   knockbackRecoverTime: 0.3
+--- !u!114 &5400570706436370484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8850365060977371982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb127ed627089c944a377ed2fedb866f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

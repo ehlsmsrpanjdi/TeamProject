@@ -27,31 +27,16 @@ public class DebugWindow : EditorWindow
         }
         if (GUILayout.Button("뽑기 버튼"))
         {
-            GachaManager.Instance.DrawCharacter(1);
+            GachaManager.Instance.DrawCharacter(GachaType.Normal, 1);
         }
         if (GUILayout.Button("스폰 버튼"))
         {
             CharacterManager.Instance.EditorFunction();
         }
-        if (GUILayout.Button("강화 버튼"))
+        if (GUILayout.Button("프리미엄 뽑기 버튼"))
         {
-            CharacterManager.Instance.EditorFunctionEnhance();
+            GachaManager.Instance.DrawCharacter(GachaType.Premium, 1);
         }
-        if (GUILayout.Button("체력 세팅 버튼"))
-        {
-            Barricade.instance.SetHealth();
-        }
-
-        if (GUILayout.Button("캐릭터 뽑기 버튼"))
-        {
-            CharacterManager.Instance.EditorFunctionCreat();
-        }
-        if (GUILayout.Button("캐릭터 랭크업 버튼"))
-        {
-            CharacterManager.Instance.EditorFunctionRankUp();
-        }
-
-
         #region //팀장자리
         if (GUILayout.Button("다이아 1000개 획득"))
         {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class SkillData
@@ -55,6 +56,8 @@ public class Skill
     public float skillCooldown;
     public Rank requiredRank; //스킬의 랭크요구치
     public bool isActive; //현재 랭크에 따라서 스킬 활성화 또는 비활성화
+    public GameObject skillPrefab;
+    public float skillRange;
 
     public Skill(SkillSO so, Rank currentRank)
     {
@@ -65,10 +68,23 @@ public class Skill
         this.skillCooldown = so.skillCooldown;
         this.requiredRank = so.requiredRank;
         isActive = currentRank >= requiredRank;
+        this.skillPrefab = so.skillPrefab;
+        this.skillRange = so.skillRange;
     }
 
     public void UpdateSkillbyRank(Rank currentRank)
     {
         isActive = currentRank >= requiredRank;
     }
+
+    public void UseSkill(int index, Vector3 chrPosition)
+    {
+        //전달받은 인덱스를 가지고 스킬을 사용함
+        //스킬키 2001, 2002가 있음.
+        //전달받은 스킬키에 맞는 스킬 프리팹 소환
+        //던진다
+        //프리팹에 달려있는 스크립트에서 물리작용 처리
+    }
+
+
 }

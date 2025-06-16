@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Barricade : MonoBehaviour, IDamageable
 {
-    
+
     private float currentHealth;
 
     public static Barricade instance;
@@ -39,16 +39,8 @@ public class Barricade : MonoBehaviour, IDamageable
         if (currentHealth <= 0)
         {
             Debug.Log("스테이지 실패");
-            // 이전 스테이지로 돌아가기
+            // 이전 스테이지로 돌아가기 >> 누구랑 연결?
+
         }
     }
-
-#if UNITY_EDITOR
-    public void EditFunctionSetHealth()
-    {
-         SetHealth();
-    }
-
-
-#endif
 }

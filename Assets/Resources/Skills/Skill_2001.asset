@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec3deb942e429c04285a93af73a7f1e3, type: 3}
-  m_Name: Blast
+  m_Name: Skill_2001
   m_EditorClassIdentifier: 
-  skillKey: 2002
-  skillName: Blast
-  skillDescription: "\uB300\uD615 \uD3ED\uBC1C"
-  skillIcon: {fileID: 0}
-  skillDamage: 2000
-  skillCooldown: 45
-  requiredRank: 2
+  skillKey: 2001
+  skillName: Boom
+  skillDescription: "\uC218\uB958\uD0C4 \uD22C\uCC99"
+  skillIcon: {fileID: 21300000, guid: a7e64dbc52b4cc542abbff150f9a2c2b, type: 3}
+  skillDamage: 1000
+  skillCooldown: 30
+  requiredRank: 1

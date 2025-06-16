@@ -196,10 +196,26 @@ public class CharacterBehaviour : MonoBehaviour
     }
 
     //스킬사용 (액티브로 하기로 했음)
-    public void UseSkill()
-    {
+    public void UseSkill(int skillIndex, Vector3 position) 
+    {    
+        
+        if (skillIndex < 0 || skillIndex >= charInstance.HasSkill().Count)
+        {
+            Debug.Log("스킬 인덱스가 잘못되었습니다.");
+            return;
+        }
 
+        Skill skill = charInstance.HasSkill()[skillIndex];
+
+        if (!skill.isActive)
+        {
+            Debug.Log($"스킬 {skill.skillName} is Not Activated");
+            return;
+        }
+        position = transform.position;
+        skill.UseSkill(skillIndex, position); 
     }
+
 
     //죽음. 바리게이트와 캐릭터의 체력을 연결 시킬 예정.
     void Die()

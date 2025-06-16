@@ -61,8 +61,6 @@ public class SoundManager : MonoBehaviour
     private const string BGM_VOLUME_KEY = "BgmVolume";
     private const string SFX_VOLUME_KEY = "SfxVolume";
 
-
-
     private void Awake()
     {
         bgmSource = gameObject.AddComponent<AudioSource>();

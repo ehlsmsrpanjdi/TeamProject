@@ -4,8 +4,8 @@ using UnityEngine.EventSystems;
 
 public class InventoryImage : BaseImage, IPointerClickHandler
 {
-    Sprite currentSprite;
     public Action OnClickAction;
+    [field : SerializeField] public Sprite NoneSprite { get; set; }
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -26,15 +26,7 @@ public class InventoryImage : BaseImage, IPointerClickHandler
     {
         if (sprite != null)
         {
-            currentSprite = this.sprite;
             this.sprite = sprite;
-            SetNativeSize();
         }
-    }
-
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        this.sprite = currentSprite;
     }
 }

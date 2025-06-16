@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIOption : UIBase
 {
@@ -21,7 +22,7 @@ public class UIOption : UIBase
 
     private void Awake()
     {
-        Continue.OnClick = UIManager.Instance.CloseUI<UIOption>;
+        Continue.OnClick = OnContinueButtonClick;
         Option.OnClick = OnOptionClick;
 
         Continue.Init();
@@ -29,10 +30,26 @@ public class UIOption : UIBase
         Option.Init();
     }
 
+    void OnContinueButtonClick()
+    {
+        UIManager.Instance.CloseUI<UIOption>(UIManager.Instance.GetMainCanvas());
+    }
+
+    public override void Open()
+    {
+        base.Open();
+        transform.FadeOutXY();
+    }
+
+    public override void Close()
+    {
+        base.Close();
+    }
+
     void OnOptionClick()
     {
-        UIManager.Instance.CloseUI<UIOption>();
-        UIManager.Instance.OpenUI<UISoundOption>();
+        UIManager.Instance.CloseUI<UIOption>(UIManager.Instance.GetMainCanvas());
+        UIManager.Instance.OpenUI<UISoundOption>(UIManager.Instance.GetMainCanvas());
     }
 
 }

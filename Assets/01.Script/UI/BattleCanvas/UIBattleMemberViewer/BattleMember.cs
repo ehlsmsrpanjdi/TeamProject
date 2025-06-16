@@ -19,5 +19,37 @@ public class BattleMember : MonoBehaviour
         MemberRankText = this.TryFindChild(Rank_Text)?.GetComponent<TextMeshProUGUI>();
         MemberTypeText = this.TryFindChild(Type_Text)?.GetComponent<TextMeshProUGUI>();
     }
+
+    public void OnMemberSet(CharacterInstance _instance)
+    {
+        MemberImage.sprite = _instance.characterImage;
+        MemberRankText.text = RankToText.RankString(_instance.currentRank);
+        MemberTypeText.text = "NotYet";
+
+    }
 }
 
+public static class RankToText
+{
+    public static string RankString(Rank _rank)
+    {
+        switch (_rank)
+        {
+            case Rank.C:
+                return "C";
+            case Rank.B:
+                return "B";
+            case Rank.A:
+                return "A";
+            case Rank.S:
+                return "S";
+            case Rank.SS:
+                return "SS";
+            case Rank.SSS:
+                return "SSS";
+            default:
+                return "";
+        }
+    }
+
+}

@@ -2,26 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager
 {
-    public static GameManager Instance;
+    private static GameManager instance;
 
-    public Player player;
-    public GachaManager gacha;
-
-    private void Awake()
+    public static GameManager Instance
     {
-        if (Instance == null)
+        get
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            player = FindObjectOfType<Player>();
-            gacha = FindObjectOfType<GachaManager>();
+            {
+                if (instance == null)
+                    instance = new GameManager();
+            }
+            return instance;
         }
-        else
-        {
-            Destroy(gameObject);
-        }
+        set {instance = value;}
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +8,8 @@ public class UIManagement : UIBase
     [SerializeField] UIInventory Inventory;
     [SerializeField] CharacterStatus characterStatus;
 
+    List<Sprite> sprites = new List<Sprite>();
+
     const string Img_Close = "Img_Close";
 
     private void Reset()
@@ -18,9 +19,33 @@ public class UIManagement : UIBase
         characterStatus = GetComponentInChildren<CharacterStatus>(true);
     }
 
+    public void IsJoin(bool _Value)
+    {
+        characterStatus.IsJoin(_Value);
+    }
+
     private void Awake()
     {
         Close_Button.OnClick = CloseButtonOn;
+    }
+
+    public override void Open()
+    {
+        base.Open();
+        List<CharacterInstance> list = CharacterManager.Instance.GetAllCharacters();
+
+        foreach (CharacterInstance character in list)
+        {
+            CharacterDataSO So = CharacterData.instance.GetData(character.key);
+            sprites.Add(So.characterImage);
+        }
+        Inventory.OnInventoryOpen(sprites);
+        sprites.Clear();
+    }
+
+    public void SetStatusView(int _index)
+    {
+        characterStatus.SetStatusView(_index);
     }
 
     void CloseButtonOn()
@@ -29,4 +54,18 @@ public class UIManagement : UIBase
         UIManager.Instance.OpenUI<UILobby>();
     }
 
+    public void OnClickJoin(int _index)
+    {
+        Inventory.OnParticipate(_index);
+    }
+
+    public void OffClickJoin(int _index)
+    {
+        Inventory.OffParticipate(_index);
+    }
+
+    public void NoneView()
+    {
+        characterStatus.NoneView();
+    }
 }

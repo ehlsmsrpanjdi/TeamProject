@@ -27,23 +27,23 @@ public class UIQuestScroll : UIBase
         ReturnButton.OnClick = UIManager.Instance.CloseUI<UIQuestScroll>;
     }
 
-    private void Start()
+    public override void Open()
     {
-        AddQuest();
-        AddQuest();
-        AddQuest();
-        AddQuest();
-        AddQuest();
-        AddQuest();
-        AddQuest();
-        AddQuest();
+        base.Open();
+        List<QuestDisplayInfo> questInfos = QuestManager.Instance.GetQuestDisplayInfos();
+        foreach (QuestDisplayInfo info in questInfos)
+        {
+            AddQuest(info);
+        }
     }
 
-    public void AddQuest()
+    public void AddQuest(QuestDisplayInfo _info)
     {
         GameObject logObject = Instantiate(questLogPrefab);
         logObject.transform.SetParent(contentObject.transform);
         QuestLog log = logObject.GetComponent<QuestLog>();
+        log.SetQuestName(_info.Title);
+        log.SetQuestDescription(_info.Description);
         questList.Add(log);
     }
 }

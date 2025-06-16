@@ -25,7 +25,7 @@ public class CharacterBehaviour : MonoBehaviour
 
         animator = GetComponent<Animator>();
         animController = new CharAnimController(animator);
-        
+
 
         animController.SetAttack(true);
     }
@@ -34,7 +34,7 @@ public class CharacterBehaviour : MonoBehaviour
         if (Time.time - lastAttackTime >= attackDelay)
         {
             animController.Attacking(CheckEnemyInRange());
-            
+
             lastAttackTime = Time.time;
 
         }
@@ -169,7 +169,7 @@ public class CharacterBehaviour : MonoBehaviour
         {
             float damage = charInstance != null ? charInstance.GetCurrentAttack() : 10;
             target.TakeDamage((int)damage, transform.position, knockbackForce: 1);
-            Debug.Log($"{charInstance.charcterName} 공격 데미지: {damage}");
+            //Debug.Log($"{charInstance.charcterName} 공격 데미지: {damage}");
         }
     }
 
@@ -196,9 +196,9 @@ public class CharacterBehaviour : MonoBehaviour
     }
 
     //스킬사용 (액티브로 하기로 했음)
-    public void UseSkill(int skillIndex, Vector3 position) 
-    {    
-        
+    public void UseSkill(int skillIndex, Vector3 position)
+    {
+
         if (skillIndex < 0 || skillIndex >= charInstance.HasSkill().Count)
         {
             Debug.Log("스킬 인덱스가 잘못되었습니다.");
@@ -213,7 +213,7 @@ public class CharacterBehaviour : MonoBehaviour
             return;
         }
         position = transform.position;
-        skill.UseSkill(skillIndex, position); 
+        skill.UseSkill(skillIndex, position);
     }
 
 

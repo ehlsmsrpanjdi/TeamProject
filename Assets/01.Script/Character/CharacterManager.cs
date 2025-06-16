@@ -225,9 +225,30 @@ public class CharacterManager
         // 리스트에 동일한 랭크의 캐릭터가 있는지
         // 랭크업이 됐으면 캐릭터 삭제
 
-        var rankInfo = character.rankInfo;
+        var charRank = character.rankInfo.FirstOrDefault(r => r.rank == character.currentRank); //선택된 캐릭터의 랭크인포 전달 (리스트로 가지고 있어서 이런식으로 줌)
+
+        int requiredCount = charRank.requiredOwnedCount; //랭크인포의 랭크업 요구 수량 전달
+        var sameCharacter = characters.Where(sc => sc.key == character.key).ToList(); //동일한 키를 가지고 있는 캐릭터만 선택하여 리스트화
+        if(sameCharacter.Count < requiredCount)
+        {
+            Debug.Log("강화에 필요한 수량이 부족합니다.");
+            return false;
+        }
 
         character.RankUp();
+
+        int consumed = 0;
+        for (int i = characters.Count -1; i >= 0 && consumed < requiredCount -1; i--) // 포문 뒤에서부터 돌리기. 리스트 제거를 뒤에서부터 하기 위해서.
+        {
+            if (characters[i] != character && characters[i].key == character.key) // 보유리스트 안의 캐릭터가 랭크업을 시도한 캐릭터가 아니거나, 키가 같으면
+            {
+                characters.RemoveAt(i); //제거
+                consumed++; //소모값 1개 추가. 요구 수량까지 진행
+            }
+
+        }
+        GetAllCharacters(); //캐릭터 리스트 업데이트
+
         return true;
 
     }

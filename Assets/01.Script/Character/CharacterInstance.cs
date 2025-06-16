@@ -190,9 +190,23 @@ public class CharacterInstance
     /// <summary>
     /// 랭크업 >> CharacterManager에서 가지고 감.
     /// </summary>
-    public void RankUp()
+    public bool RankUp()
     {
 
+        var rankIndex = rankInfo.FindIndex(r => r.rank == currentRank); //랭크정보를 리스트로 가지고 있어서 인덱스로 찾기
+
+        if (rankIndex == -1 || rankIndex +1 >= rankInfo.Count) //랭크인데스 (랭크정보) 보다 많거나 적으면 랭크업 불가
+        {
+            Debug.Log("랭크업 불가능");
+            return false;
+        }
+
+        var nextRank = rankInfo[rankIndex + 1]; //랭크 인덱스 +1 (랭크업)
+
+        UpdateRank(nextRank.rank); // 만들어놨던 함수 사용 >> 현재 랭크에 새로운 랭크 할당 및 랭크에 맞는 스킬 활성화
+        enhancementLevel = 0; // 이건 0으로 할지 아니면 기존 강화 수치를 유지 할지 논의 해봐야 함.
+
+        return true;
     }
 }
 

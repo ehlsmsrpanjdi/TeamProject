@@ -7,7 +7,7 @@ public class PlayerData
 {
     public int gold;
     public int diamond;
-    public int currentWave;
+    public int currentStage;
     public List<CharacterSaveData> characterInstances;
     public List<int> particpateCharacterKeys;
 
@@ -15,7 +15,7 @@ public class PlayerData
     {
         gold = 0;
         diamond = 0;
-        currentWave = 1;
+        currentStage = 1;
         characterInstances = new List<CharacterSaveData>();
         particpateCharacterKeys = new List<int>();
     }

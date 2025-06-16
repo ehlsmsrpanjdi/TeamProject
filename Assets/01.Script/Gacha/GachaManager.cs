@@ -86,7 +86,18 @@ public class GachaManager
             return new List<DrawResult>();
         }
 
-        int totalCost = times * costPerDraw;
+        int currentCostPerDraw = costPerDraw;
+        
+        switch (type)
+        {
+            case GachaType.Normal:
+                currentCostPerDraw = costPerDraw;
+                break;
+            case GachaType.Premium:
+                currentCostPerDraw = costPerDraw * 2;
+                break;
+        }
+        int totalCost = times * currentCostPerDraw;
 
         bool drawSuccess = Player.Instance.UseDiamond(totalCost);
 

@@ -122,4 +122,19 @@ public class Player
         }
         return loadedCharacters;
     }
+
+    public void SaveParticipateCharacter(List<CharacterInstance> participateCharacters)
+    {
+        Data.particpateCharacterKeys.Clear();
+        foreach (var character in participateCharacters)
+        {
+            Data.particpateCharacterKeys.Add(character.key);
+        }
+        SavePlayerData();
+    }
+
+    public List<int> LoadParticipateCharacter()
+    {
+        return Data.particpateCharacterKeys;
+    }
 }

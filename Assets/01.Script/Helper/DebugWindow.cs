@@ -27,7 +27,7 @@ public class DebugWindow : EditorWindow
         }
         if (GUILayout.Button("뽑기 버튼"))
         {
-            GachaManager.Instance.DrawCharacter(1);
+            GachaManager.Instance.DrawCharacter(GachaType.Normal, 1);
         }
         if (GUILayout.Button("스폰 버튼"))
         {

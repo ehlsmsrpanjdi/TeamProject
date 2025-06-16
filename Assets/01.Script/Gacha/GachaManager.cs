@@ -13,6 +13,7 @@ public enum GachaFailReason
 {
     NotEnoughDiamond,
     InventoryFull,
+    GachaTableIsNull,
 }
 
 public enum GachaType
@@ -53,14 +54,35 @@ public class GachaManager
         var gachaTable = Resources.Load<GachaTableDataBase>("Gacha/GachaTableList");
 
         gachaTableList = new Dictionary<GachaType, GachaTableSO>();
+        if (gachaTable != null)
+        {
+            foreach (var mapping in gachaTable.gachaRateMappingList)
+            {
+                if (!gachaTableList.ContainsKey(mapping.type))
+                {
+                    gachaTableList.Add(mapping.type, mapping.rateTable);
+                }
+            }
+        }
+        else
+        {
+            DebugHelper.Log("gachaTable is null", gachaTable);;
+        }
     }
 
 
     // 가챠 버튼 등을 눌러서 호출
-    public List<DrawResult> DrawCharacter(int times) // GachaType type 가챠 타입별로 가챠확률 다르게 만들기?
+    public List<DrawResult> DrawCharacter(GachaType type, int times)
     {
         if (times <= 0)
         {
+            return new List<DrawResult>();
+        }
+
+        if (!gachaTableList.TryGetValue(type, out GachaTableSO gachaTable))
+        {
+            DebugHelper.Log("gachaTable is null", gachaTable);
+            OnGachaFail?.Invoke(GachaFailReason.GachaTableIsNull);
             return new List<DrawResult>();
         }
 
@@ -81,35 +103,26 @@ public class GachaManager
         {
             // 캐릭터의 랭크를 정함
             float random = UnityEngine.Random.Range(0f, 100f);
-            Rank rankToDraw;
+            float rateSum = 0f;
+            Rank rankToDraw = Rank.C;
 
-            if (random < 0.1f)
+            if (gachaTable.gachaRateList.Count > 0)
             {
-                rankToDraw = Rank.SSS; // 0.1%
+                rankToDraw = gachaTable.gachaRateList[0].rank;
             }
-            else if (random < 1f)
+
+            foreach (var rate in gachaTable.gachaRateList)
             {
-                rankToDraw = Rank.SS; // 0.9%
+                rateSum += rate.rate;
+                if (random < rateSum)
+                {
+                    rankToDraw = rate.rank;
+                    break;
+                }
             }
-            else if (random < 5f)
-            {
-                rankToDraw = Rank.S; // 4%
-            }
-            else if (random < 15f)
-            {
-                rankToDraw = Rank.A; // 10%
-            }
-            else if (random < 40f)
-            {
-                rankToDraw = Rank.B; // 25%
-            }
-            else
-            {
-                rankToDraw = Rank.C; // 60%
-            }
-            // 각 랭크별 확률을 변수로 만들어서 처리할 예정
 
             List<CharacterDataSO> candidateList = null;
+
             switch (rankToDraw)
             {
                 case Rank.SSS: candidateList = gachaDataBase.SSSCharacterList; break;
@@ -122,6 +135,7 @@ public class GachaManager
 
             if (candidateList == null || candidateList.Count == 0)
             {
+                DebugHelper.Log("candidateList is null", gachaTable);
                 continue;
             }
 
@@ -131,9 +145,6 @@ public class GachaManager
             {
                 CharacterManager.Instance.CreateCharacter(drawncharacterSO.key);
             }
-            else
-            {
-            }
 
             DrawResult result = new DrawResult
             {
@@ -142,7 +153,7 @@ public class GachaManager
             };
 
             resultList.Add(result);
-            DebugHelper.Log($"뽑기 결과: {result.character.characterName} {result.rank}", result.character);
+            DebugHelper.Log($"{type} 뽑기 결과: {result.character.characterName} {result.rank}", result.character);
             OnCharacterDraw?.Invoke(result);
         }
         SoundManager.Instance.PlaySFX(SfxType.Gacha, -1);

@@ -17,10 +17,10 @@ public class ZombieStatHandler : MonoBehaviour
 
     public int MaxHealth { get; private set; }      // 최대 체력
     public int CurrentHealth { get; private set; }  // 현재 체력
-    public int Damage { get; private set; }          // 공격력
-    public float MoveSpeed { get; private set; }     // 이동 속도
-    public float AttackDelay { get; private set; }   // 공격 딜레이
-    public float AttackRange { get; private set; }   // 공격 사거리
+    public int Damage { get; private set; }         // 공격력
+    public float MoveSpeed { get; private set; }    // 이동 속도
+    public float AttackDelay { get; private set; }  // 공격 딜레이
+    public float AttackRange { get; private set; }  // 공격 사거리
 
     //기본값으로 스탯 세팅
     private void Awake()
@@ -60,5 +60,13 @@ public class ZombieStatHandler : MonoBehaviour
     public void ResetHealth()
     {
         CurrentHealth = MaxHealth;
+    }
+
+    // 약화 모드: 스탯을 10%로 줄임
+    public void ApplyWeakPenalty()
+    {
+        MaxHealth = Mathf.Max(1, Mathf.CeilToInt(defaultMaxHealth * 0.1f));
+        CurrentHealth = MaxHealth;
+        Damage = Mathf.Max(1, Mathf.CeilToInt(defaultDamage * 0.1f));
     }
 }

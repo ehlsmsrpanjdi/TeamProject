@@ -27,12 +27,42 @@ public class DebugWindow : EditorWindow
         }
         if (GUILayout.Button("뽑기 버튼"))
         {
-            GachaManager.Instance.DrawCharacter(1);
+            GachaManager.Instance.DrawCharacter(GachaType.Normal, 1);
         }
         if (GUILayout.Button("스폰 버튼"))
         {
             CharacterManager.Instance.EditorFunction();
         }
+        if (GUILayout.Button("프리미엄 뽑기 버튼"))
+        {
+            GachaManager.Instance.DrawCharacter(GachaType.Premium, 1);
+        }
+
+        if (GUILayout.Button("캐릭터 스폰"))
+        {
+            CharacterManager.Instance.EditorFunction();
+        }
+
+        if (GUILayout.Button("바리게이트 체력 전달"))
+        {
+            Barricade.instance.SetHealth();
+        }
+
+        if (GUILayout.Button("캐릭터 강화"))
+        {
+            CharacterManager.Instance.EditorFunctionEnhance();
+        }
+
+        if (GUILayout.Button("캐릭터 랭크업"))
+        {
+            CharacterManager.Instance.EditorFunctionRankUp();
+        }
+
+        if (GUILayout.Button("캐릭터 뽑기"))
+        {
+            CharacterManager.Instance.EditorFunctionCreat();
+        }
+
 
         #region //팀장자리
         if (GUILayout.Button("다이아 1000개 획득"))
@@ -92,7 +122,7 @@ public class DebugWindow : EditorWindow
                 QuestManager qm = FindObjectOfType<QuestManager>();
                 if (qm != null)
                 {
-                    qm.ClaimReward(qm.dailyQuests[0]);
+                    qm.ClaimReward(0);
                 }
                 else
                 {
@@ -112,7 +142,7 @@ public class DebugWindow : EditorWindow
                 QuestManager qm = FindObjectOfType<QuestManager>();
                 if (qm != null)
                 {
-                    qm.ClaimReward(qm.dailyQuests[1]);
+                    qm.ClaimReward(1);
                 }
                 else
                 {
@@ -132,7 +162,7 @@ public class DebugWindow : EditorWindow
                 QuestManager qm = FindObjectOfType<QuestManager>();
                 if (qm != null)
                 {
-                    qm.ClaimReward(qm.dailyQuests[2]);
+                    qm.ClaimReward(2);
                 }
                 else
                 {
@@ -152,7 +182,7 @@ public class DebugWindow : EditorWindow
                 QuestManager qm = FindObjectOfType<QuestManager>();
                 if (qm != null)
                 {
-                    qm.ClaimReward(qm.dailyQuests[3]);
+                    qm.ClaimReward(3);
                 }
                 else
                 {

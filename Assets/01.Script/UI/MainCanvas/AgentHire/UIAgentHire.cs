@@ -59,12 +59,12 @@ public class UIAgentHire : UIBase
             return;
         }
 
-        List<DrawResult> list = GachaManager.Instance.DrawCharacter(1);
+       List<DrawResult> list = GachaManager.Instance.DrawCharacter(1);
 
-        if (list.Count != 0)
-        {
-            UIManager.Instance.OpenUI<UIGacha>(UIManager.Instance.GetMainCanvas());
-        }
+       if (list.Count != 0)
+       {
+           UIManager.Instance.OpenUI<UIGacha>(UIManager.Instance.GetMainCanvas());
+       }
 
     }
 

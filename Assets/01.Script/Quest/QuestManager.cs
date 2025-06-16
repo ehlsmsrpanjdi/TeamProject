@@ -6,7 +6,11 @@ using UnityEngine;
 
 public class QuestManager : MonoBehaviour
 {
-    public List<QuestData> dailyQuests = new();
+    public QuestDataListSO dailyQuestListSO;
+
+    private List<QuestData> dailyQuests = new List<QuestData>();
+
+    // public List<QuestData> dailyQuests = new();
 
     private int playTimeSeconds = 0; // 접속시간 계산.
 
@@ -46,6 +50,10 @@ public class QuestManager : MonoBehaviour
     public Action<int, float> OnQuestUpdated; // 공격력 강화와 접속시간을 반환.
 
     public Action<float> OnQuestCompleted; // 모든 일퀘 ui에서 사용. 각 일퀘 클리어 시 값 반환
+
+    public Action<int> OnQuestCleared; // 각 퀘스트 클리어 조건 달성 시 UI 변경.
+
+    public Action<int> OnQuestRewardClaimed; // 보상 수령 시 UI 갱신
 
     private void Start()
      {
@@ -104,34 +112,16 @@ public class QuestManager : MonoBehaviour
     {
         dailyQuests.Clear();
 
-        dailyQuests.Add(new QuestData(
-            id: 0,
-            title: "공격력 강화",
-            description: "강화 버튼을 5번 누르세요",
-            type: QuestType.IncreaseAttackLevel,
-            targetValue: 5
-        ));
-        dailyQuests.Add(new QuestData(
-            id: 1,
-            title: "접속하기",
-            description: "게임에 접속하세요",
-            type: QuestType.DailyLogin,
-            targetValue: 0
-        ));
-        dailyQuests.Add(new QuestData(
-            id: 2,
-            title: "10분 플레이",
-            description: "10분 이상 플레이하세요",
-            type: QuestType.Play10Minute,
-            targetValue: 600
-        ));
-        dailyQuests.Add(new QuestData(
-            id: 3,
-            title: "전체 클리어 보상",
-            description: "다른 일반퀘스트를 모두 클리어하세요",
-            type: QuestType.AllClear,
-            targetValue: 0
-        ));
+        if (dailyQuestListSO == null)
+        {
+            Debug.LogWarning("퀘스트 리스트 SO가 연결되지 않았습니다.");
+            return;
+        }
+
+        foreach (var questSO in dailyQuestListSO.quests)
+        {
+            dailyQuests.Add(questSO.ToQuestData());
+        }
     }
 
     private SaveData CreateDefaultSaveData() // 초기 데이터 없으면 불러오기.
@@ -217,19 +207,34 @@ public class QuestManager : MonoBehaviour
         if (loginQuest != null && !loginQuest.IsCompleted)
         {
             loginQuest.IsCompleted = true;
+            OnQuestCleared?.Invoke(loginQuest.Id);
             SaveQuestsToJson();
         }
 
         CheckAllClearQuest(); // 전체 클리어 퀘스트 상태 갱신
     }
 
-    public void ClaimReward(QuestData quest) // 퀘스트 클리어 버튼과 연결, 보상 수령.
+    public void ClaimReward(int index) // 퀘스트 클리어 버튼과 연결, 보상 수령.
     {
+        QuestData quest = dailyQuests.Find(q => q.Id == index);
+
+        if (dailyQuests == null)
+        {
+            DebugHelper.LogWarrning($"dailyQuests 리스트가 생성되지 않았습니다.", this);
+            return;
+        }
+
+        if (quest == null)
+        {
+            DebugHelper.LogWarrning($"퀘스트 인덱스 {index}가 잘못되었습니다.", this);
+            return;
+        }
+
         if (quest.IsCompleted && !quest.IsClaimed)
         {
             quest.IsClaimed = true;
             SaveQuestsToJson();
-            // Debug.Log($"보상 수령: {quest.Title}");
+            OnQuestRewardClaimed?.Invoke(quest.Id);
 
             switch (quest.Id)
             {
@@ -248,7 +253,7 @@ public class QuestManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"{quest.Title} 보상 수령 실패, 조건 여부: {quest.IsCompleted}, 수령 여부: {quest.IsClaimed}");
+            DebugHelper.LogWarrning($"{quest.Title} 보상 수령 실패, 조건 여부: {quest.IsCompleted}, 수령 여부: {quest.IsClaimed}", this);
         }
     }
 
@@ -260,12 +265,11 @@ public class QuestManager : MonoBehaviour
 
         attackQuest.CurrentValue++;
         OnQuestUpdated?.Invoke(attackQuest.Id, (float) attackQuest.CurrentValue / (float) attackQuest.TargetValue);
-        // Debug.Log($"강화 횟수: {attackQuest.CurrentValue} / {attackQuest.TargetValue}");
 
         if (attackQuest.CurrentValue >= attackQuest.TargetValue)
         {
             attackQuest.IsCompleted = true;
-            // Debug.Log($"공격력 강화 퀘스트 완료!");
+            OnQuestCleared?.Invoke(attackQuest.Id);
             CheckAllClearQuest();
         }
 
@@ -286,8 +290,8 @@ public class QuestManager : MonoBehaviour
         if (allOthersCompleted)
         {
             allClearQuest.IsCompleted = true;
+            OnQuestCleared?.Invoke(allClearQuest.Id);
             SaveQuestsToJson();
-//            Debug.Log("전체 클리어 보상 퀘스트 완료!");
         }
     }
 
@@ -317,8 +321,8 @@ public class QuestManager : MonoBehaviour
             if (playTimeSeconds >= playQuest.TargetValue)
             {
                 playQuest.IsCompleted = true;
+                OnQuestCleared?.Invoke(playQuest.Id);
                 CheckAllClearQuest();
-                // Debug.Log($"10분 이상 플레이 퀘스트 완료!");
             }
 
             SaveQuestsToJson();

@@ -92,7 +92,7 @@ public class DebugWindow : EditorWindow
                 QuestManager qm = FindObjectOfType<QuestManager>();
                 if (qm != null)
                 {
-                    qm.ClaimReward(qm.dailyQuests[0]);
+                    qm.ClaimReward(0);
                 }
                 else
                 {
@@ -112,7 +112,7 @@ public class DebugWindow : EditorWindow
                 QuestManager qm = FindObjectOfType<QuestManager>();
                 if (qm != null)
                 {
-                    qm.ClaimReward(qm.dailyQuests[1]);
+                    qm.ClaimReward(1);
                 }
                 else
                 {
@@ -132,7 +132,7 @@ public class DebugWindow : EditorWindow
                 QuestManager qm = FindObjectOfType<QuestManager>();
                 if (qm != null)
                 {
-                    qm.ClaimReward(qm.dailyQuests[2]);
+                    qm.ClaimReward(2);
                 }
                 else
                 {
@@ -152,7 +152,7 @@ public class DebugWindow : EditorWindow
                 QuestManager qm = FindObjectOfType<QuestManager>();
                 if (qm != null)
                 {
-                    qm.ClaimReward(qm.dailyQuests[3]);
+                    qm.ClaimReward(3);
                 }
                 else
                 {

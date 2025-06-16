@@ -244,9 +244,10 @@ public class CharacterManager
     public void EditorFunction()
     {
         CreateCharacter(1005);
-  
+        CreateCharacter(1002);
+
         SelectParticipate(0);
-   
+        SelectParticipate(1);
 
 
         SpawnParticipateCharacters(Vector3.zero); // 스폰 호출

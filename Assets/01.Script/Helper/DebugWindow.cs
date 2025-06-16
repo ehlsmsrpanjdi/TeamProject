@@ -33,12 +33,11 @@ public class DebugWindow : EditorWindow
         {
             CharacterManager.Instance.EditorFunctionEnhance();
         }
-
-        if (GUILayout.Button("체력세팅 버튼"))
+        if (GUILayout.Button("체력 세팅 버튼"))
         {
-            
+            Barricade.instance.SetHealth();
         }
-        
+
 
 
 

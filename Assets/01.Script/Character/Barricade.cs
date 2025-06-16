@@ -7,16 +7,13 @@ public class Barricade : MonoBehaviour, IDamageable
     
     private float currentHealth;
 
-    public Barricade instance;
+    public static Barricade instance;
 
     public void Awake()
     {
-        Init();
-    }
-    public void Init()
-    {
         instance = this;
     }
+
 
     //체력 초기화. 현재 참전 중인 캐릭터들의 체력을 넘겨 받음.
     //모든 체력을 하나의 바라게이트가 받을 것인가?
@@ -29,13 +26,14 @@ public class Barricade : MonoBehaviour, IDamageable
     public void SetHealth()
     {
         currentHealth = CharacterManager.Instance.GetTotalHealt();
+        Debug.Log($"{currentHealth}");
     }
 
     // 대미지를 받는 함수
     public void TakeDamage(int amount, Vector3 attackerPosition, float knockbackForce)
     {
         currentHealth -= amount;
-        Debug.Log($"[DummyPlayer] 대미지 {amount} 받음 → 남은 체력: {currentHealth}");
+        Debug.Log($"대미지 {amount} 받음 → 남은 체력: {currentHealth}");
 
         // 체력이 0 이하일 경우 스테이지 실패
         if (currentHealth <= 0)

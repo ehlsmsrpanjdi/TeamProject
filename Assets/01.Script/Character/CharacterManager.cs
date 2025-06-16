@@ -237,17 +237,17 @@ public class CharacterManager
     /// </summary>
     public float GetTotalHealt()
     {
-        return participated.Values.Sum(character => character.baseHealth);
+        return participated.Values.Sum(character => character.GetCurrentHealth());
     }
 
     #if UNITY_EDITOR
     public void EditorFunction()
     {
         CreateCharacter(1005);
-        CreateCharacter(1002);
+
 
         SelectParticipate(0);
-        SelectParticipate(1);
+
 
 
         SpawnParticipateCharacters(Vector3.zero); // 스폰 호출

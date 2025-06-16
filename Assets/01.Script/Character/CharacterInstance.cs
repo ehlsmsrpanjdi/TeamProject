@@ -12,8 +12,8 @@ public class CharacterInstance
     public int key;
     public string charcterName;
     public Sprite characterImage;
-    public float currentAttack;
-    public float currentHealth;
+    public float baseAttack;
+    public float baseHealth;
     public Rank currentRank;
     public int enhancementLevel;
     public List<RankInfo> rankInfo;
@@ -25,8 +25,8 @@ public class CharacterInstance
         this.key = data.key;
         this.charcterName = data.characterName;
         this.characterImage = data.characterImage;
-        currentAttack = data.baseAttack;
-        currentHealth = data.baseHealth;
+        this.baseAttack = data.baseAttack;
+        this.baseHealth = data.baseHealth;
         this.currentRank = data.startRank;
         this.enhancementLevel = data.enhancementLevel;
         charPrefab = data.characterPrefab;
@@ -90,9 +90,9 @@ public class CharacterInstance
     public float GetCurrentAttack()
     {
         var rankInfo = GetCurrentRankInfo();
-        if (rankInfo == null) return currentAttack;
+        if (rankInfo == null) return baseAttack;
 
-        return Mathf.RoundToInt(currentAttack * rankInfo.attackMultiplier * GetEnhancementBonus());
+        return Mathf.RoundToInt(baseAttack * rankInfo.attackMultiplier * GetEnhancementBonus());
     }
 
     /// <summary>
@@ -101,9 +101,9 @@ public class CharacterInstance
     public float GetCurrentHealth()
     {
         var rankInfo = GetCurrentRankInfo();
-        if (rankInfo == null) return currentHealth;
+        if (rankInfo == null) return baseHealth;
 
-        return Mathf.RoundToInt(currentHealth * rankInfo.hpMultiplier * GetEnhancementBonus());
+        return Mathf.RoundToInt(baseHealth * rankInfo.hpMultiplier * GetEnhancementBonus());
     }
 
     // <summary>
@@ -176,8 +176,8 @@ public class CharacterInstance
 
         enhancementLevel++;
         Debug.Log($"현재 강화 수치 : {enhancementLevel}");
-        Debug.Log($"현재 공격력 : {currentAttack}");
-        Debug.Log($"현재 공격력 : {currentHealth}");
+        Debug.Log($"현재 공격력 : {GetCurrentAttack()}");
+        Debug.Log($"현재 체력 : {GetCurrentHealth()}");
     }
 
     /// <summary>

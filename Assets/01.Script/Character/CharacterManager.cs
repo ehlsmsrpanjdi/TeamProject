@@ -181,11 +181,32 @@ public class CharacterManager
         }
     }
 
+    /// <summary>
+    /// 선택 슬롯의 캐릭터 강화
+    /// </summary>
+      
+    public bool EnhanceCharacter(int index)
+    {
+        if(index <0 || index >= characters.Count)
+        {
+            return false;
+        }
+
+        var character = characters[index];
+        if(character == null)
+        {
+            return false;
+        }
+
+        character.Enhance();
+        return true;
+    }
+
 
     #if UNITY_EDITOR
     public void EditorFunction()
     {
-        CreateCharacter(1005);
+        CreateCharacter(1001);
   
         SelectParticipate(0);
    
@@ -195,5 +216,12 @@ public class CharacterManager
 
 
     }
-    #endif
+    public void EditorFunctionEnhance()
+    {
+        EnhanceCharacter(0);
+
+
+    }
+
+#endif
 }

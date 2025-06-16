@@ -29,6 +29,12 @@ public class DebugWindow : EditorWindow
         {
             CharacterManager.Instance.EditorFunction();
         }
+        if (GUILayout.Button("강화 버튼"))
+        {
+            CharacterManager.Instance.EditorFunctionEnhance();
+        }
+
+
 
         #region QuestTest
 

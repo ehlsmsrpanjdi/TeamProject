@@ -40,5 +40,6 @@ public class RankInfo
     public float hpMultiplier; //랭크업 당 증가 되는 기본 체력 배율
     //public List<int> skillKey;
     public int requiredOwnedCount; //랭크업 시 필요한 개수
+    public int maxenhancementLevel;
 
 }

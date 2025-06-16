@@ -153,5 +153,25 @@ public class CharacterInstance
         //learnedSkills = LearnSkillByRank(newRank);
         UpdateSkillActivation();
     }
+
+    public void Enhance()
+    {
+        var info = GetCurrentRankInfo();
+
+        if(info == null)
+        {
+            Debug.Log("강화 실패: 현재 랭크 정보가 없습니다.");
+            return;
+        }
+
+        if(enhancementLevel >= info.maxenhancementLevel)
+        {
+            Debug.Log("최대 강화 수치 도달.");
+            return;
+        }
+
+        enhancementLevel++;
+        Debug.Log($"현재 강화 수치 : {enhancementLevel}");
+    }
 }
 

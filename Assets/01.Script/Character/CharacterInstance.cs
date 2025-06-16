@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 
 /// <summary>
@@ -152,6 +153,61 @@ public class CharacterInstance
         currentRank = newRank;
         //learnedSkills = LearnSkillByRank(newRank);
         UpdateSkillActivation();
+    }
+
+
+    /// <summary>
+    /// 강화 >> CharacterManager에서 가지고 감.
+    /// </summary>
+    public void Enhance()
+    {
+        var info = GetCurrentRankInfo();
+
+        if(info == null)
+        {
+            Debug.Log("강화 실패: 현재 랭크 정보가 없습니다.");
+            return;
+        }
+
+        if(enhancementLevel >= info.maxenhancementLevel)
+        {
+            Debug.Log("최대 강화 수치 도달.");
+            return;
+        }
+
+        enhancementLevel++;
+        Debug.Log($"현재 강화 수치 : {enhancementLevel}");
+        Debug.Log($"현재 공격력 : {GetCurrentAttack()}");
+        Debug.Log($"현재 체력 : {GetCurrentHealth()}");
+    }
+
+    /// <summary>
+    /// 캐릭터의 강화 수치 확인
+    /// </summary>
+    public int GetEnhancementLevel()
+    {
+        return enhancementLevel;
+    }
+    /// <summary>
+    /// 랭크업 >> CharacterManager에서 가지고 감.
+    /// </summary>
+    public bool RankUp()
+    {
+
+        var rankIndex = rankInfo.FindIndex(r => r.rank == currentRank); //랭크정보를 리스트로 가지고 있어서 인덱스로 찾기
+
+        if (rankIndex == -1 || rankIndex +1 >= rankInfo.Count) //랭크인데스 (랭크정보) 보다 많거나 적으면 랭크업 불가
+        {
+            Debug.Log("랭크업 불가능");
+            return false;
+        }
+
+        var nextRank = rankInfo[rankIndex + 1]; //랭크 인덱스 +1 (랭크업)
+
+        UpdateRank(nextRank.rank); // 만들어놨던 함수 사용 >> 현재 랭크에 새로운 랭크 할당 및 랭크에 맞는 스킬 활성화
+        enhancementLevel = 0; // 이건 0으로 할지 아니면 기존 강화 수치를 유지 할지 논의 해봐야 함.
+
+        return true;
     }
 }
 

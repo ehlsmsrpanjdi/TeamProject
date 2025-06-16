@@ -29,7 +29,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
     private Renderer zombieRenderer; // 렌더러 (피격 시 색변경용)
     private Transform target; // 플레이어 Transform
     private ZombieStatHandler statHandler; // 좀비 스탯 핸들러
-    private ZombiePool pool; // 좀비 풀
     private WaveManager waveManager; // 웨이브 매니저
     private Coroutine knockbackCoroutine;
 
@@ -38,9 +37,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
     [Header("발사위치")]
     public Transform firePoint;
-
-    [Header("디버그용 공격 범위")] [SerializeField]
-    private float debugAttackRange = 2f;
 
     [Header("접근거리")] public float stopDistance = 2f;
 
@@ -97,7 +93,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
             originalColor = zombieRenderer.material.color;
 
         // 시작 시 참조 캐싱
-        pool = FindObjectOfType<ZombiePool>();
         statHandler = GetComponent<ZombieStatHandler>();
     }
 
@@ -170,6 +165,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
                     10f * Time.deltaTime);
         }
     }
+
     // 플레이어 공격
     private void Attack()
     {
@@ -215,39 +211,43 @@ public class ZombieAI : MonoBehaviour, IDamageable
                     Debug.LogWarning("[ZombieAI] 대상이 IDamageable 아님");
                 }
             }
-            // 원거리 공격
-            if (firePoint != null && target != null)
+            else if (attackType == AttackType.Projectile)
             {
-                Vector3 velocity = CalculateProjectileVelocity(firePoint.position, target.position);
-
-                if (velocity == Vector3.zero)
+                // 원거리 공격
+                if (firePoint != null && target != null)
                 {
-                    Debug.LogWarning("[ProjectileAttack] CalculateProjectileVelocity 반환값이 0벡터입니다. 직선 발사로 대체합니다.");
-                    velocity = (target.position - firePoint.position).normalized * 20f;
+                    Vector3 velocity = CalculateProjectileVelocity(firePoint.position, target.position);
+
+                    if (velocity == Vector3.zero)
+                    {
+                        Debug.LogWarning("[ProjectileAttack] CalculateProjectileVelocity 반환값이 0벡터입니다. 직선 발사로 대체합니다.");
+                        velocity = (target.position - firePoint.position).normalized * 20f;
+                    }
+
+                    ZombieProjectile proj = ObjectPool.Instance.Get<ZombieProjectile>("Projectile");
+                    if (proj != null)
+                    {
+                        proj.transform.position = firePoint.position;
+                        proj.transform.rotation = Quaternion.LookRotation(velocity);
+                        proj.SetDamage(statHandler.Damage);
+                        proj.SetShooter(gameObject);
+                        proj.gameObject.SetActive(true); // 이 줄은 있어도 되고 없어도 됨
+                        proj.Launch(velocity);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[ZombieAI] ZombieProjectile 풀에서 꺼내기 실패");
+                    }
                 }
-
-                GameObject proj = ZombieProjectilePool.Instance.GetProjectile(
-                    firePoint.position,
-                    Quaternion.LookRotation(velocity),
-                    statHandler.Damage,
-                    gameObject,
-                    velocity
-                );
-
-                ZombieProjectile projScript = proj.GetComponent<ZombieProjectile>();
-                if (projScript != null)
+                else
                 {
-                    projScript.gameObject.SetActive(true);
-                    projScript.Launch(velocity);
+                    Debug.LogWarning("[ZombieAI] 투사체 발사 실패: firePoint 또는 target이 null");
                 }
-            }
-            else
-            {
-                Debug.LogWarning("[ZombieAI] 투사체 풀 또는 발사 위치 또는 타겟이 설정되지 않음");
             }
             attackTimer = 0f; // 타이머 초기화
         }
     }
+
     // 원거리 공격 포물선 계산
     private Vector3 CalculateProjectileVelocity(Vector3 origin, Vector3 target)
     {
@@ -276,15 +276,11 @@ public class ZombieAI : MonoBehaviour, IDamageable
         return velocity;
     }
 
-
-
-
     // 에디터에서 공격 범위를 시각화하는 함수
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Vector3 center = transform.position + transform.forward * (debugAttackRange * 0.5f);
-        Gizmos.DrawWireSphere(center, debugAttackRange);
+        Gizmos.DrawWireSphere(transform.position, statHandler.AttackRange);
     }
 
     // 상태 변경
@@ -376,6 +372,19 @@ public class ZombieAI : MonoBehaviour, IDamageable
             rb.isKinematic = true;
         }
 
+        // 골드 보상 지급
+        if (Player.Instance != null && Player.Instance.Data != null)
+        {
+            int currentStage = Player.Instance.Data.currentStage;
+
+            bool isRetry = FindObjectOfType<WaveManager>()?.IsWeakMode() == true;
+            int baseReward = currentStage * 10;
+            int reward = isRetry ? Mathf.CeilToInt(baseReward * 0.1f) : baseReward;
+
+            Player.Instance.AddGold(reward);
+            Debug.Log($"[ZombieAI] 골드 {reward} 획득 (스테이지 {currentStage}, 반복 모드: {isRetry})");
+        }
+
         // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
         if (animator != null && animator.runtimeAnimatorController != null)
             animator.SetTrigger("");
@@ -384,34 +393,75 @@ public class ZombieAI : MonoBehaviour, IDamageable
         waveManager?.OnZombieDied();
 
         // 풀에 반환 대기 시작
-        int type = (attackType == AttackType.Projectile) ? 2 : 1;
-        StartCoroutine(ReturnToPoolAfterDelay(2f, type));
+        string zombieKey = (attackType == AttackType.Projectile) ? "Zombie2" : "Zombie1";
+        StartCoroutine(ReturnToPoolAfterDelay(2f, zombieKey));
     }
 
+
     // 지정 시간 후 풀에 좀비 반환
-    private IEnumerator ReturnToPoolAfterDelay(float delay, int type)
+    private IEnumerator ReturnToPoolAfterDelay(float delay, string key)
     {
         yield return new WaitForSeconds(delay);
-        pool.ReturnZombie(type, gameObject);
+
+        ObjectPool.Instance.Return(key, GetComponent<Zombie>());
 
         // 안전을 위해 웨이브 매니저에 추가 사망 알림
         FindObjectOfType<WaveManager>()?.OnZombieDied();
     }
 
 
+    // 넉백 시작
     public void StartKnockback(Vector3 attackerPosition, float force)
     {
         if (knockbackCoroutine != null)
-            StopCoroutine(knockbackCoroutine);
-        knockbackCoroutine = StartCoroutine(ApplyKnockback(attackerPosition, force));
+            StopCoroutine(knockbackCoroutine); // 이전 넉백 중단
+
+        knockbackCoroutine = StartCoroutine(ApplyKnockback(attackerPosition, force)); // 새 넉백 시작
     }
 
+    // 넉백 중이라면 즉시 중단
     public void StopKnockback()
     {
         if (knockbackCoroutine != null)
         {
-            StopCoroutine(knockbackCoroutine);
-            knockbackCoroutine = null;
+            StopCoroutine(knockbackCoroutine); // 넉백 코루틴 정지
+            knockbackCoroutine = null;         // 참조 제거
         }
+    }
+
+    // 좀비를 강제로 초기화하고 풀로 즉시 반환
+    public void ResetAndReturnToPool(string key)
+    {
+        // 넉백 중이면 정지 (강제 리셋 시 흔들림 제거)
+        StopKnockback();
+
+        // 이동 정지 및 AI 중단
+        if (agent != null && agent.enabled)
+        {
+            agent.isStopped = true;
+            agent.enabled = false;
+        }
+
+        // 리지드바디 물리 속도 제거 및 고정
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.velocity = Vector3.zero;
+        }
+
+        // 애니메이션 트리거 및 상태 초기화
+        if (animator != null && animator.runtimeAnimatorController != null)
+        {
+            animator.ResetTrigger("Attack");
+            animator.ResetTrigger("Hit");
+            animator.ResetTrigger("Die");
+            animator.SetBool("IsMoving", false);
+        }
+
+        // 체력, 상태 등 스탯 리셋
+        statHandler?.ResetHealth();
+
+        // 풀 반환
+        ObjectPool.Instance.Return(key, GetComponent<Zombie>());
     }
 }

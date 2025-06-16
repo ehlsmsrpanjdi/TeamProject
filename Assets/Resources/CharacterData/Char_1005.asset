@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 851cfaf6313d0d444b04d97021f7ec7e, type: 3}
+  m_Name: Char_1005
+  m_EditorClassIdentifier: 
+  key: 1005
+  characterName: "\uC81C\uB9AC"
+  characterImage: {fileID: 21300000, guid: cb032ec3f4d3a2345a5c07614d5b0d3c, type: 3}
+  baseAttack: 70
+  baseHealth: 750
+  startRank: 1
+  characterPrefab: {fileID: 1374702107769640116, guid: fcc7ac0fb448027439ad28d675674373,
+    type: 3}
+  enhancementLevel: 0
+  rankInfo:
+  - rank: 0
+    attackMultiplier: 1
+    hpMultiplier: 1
+    requiredOwnedCount: 2
+    maxenhancementLevel: 10
+  - rank: 1
+    attackMultiplier: 1.2
+    hpMultiplier: 1.2
+    requiredOwnedCount: 2
+    maxenhancementLevel: 20
+  - rank: 2
+    attackMultiplier: 1.3
+    hpMultiplier: 1.3
+    requiredOwnedCount: 2
+    maxenhancementLevel: 30
+  - rank: 3
+    attackMultiplier: 1.4
+    hpMultiplier: 1.4
+    requiredOwnedCount: 2
+    maxenhancementLevel: 40
+  - rank: 4
+    attackMultiplier: 1.5
+    hpMultiplier: 1.5
+    requiredOwnedCount: 2
+    maxenhancementLevel: 50
+  - rank: 5
+    attackMultiplier: 1.6
+    hpMultiplier: 1.6
+    requiredOwnedCount: 0
+    maxenhancementLevel: 100

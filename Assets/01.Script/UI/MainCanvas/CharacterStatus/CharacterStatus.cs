@@ -118,12 +118,12 @@ public class CharacterStatus : MonoBehaviour
         {
             IsJoin(!IsParticipated);
             CharacterManager.Instance.RemoveParticipate(Selected_Index);
-            UIManager.Instance.GetUI<UIManagement>().OffClickJoin(Selected_Index);
+            UIManager.Instance.GetUI<UIManagement>(UIManager.Instance.GetMainCanvas()).OffClickJoin(Selected_Index);
         }
         else
         {
             CharacterManager.Instance.SelectParticipate(Selected_Index);
-            UIManager.Instance.GetUI<UIManagement>().OnClickJoin(Selected_Index);
+            UIManager.Instance.GetUI<UIManagement>(UIManager.Instance.GetMainCanvas()).OnClickJoin(Selected_Index);
             IsJoin(!IsParticipated);
         }
     }

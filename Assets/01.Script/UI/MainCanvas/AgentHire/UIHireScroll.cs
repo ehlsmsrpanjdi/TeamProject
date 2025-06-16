@@ -26,7 +26,12 @@ public class UIHireScroll : UIBase
 
     private void Awake()
     {
-        ReturnButton.OnClick = UIManager.Instance.CloseUI<UIHireScroll>;
+        ReturnButton.OnClick = OnReturnButttonClick;
+    }
+
+    void OnReturnButttonClick()
+    {
+        UIManager.Instance.CloseUI<UIHireScroll>(UIManager.Instance.GetMainCanvas());
     }
 
     private void OnDisable()

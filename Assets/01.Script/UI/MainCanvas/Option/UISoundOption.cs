@@ -30,8 +30,8 @@ public class UISoundOption : UIBase
 
     void ReturnButtonOn()
     {
-        UIManager.Instance.CloseUI<UISoundOption>();
-        UIManager.Instance.OpenUI<UIOption>();
+        UIManager.Instance.CloseUI<UISoundOption>(UIManager.Instance.GetMainCanvas());
+        UIManager.Instance.OpenUI<UIOption>(UIManager.Instance.GetMainCanvas());
     }
 
     public override void Close()

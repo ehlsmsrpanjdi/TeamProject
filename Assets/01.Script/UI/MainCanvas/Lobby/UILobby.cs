@@ -73,7 +73,7 @@ public class UILobby : UIBase
 
     void OnManagementClick()
     {
-        UIManager.Instance.OpenUI<UIManagement>();
+        UIManager.Instance.OpenUI<UIManagement>(UIManager.Instance.GetMainCanvas());
         Management_Button.transform.KillDoTween();
         ManagementBackGround.transform.KillDoTween();
         ManagementBackGround.transform.FadeInX();
@@ -81,7 +81,7 @@ public class UILobby : UIBase
 
     void OnQuestClick()
     {
-        UIManager.Instance.OpenUI<UIQuestScroll>();
+        UIManager.Instance.OpenUI<UIQuestScroll>(UIManager.Instance.GetMainCanvas());
         Quest_Button.transform.KillDoTween();
         QuestBackGround.transform.KillDoTween();
         QuestBackGround.transform.FadeInX();
@@ -89,7 +89,7 @@ public class UILobby : UIBase
 
     void OnAgentClick()
     {
-        UIManager.Instance.OpenUI<UIAgentHire>();
+        UIManager.Instance.OpenUI<UIAgentHire>(UIManager.Instance.GetMainCanvas());
         Agent_Button.transform.KillDoTween();
         AgentBackGround.transform.KillDoTween();
         AgentBackGround.transform.FadeInX();

@@ -45,7 +45,7 @@ public class UIGacha : UIBase
     public override void Close()
     {
         base.Close();
-        UIHireScroll HireScroll = UIManager.Instance.GetUI<UIHireScroll>();
+        UIHireScroll HireScroll = UIManager.Instance.GetUI<UIHireScroll>(UIManager.Instance.GetMainCanvas());
         HireScroll.Open();
         IsOpening = false;
         IsOpen = false;

@@ -64,7 +64,7 @@ public class InventorySlot : MonoBehaviour
 
     public void OnClickSlot()
     {
-        UIManagement management = UIManager.Instance.GetUI<UIManagement>();
+        UIManagement management = UIManager.Instance.GetUI<UIManagement>(UIManager.Instance.GetMainCanvas());
         management.SetStatusView(index);
         bool IsParticipated = CharacterManager.Instance.IsParticipating(index);
         management.IsJoin(IsParticipated);

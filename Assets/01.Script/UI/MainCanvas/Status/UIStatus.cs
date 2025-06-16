@@ -31,7 +31,7 @@ public class UIStatus : UIBase
 
     public void OnOptionClick()
     {
-        UIManager.Instance.OpenUI<UIOption>();
+        UIManager.Instance.OpenUI<UIOption>(UIManager.Instance.GetMainCanvas());
     }
 
     public void SetGold(int _Gold)

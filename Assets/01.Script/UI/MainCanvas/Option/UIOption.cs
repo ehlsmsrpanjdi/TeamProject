@@ -22,12 +22,17 @@ public class UIOption : UIBase
 
     private void Awake()
     {
-        Continue.OnClick = UIManager.Instance.CloseUI<UIOption>;
+        Continue.OnClick = OnContinueButtonClick;
         Option.OnClick = OnOptionClick;
 
         Continue.Init();
         Exit.Init();
         Option.Init();
+    }
+
+    void OnContinueButtonClick()
+    {
+        UIManager.Instance.CloseUI<UIOption>(UIManager.Instance.GetMainCanvas());
     }
 
     public override void Open()
@@ -43,8 +48,8 @@ public class UIOption : UIBase
 
     void OnOptionClick()
     {
-        UIManager.Instance.CloseUI<UIOption>();
-        UIManager.Instance.OpenUI<UISoundOption>();
+        UIManager.Instance.CloseUI<UIOption>(UIManager.Instance.GetMainCanvas());
+        UIManager.Instance.OpenUI<UISoundOption>(UIManager.Instance.GetMainCanvas());
     }
 
 }

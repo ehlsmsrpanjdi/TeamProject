@@ -30,7 +30,13 @@ public class UIQuestScroll : UIBase
         {
             Resources.Load<GameObject>(QuestLog);
         }
-        ReturnButton.OnClick = UIManager.Instance.CloseUI<UIQuestScroll>;
+        ReturnButton.OnClick = OnReturnButtonclick;
+    }
+
+
+    void OnReturnButtonclick()
+    {
+        UIManager.Instance.CloseUI<UIQuestScroll>(UIManager.Instance.GetMainCanvas());
     }
 
     public override void Open()

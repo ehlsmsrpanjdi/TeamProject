@@ -34,7 +34,7 @@ public class UIAgentHire : UIBase
 
     private void Start()
     {
-        uiHireScroll = UIManager.Instance.GetUI<UIHireScroll>();
+        uiHireScroll = UIManager.Instance.GetUI<UIHireScroll>(UIManager.Instance.GetMainCanvas());
         if (uiHireScroll == null)
         {
             DebugHelper.Log("uihirescroll is NONO", this);
@@ -50,7 +50,7 @@ public class UIAgentHire : UIBase
 
     void ClickGachaOneTime()
     {
-        if(true == UIManager.Instance.GetUI<UIGacha>().gameObject.activeSelf)
+        if(true == UIManager.Instance.GetUI<UIGacha>(UIManager.Instance.GetMainCanvas()).gameObject.activeSelf)
         {
             return;
         }
@@ -63,14 +63,14 @@ public class UIAgentHire : UIBase
 
         if (list.Count != 0)
         {
-            UIManager.Instance.OpenUI<UIGacha>();
+            UIManager.Instance.OpenUI<UIGacha>(UIManager.Instance.GetMainCanvas());
         }
 
     }
 
     void ClickGachaTenTime()
     {
-        if (true == UIManager.Instance.GetUI<UIGacha>().gameObject.activeSelf)
+        if (true == UIManager.Instance.GetUI<UIGacha>(UIManager.Instance.GetMainCanvas()).gameObject.activeSelf)
         {
             return;
         }
@@ -83,13 +83,13 @@ public class UIAgentHire : UIBase
 
         if (list.Count != 0)
         {
-            UIManager.Instance.OpenUI<UIGacha>();
+            UIManager.Instance.OpenUI<UIGacha>(UIManager.Instance.GetMainCanvas());
         }
     }
 
     void ReturnButtonOn()
     {
-        UIManager.Instance.CloseUI<UIAgentHire>();
+        UIManager.Instance.CloseUI<UIAgentHire>(UIManager.Instance.GetMainCanvas());
     }
 
     void Hire(DrawResult _Result)

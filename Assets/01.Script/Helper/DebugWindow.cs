@@ -33,7 +33,10 @@ public class DebugWindow : EditorWindow
         {
             CharacterManager.Instance.EditorFunction();
         }
-
+        if (GUILayout.Button("프리미엄 뽑기 버튼"))
+        {
+            GachaManager.Instance.DrawCharacter(GachaType.Premium, 1);
+        }
         #region //팀장자리
         if (GUILayout.Button("다이아 1000개 획득"))
         {

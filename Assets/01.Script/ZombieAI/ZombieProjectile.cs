@@ -48,11 +48,12 @@ public class ZombieProjectile : MonoBehaviour
             rb.velocity = velocity;
     }
 
-    // 비활성화 및 풀로 반환
+    // 비활성화 및 키 기반 풀로 반환
     private void Deactivate()
     {
-        Pool.Instance.Return(this);
+        ObjectPool.Instance.Return("Projectile", this);
     }
+
     // 트리거 구분
     private void OnTriggerEnter(Collider other)
     {

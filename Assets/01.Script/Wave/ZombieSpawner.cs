@@ -9,7 +9,7 @@ public class ZombieSpawner : MonoBehaviour
     public Vector2 spawnAreaSize = new Vector2(10f, 10f);
 
     // 좀비 n마리 소환
-    public void SpawnWave(int zombieCount)
+    public void SpawnWave(int zombieCount, bool isWeak)
     {
         for (int i = 0; i < zombieCount; i++)
         {
@@ -29,10 +29,18 @@ public class ZombieSpawner : MonoBehaviour
             // 10% 확률로 Zombie2, 아니면 Zombie1
             string zombieKey = (Random.value <= 0.1f) ? "Zombie2" : "Zombie1";
 
-            Zombie zombie = Pool.Instance.GetZombie(zombieKey);
+            Zombie zombie = ObjectPool.Instance.Get<Zombie>(zombieKey);
             if (zombie == null) continue;
 
             zombie.transform.position = randomPos;
+
+            // 약화 모드일 경우 좀비 스탯을 약하게 조정
+            if (isWeak)
+            {
+                ZombieStatHandler statHandler = zombie.GetComponent<ZombieStatHandler>();
+                if (statHandler != null)
+                    statHandler.ApplyWeakPenalty();
+            }
         }
     }
 

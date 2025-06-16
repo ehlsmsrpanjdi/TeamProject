@@ -38,9 +38,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
     [Header("발사위치")]
     public Transform firePoint;
 
-    [Header("디버그용 공격 범위")] [SerializeField]
-    private float debugAttackRange = 2f;
-
     [Header("접근거리")] public float stopDistance = 2f;
 
     [Header("대미지 점멸")] public float flashDuration = 0.1f;
@@ -172,85 +169,84 @@ public class ZombieAI : MonoBehaviour, IDamageable
     // 플레이어 공격
     private void Attack()
     {
-    if (target == null || isKnockback) return;
+        if (target == null || isKnockback) return;
 
-    // 플레이어와의 거리 계산
-    float dist = Vector3.Distance(transform.position, target.position);
+        // 플레이어와의 거리 계산
+        float dist = Vector3.Distance(transform.position, target.position);
 
-    // 공격 범위 밖이면 추적 상태로 전환하고 공격 중단
-    if (dist > statHandler.AttackRange)
-    {
-        ChangeState(State.Chase);
-        return;
-    }
-
-    agent.ResetPath(); // 이동 경로 초기화
-
-    // 애니메이터가 있고, 컨트롤러가 할당된 경우 애니메이션 이동 중지 처리
-    if (animator != null && animator.runtimeAnimatorController != null)
-        animator.SetBool("IsMoving", false);
-
-    transform.LookAt(target); // 플레이어를 바라봄
-
-    attackTimer += Time.deltaTime;
-
-    // 공격 딜레이가 지나면 공격 실행
-    if (attackTimer >= statHandler.AttackDelay)
-    {
-        Debug.Log("[ZombieAI] 공격 시도");
-
-        // 공격 타입에 따라 근접 또는 투사체 공격 분기 처리
-        if (attackType == AttackType.Melee)
+        // 공격 범위 밖이면 추적 상태로 전환하고 공격 중단
+        if (dist > statHandler.AttackRange)
         {
-            // 근접 공격 처리
-            IDamageable damageTarget = target.GetComponent<IDamageable>();
-            if (damageTarget != null)
-            {
-                Debug.Log("[ZombieAI] 근접 대미지 전달");
-                damageTarget.TakeDamage(statHandler.Damage, transform.position, 0f);
-            }
-            else
-            {
-                Debug.LogWarning("[ZombieAI] 대상이 IDamageable 아님");
-            }
+            ChangeState(State.Chase);
+            return;
         }
-        else if (attackType == AttackType.Projectile)
+
+        agent.ResetPath(); // 이동 경로 초기화
+
+        // 애니메이터가 있고, 컨트롤러가 할당된 경우 애니메이션 이동 중지 처리
+        if (animator != null && animator.runtimeAnimatorController != null)
+            animator.SetBool("IsMoving", false);
+
+        transform.LookAt(target); // 플레이어를 바라봄
+
+        attackTimer += Time.deltaTime;
+
+        // 공격 딜레이가 지나면 공격 실행
+        if (attackTimer >= statHandler.AttackDelay)
         {
-            // 원거리 공격
-            if (firePoint != null && target != null)
+            Debug.Log("[ZombieAI] 공격 시도");
+
+            // 공격 타입에 따라 근접 또는 투사체 공격 분기 처리
+            if (attackType == AttackType.Melee)
             {
-                Vector3 velocity = CalculateProjectileVelocity(firePoint.position, target.position);
-
-                if (velocity == Vector3.zero)
+                // 근접 공격 처리
+                IDamageable damageTarget = target.GetComponent<IDamageable>();
+                if (damageTarget != null)
                 {
-                    Debug.LogWarning("[ProjectileAttack] CalculateProjectileVelocity 반환값이 0벡터입니다. 직선 발사로 대체합니다.");
-                    velocity = (target.position - firePoint.position).normalized * 20f;
-                }
-
-                ZombieProjectile proj = Pool.Instance.Get<ZombieProjectile>();
-                if (proj != null)
-                {
-                    proj.transform.position = firePoint.position;
-                    proj.transform.rotation = Quaternion.LookRotation(velocity);
-                    proj.SetDamage(statHandler.Damage);
-                    proj.SetShooter(gameObject);
-                    proj.gameObject.SetActive(true);
-                    proj.Launch(velocity);
+                    Debug.Log("[ZombieAI] 근접 대미지 전달");
+                    damageTarget.TakeDamage(statHandler.Damage, transform.position, 0f);
                 }
                 else
                 {
-                    Debug.LogWarning("[ZombieAI] ZombieProjectile 풀에서 꺼내기 실패");
+                    Debug.LogWarning("[ZombieAI] 대상이 IDamageable 아님");
                 }
             }
-            else
+            else if (attackType == AttackType.Projectile)
             {
-                Debug.LogWarning("[ZombieAI] 투사체 발사 실패: firePoint 또는 target이 null");
+                // 원거리 공격
+                if (firePoint != null && target != null)
+                {
+                    Vector3 velocity = CalculateProjectileVelocity(firePoint.position, target.position);
+
+                    if (velocity == Vector3.zero)
+                    {
+                        Debug.LogWarning("[ProjectileAttack] CalculateProjectileVelocity 반환값이 0벡터입니다. 직선 발사로 대체합니다.");
+                        velocity = (target.position - firePoint.position).normalized * 20f;
+                    }
+
+                    ZombieProjectile proj = ObjectPool.Instance.Get<ZombieProjectile>("Projectile");
+                    if (proj != null)
+                    {
+                        proj.transform.position = firePoint.position;
+                        proj.transform.rotation = Quaternion.LookRotation(velocity);
+                        proj.SetDamage(statHandler.Damage);
+                        proj.SetShooter(gameObject);
+                        proj.gameObject.SetActive(true); // 이 줄은 있어도 되고 없어도 됨
+                        proj.Launch(velocity);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[ZombieAI] ZombieProjectile 풀에서 꺼내기 실패");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning("[ZombieAI] 투사체 발사 실패: firePoint 또는 target이 null");
+                }
             }
-        }
             attackTimer = 0f; // 타이머 초기화
         }
     }
-
 
     // 원거리 공격 포물선 계산
     private Vector3 CalculateProjectileVelocity(Vector3 origin, Vector3 target)
@@ -279,9 +275,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
         return velocity;
     }
-
-
-
 
     // 에디터에서 공격 범위를 시각화하는 함수
     private void OnDrawGizmos()
@@ -380,12 +373,16 @@ public class ZombieAI : MonoBehaviour, IDamageable
         }
 
         // 골드 보상 지급
-        if (DataManager.Instance != null && DataManager.Instance.data != null)
+        if (Player.Instance != null && Player.Instance.Data != null)
         {
-            int currentStage = DataManager.Instance.data.currentStage;
-            int reward = currentStage * 10;
-            DataManager.Instance.AddGold(reward);
-            Debug.Log($"[ZombieAI] 골드 {reward} 획득 (스테이지 {currentStage})");
+            int currentStage = Player.Instance.Data.currentStage;
+
+            bool isRetry = FindObjectOfType<WaveManager>()?.IsWeakMode() == true;
+            int baseReward = currentStage * 10;
+            int reward = isRetry ? Mathf.CeilToInt(baseReward * 0.1f) : baseReward;
+
+            Player.Instance.AddGold(reward);
+            Debug.Log($"[ZombieAI] 골드 {reward} 획득 (스테이지 {currentStage}, 반복 모드: {isRetry})");
         }
 
         // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
@@ -406,8 +403,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
     {
         yield return new WaitForSeconds(delay);
 
-        // ZombieAI는 Zombie를 상속하지 않으므로, GetComponent로 명시적 참조
-        Pool.Instance.ReturnZombie(key, GetComponent<Zombie>());
+        ObjectPool.Instance.Return(key, GetComponent<Zombie>());
 
         // 안전을 위해 웨이브 매니저에 추가 사망 알림
         FindObjectOfType<WaveManager>()?.OnZombieDied();
@@ -465,8 +461,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         // 체력, 상태 등 스탯 리셋
         statHandler?.ResetHealth();
 
-        // 풀로 반환 (즉시 비활성화)
-        Pool.Instance.ReturnZombie(key, GetComponent<Zombie>());
+        // 풀 반환
+        ObjectPool.Instance.Return(key, GetComponent<Zombie>());
     }
-
 }

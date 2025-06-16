@@ -277,12 +277,25 @@ public class CharacterManager
 
     public void EditorFunctionCreat()
     {
-        CreateCharacter(1005);
-        CreateCharacter(1005);
+        CreateCharacter(1001);
+        CreateCharacter(1001);
 
         foreach (var character in characters)
         {
             Debug.Log($"생성된 캐릭터 이름: {character.charcterName}\n 생성된 캐릭터 랭크: {character.currentRank}");
+            Debug.Log($"공격력: {character.GetCurrentAttack()}\n 체력 : {character.GetCurrentHealth()}");
+            List<Skill> activeSkills = character.GetActiveSkills();
+
+            if (activeSkills.Count > 0)
+            {
+                string skillNames = string.Join(", ", activeSkills.Select(skill => skill.skillName));
+                Debug.Log($"활성화된 스킬: {skillNames}");
+            }
+            else
+            {
+                Debug.Log("활성화된 스킬이 없습니다.");
+            }
+
         }
     }
 
@@ -292,6 +305,18 @@ public class CharacterManager
         foreach (var character in characters)
         {
             Debug.Log($"캐릭터 이름: {character.charcterName}\n 캐릭터 랭크: {character.currentRank}");
+            Debug.Log($"공격력: {character.GetCurrentAttack()}\n 체력 : {character.GetCurrentHealth()}");
+            List<Skill> activeSkills = character.GetActiveSkills();
+
+            if (activeSkills.Count > 0)
+            {
+                string skillNames = string.Join(", ", activeSkills.Select(skill => skill.skillName));
+                Debug.Log($"활성화된 스킬: {skillNames}");
+            }
+            else
+            {
+                Debug.Log("활성화된 스킬이 없습니다.");
+            }
         }
     }
 

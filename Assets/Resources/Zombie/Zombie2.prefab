@@ -195,11 +195,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96eea7a17f571e140ba48d5ae307775e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaxHealth: 50
-  defaultDamage: 5
+  defaultMaxHealth: 150
+  defaultDamage: 20
   defaultMoveSpeed: 1
   defaultAttackDelay: 3
-  defaultAttackRange: 10
+  defaultAttackRange: 7
 --- !u!114 &-8187227789254039245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,7 +214,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: 1
   firePoint: {fileID: 1709366760422639344}
-  debugAttackRange: 10
   stopDistance: 2
   flashDuration: 0.5
   knockbackRecoverTime: 0.3

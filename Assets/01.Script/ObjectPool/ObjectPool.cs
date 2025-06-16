@@ -87,12 +87,12 @@ public class ObjectPool : MonoBehaviour
             return obj;
         }
 
-        if (typePrefabs.TryGetValue(type, out var prefab))
-        {
-            var obj = Instantiate(prefab as T, transform);
-            obj.gameObject.SetActive(true);
-            return obj;
-        }
+        //if (typePrefabs.TryGetValue(type, out var prefab))
+        //{
+        //    var obj = Instantiate(prefab as T, transform);
+        //    obj.gameObject.SetActive(true);
+        //    return obj;
+        //}
 
         Debug.LogError($"[ObjectPool] 등록되지 않은 타입: {type}");
         return null;
@@ -120,12 +120,12 @@ public class ObjectPool : MonoBehaviour
             return obj;
         }
 
-        if (keyPrefabs.TryGetValue(key, out var prefab))
-        {
-            var obj = Instantiate(prefab as T, transform);
-            obj.gameObject.SetActive(true);
-            return obj;
-        }
+        //if (keyPrefabs.TryGetValue(key, out var prefab))
+        //{
+        //    var obj = Instantiate(prefab as T, transform);
+        //    obj.gameObject.SetActive(true);
+        //    return obj;
+        //}
 
         Debug.LogError($"[ObjectPool] 등록되지 않은 키: {key}");
         return null;

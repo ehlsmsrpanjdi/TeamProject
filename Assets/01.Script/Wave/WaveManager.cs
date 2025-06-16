@@ -82,15 +82,15 @@ public class WaveManager : MonoBehaviour
     {
         isWaveSpawning = true;
 
-        int stage = Player.Instance.Data.currentStage;
+        int repeatStage = Player.Instance.Data.currentStage;
 
-        Debug.Log($"[WaveManager] 웨이브 {stage} 반복 대기: {waveInterval}초");
+        Debug.Log($"[WaveManager] 웨이브 {repeatStage} 반복 대기: {waveInterval}초");
         yield return new WaitForSeconds(waveInterval);
 
         if (Barricade != null && !Barricade.activeSelf)
             Barricade.SetActive(true);
 
-        int totalCount = stage * zombiesPerWave;
+        int totalCount = repeatStage * zombiesPerWave;
         int spawnBatch = 5;
         int zombiesPerBatch = Mathf.CeilToInt((float)totalCount / spawnBatch);
 
@@ -105,7 +105,7 @@ public class WaveManager : MonoBehaviour
         }
 
         aliveZombies = totalCount;
-        Debug.Log($"[WaveManager] 웨이브 {stage} 반복 시작 - 총 좀비 수: {aliveZombies}");
+        Debug.Log($"[WaveManager] 웨이브 {repeatStage} 반복 시작 - 총 좀비 수: {aliveZombies}");
 
         isWaveSpawning = false;
     }

@@ -694,22 +694,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6141bda7dac4fc40bf38d8f172a7bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MainUI: []
-  BattleUI: []
   mainCanvas: {fileID: 1344852428}
   battleCanvas: {fileID: 0}
-  BattleMemberViewerPrefab: {fileID: 0}
-  HireAgentPrefab: {fileID: 0}
-  HireScrollPrefab: {fileID: 0}
-  ManagementPrefab: {fileID: 0}
-  QuestScrollPrefab: {fileID: 0}
-  SkillViewerPrefab: {fileID: 0}
-  SoundOptionPrefab: {fileID: 0}
-  Stage_ViewerPrefab: {fileID: 0}
-  StatusPrefab: {fileID: 0}
-  UIGachaPrefab: {fileID: 0}
-  UILobbyPrefab: {fileID: 0}
-  UIOptionPrefab: {fileID: 0}
 --- !u!4 &1437069006
 Transform:
   m_ObjectHideFlags: 0

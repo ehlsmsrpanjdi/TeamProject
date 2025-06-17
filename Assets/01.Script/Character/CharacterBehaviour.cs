@@ -11,7 +11,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     private float lastAttackTime;
 
-    private CharacterInstance charInstance;
+    public CharacterInstance charInstance;
 
     private CharAnimController animController;
     public Animator animator;
@@ -159,25 +159,31 @@ public class CharacterBehaviour : MonoBehaviour
     /// </summary>
     public void Attack()
     {
-        Collider closestEnemy = GetClosestEnemy();
-        if (closestEnemy == null) return;
-
         
+        Collider closestEnemy = GetClosestEnemy();
+        if (closestEnemy == null)
+        {
+            isAttacking = false;
+            return;
+        }
+
+
         //if (State.Die == closestEnemy.GetComponent<ZombieAI>().currentState) // 타겟 몬스터의 상태 체크
         //{
         //    return;
         //}
-        
+        isAttacking = true;
         LookRotation(closestEnemy.transform);
 
         IDamageable target = closestEnemy.GetComponent<IDamageable>();
-        if (target != null)
+        if (target != null && isAttacking == true)
         {
             
             float damage = charInstance != null ? charInstance.GetCurrentAttack() : 10;
             target.TakeDamage((int)damage, transform.position, knockbackForce: 1);
             //Debug.Log($"{charInstance.charcterName} 공격 데미지: {damage}");
         }
+        isAttacking = true;
     }
 
     /// <summary>
@@ -229,7 +235,7 @@ public class CharacterBehaviour : MonoBehaviour
     //죽음. 바리게이트와 캐릭터의 체력을 연결 시킬 예정.
     void Die()
     {
-
+        isAttacking = false;
     }
 
     //Interface 처리

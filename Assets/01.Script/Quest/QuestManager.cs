@@ -85,6 +85,9 @@ public class QuestManager : MonoBehaviour
 
         // 액션으로 진행도 전달
         OnQuestCompleted?.Invoke(progress);
+
+        OnQuestUpdated?.Invoke(0, (float) dailyQuests[0].CurrentValue / (float) dailyQuests[0].TargetValue);;
+        OnQuestUpdated?.Invoke(2, (float) dailyQuests[2].CurrentValue / (float) dailyQuests[2].TargetValue);;
     }
 
     #endregion
@@ -264,7 +267,8 @@ public class QuestManager : MonoBehaviour
         if (attackQuest == null || attackQuest.IsCompleted)
             return;
 
-        attackQuest.CurrentValue++;
+        // attackQuest.CurrentValue++;
+        attackQuest.CurrentValue = Mathf.Min(attackQuest.CurrentValue + 1, attackQuest.TargetValue);
         OnQuestUpdated?.Invoke(attackQuest.Id, (float) attackQuest.CurrentValue / (float) attackQuest.TargetValue);
 
         if (attackQuest.CurrentValue >= attackQuest.TargetValue)
@@ -316,8 +320,8 @@ public class QuestManager : MonoBehaviour
         if (playQuest != null && !playQuest.IsCompleted)
         {
             playTimeSeconds += 60; // 1분 증가
+            playQuest.CurrentValue = Mathf.Min(playTimeSeconds, playQuest.TargetValue);
             OnQuestUpdated?.Invoke(playQuest.Id, (float)playQuest.CurrentValue / (float) playQuest.TargetValue);
-            // Debug.Log($"플레이 시간 업데이트: {playTimeSeconds}초 / {playQuest.TargetValue}초");
 
             if (playTimeSeconds >= playQuest.TargetValue)
             {

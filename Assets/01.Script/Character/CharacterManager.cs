@@ -236,7 +236,7 @@ public class CharacterManager
             Debug.Log("강화에 필요한 수량이 부족합니다.");
             return false;
         }
-        
+
         int consumed = 0;
         for (int i = characters.Count -1; i >= 0 && consumed < requiredCount -1; i--) // 포문 뒤에서부터 돌리기. 리스트 제거를 뒤에서부터 하기 위해서.
         {

@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/02.Prefab/Character/Grenade.prefab.meta
 guid: fd9fffb4336e0ba4b9d66c092c37733f
-========
-guid: c05e2ee8cc1655c438d8832750150540
->>>>>>>> Fix_WaveManager:Assets/Resources/UI/Canvas/UINextStage.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
 public class UIManager : MonoBehaviour
 {
     static UIManager instance;
@@ -28,6 +29,8 @@ public class UIManager : MonoBehaviour
         }
     }
 
+
+
     //[SerializeField] UIBase[] MainUI;
     //[SerializeField] UIBase[] BattleUI;
 
@@ -52,6 +55,7 @@ public class UIManager : MonoBehaviour
     const string UIDoor = "UI/Canvas/UIDoor";
     const string BattleCanvas = "UI/Canvas/BattleCanvas";
     const string MainCanvas = "UI/Canvas/MainCanvas";
+    const string UINextStage = "UI/Canvas/UINextStage";
 
     //[SerializeField] GameObject BattleMemberViewerPrefab;
     //[SerializeField] GameObject HireAgentPrefab;
@@ -96,6 +100,7 @@ public class UIManager : MonoBehaviour
         ResourcesPathDictionary.Add(typeof(UIOption), UIOption);
         ResourcesPathDictionary.Add(typeof(UIPopup), UIPopup);
         ResourcesPathDictionary.Add(typeof(UIDoor), UIDoor);
+        ResourcesPathDictionary.Add(typeof(UINextStage), UINextStage);
     }
 
     private void Awake()

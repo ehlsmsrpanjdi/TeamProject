@@ -104,9 +104,9 @@ public class Skill
         Grenade grenade = go.GetComponent<Grenade>(); //스킬 프리팹 컴포넌트 획득
         if( grenade != null)
         {
-            grenade.Explosion(throwDirection, so.skillRange, so.skillDamage); //던지고 터지는건 grenade에서 처리
+            grenade.GrenadeThrow(throwDirection, so.skillRange, so.skillDamage); //던지고 터지는건 grenade에서 처리
         }
-        
+
     }
 
 

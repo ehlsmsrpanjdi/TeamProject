@@ -19,5 +19,5 @@ MonoBehaviour:
   skillDamage: 2000
   skillCooldown: 45
   skillPrefab: {fileID: 0}
-  skillRange: 0
+  skillRange: 5
   requiredRank: 2

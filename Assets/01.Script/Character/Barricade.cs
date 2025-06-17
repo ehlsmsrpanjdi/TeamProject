@@ -43,6 +43,7 @@ public class Barricade : MonoBehaviour, IDamageable
             WaveManager waveManager = FindObjectOfType<WaveManager>();
             if (waveManager != null)
             {
+                 
                 Debug.Log("사망 호출");
                 waveManager.OnPlayerDead();
             }

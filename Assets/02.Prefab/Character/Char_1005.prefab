@@ -933,7 +933,6 @@ GameObject:
   - component: {fileID: 664712642456146564}
   - component: {fileID: 8012610762833725679}
   - component: {fileID: 218435935388588226}
-  - component: {fileID: 6607560711829211881}
   m_Layer: 0
   m_Name: Char_1005
   m_TagString: Untagged
@@ -983,10 +982,10 @@ Animator:
   m_GameObject: {fileID: 1374702107769640116}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 6394fe946fddfaf41bfac9f21431cf99, type: 3}
-  m_Controller: {fileID: 9100000, guid: 7a02fba000faabb4090e1f15749e05a6, type: 2}
-  m_CullingMode: 0
+  m_Controller: {fileID: 9100000, guid: 7534003ee385d204b8511def45f5a04c, type: 2}
+  m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1012,18 +1011,6 @@ MonoBehaviour:
   animator: {fileID: 0}
   isAttacking: 0
   isMoving: 0
---- !u!114 &6607560711829211881
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374702107769640116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e59610a5f30efd4d97dd604121212fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1537327181517182966
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,13 +18,13 @@ public class CharacterManager
             if (instance == null)
             {
                 instance = new CharacterManager();
-                
+
             }
             return instance;
         }
         set { instance = value; }
     }
-       
+
 
     private List<CharacterInstance> characters = new();
     private Dictionary<int, CharacterInstance> participated = new();
@@ -185,7 +185,7 @@ public class CharacterManager
     /// <summary>
     /// 선택 슬롯의 캐릭터 강화
     /// </summary>
-      
+
     public bool EnhanceCharacter(int index)
     {
         if(index <0 || index >= characters.Count)
@@ -200,6 +200,7 @@ public class CharacterManager
         }
 
         character.Enhance();
+        QuestManager.Instance.OnEnchantButtonPressed();
         return true;
     }
 
@@ -235,7 +236,6 @@ public class CharacterManager
             Debug.Log("강화에 필요한 수량이 부족합니다.");
             return false;
         }
-        
 
         int consumed = 0;
         for (int i = characters.Count -1; i >= 0 && consumed < requiredCount -1; i--) // 포문 뒤에서부터 돌리기. 리스트 제거를 뒤에서부터 하기 위해서.

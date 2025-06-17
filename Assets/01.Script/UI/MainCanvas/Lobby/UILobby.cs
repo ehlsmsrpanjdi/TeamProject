@@ -80,7 +80,13 @@ public class UILobby : UIBase
 
     void OnQuestClick()
     {
-        UIManager.Instance.OpenUI<UIQuestScroll>(UIManager.Instance.GetMainCanvas());
+        UIManager Manager = UIManager.Instance;
+        UIQuestScroll QuestScroll = Manager.GetUI<UIQuestScroll>(Manager.GetMainCanvas());
+        if (true == QuestScroll.gameObject.activeSelf)
+        {
+            return;
+        }
+        QuestScroll.Open();
         Quest_Button.transform.KillDoTween();
         QuestBackGround.transform.KillDoTween();
         QuestBackGround.transform.FadeInX();
@@ -97,6 +103,15 @@ public class UILobby : UIBase
     void OnBattleClick()
     {
         UIManager Manager = UIManager.Instance;
+        if (1 > CharacterManager.Instance.GetParticipateCharacters().Count)
+        {
+            UIPopup Popup = Manager.GetUI<UIPopup>(Manager.GetMainCanvas());
+            Popup.SetText("참전한 캐릭터가 없습니다");
+            Popup.Open();
+            return;
+        }
+
+
         UIDoor uiDoor = Manager.GetUI<UIDoor>(Manager.GetMainCanvas());
         uiDoor.OnCloseAction = DoorCloseAction;
         uiDoor.OnOpenAction = DoorOpenAction;
@@ -107,6 +122,8 @@ public class UILobby : UIBase
     {
         UIManager Manager = UIManager.Instance;
         Transform BattleCanvasTransform = Manager.GetBattleCanvas();
+        UIStage stage = Manager.GetUI<UIStage>(BattleCanvasTransform);
+        stage.SetStageText(Player.Instance.Data.currentStage);
         Manager.OpenUI<UIStage>(BattleCanvasTransform);
         Manager.OpenUI<UIBattleMemberViewer>(BattleCanvasTransform);
         Manager.OpenUI<UISkillViewer>(BattleCanvasTransform);

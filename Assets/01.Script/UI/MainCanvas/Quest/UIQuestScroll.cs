@@ -56,18 +56,25 @@ public class UIQuestScroll : UIBase
         Tween tween = transform.FadeInXY();
         tween.OnComplete(() =>
         {
+            foreach(QuestLog Log in questList)
+            {
+                Destroy(Log.gameObject);
+            }
+            questList.Clear();
             base.Close();
         });
     }
-
+    //
     public void AddQuest(QuestDisplayInfo _info)
     {
         GameObject logObject = Instantiate(questLogPrefab);
         logObject.transform.SetParent(contentObject.transform);
+        logObject.transform.localScale = new Vector3(1, 1, 1);
         QuestLog log = logObject.GetComponent<QuestLog>();
         log.SetQuestName(_info.Title);
         log.SetQuestDescription(_info.Description);
         log.SetInfo(_info);
+        log.SetValue(_info);
         questList.Add(log);
     }
 }

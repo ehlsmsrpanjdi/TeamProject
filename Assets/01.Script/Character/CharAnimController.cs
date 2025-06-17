@@ -15,9 +15,9 @@ public class CharAnimController
         this.animator = animator;
     }
 
-    public void Moving()
+    public void Moving(bool onMove)
     {
-        animator.SetTrigger(isMoving);
+        animator.SetBool(isMoving, onMove);
     }
 
     public void SetAttack(bool isSet)

@@ -17,8 +17,9 @@ public class CharacterBehaviour : MonoBehaviour
     public Animator animator;
 
     public bool isAttacking;
+    public bool isMoving;
 
-    public void Init(CharacterInstance data)
+    public void Init(CharacterInstance data, Transform destination)
     {
         charInstance = data;
         var usableSkills = charInstance.GetActiveSkills(); // 현재 활성화 되어있는 스킬만 사용 가능한 스킬에 들어감.
@@ -26,11 +27,40 @@ public class CharacterBehaviour : MonoBehaviour
         animator = GetComponent<Animator>();
         animController = new CharAnimController(animator);
 
+        isMoving = true;
+        StartCoroutine(MoveSetPosition(destination));
 
+        //animController.SetAttack(true);
+    }
+
+    private IEnumerator MoveSetPosition(Transform setPosition)
+    {
+        yield return new WaitForSeconds(1f);
+        animController.Moving(true);
+        float speed = 3f;
+        while (Vector3.Distance(transform.position, setPosition.position) > 0.1f)
+        {
+            // 회전 처리
+            Vector3 dir = (setPosition.position - transform.position).normalized;
+            if (dir != Vector3.zero)
+            {
+                Quaternion lookRot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, Time.deltaTime * 5f);
+            }
+
+            // 이동
+            transform.position = Vector3.MoveTowards(transform.position, setPosition.position, speed * Time.deltaTime);
+            yield return null;
+        }
+        animController.Moving(false);
         animController.SetAttack(true);
     }
+
     void Update()
     {
+        if (isMoving == false)
+            return;
+
         if (Time.time - lastAttackTime >= attackDelay)
         {
             animController.Attacking(CheckEnemyInRange());

@@ -158,21 +158,26 @@ public class CharacterManager
     /// <summary>
     /// 실제로 전투에 참여할 캐릭터 스폰 함수
     /// </summary>
-    public void SpawnParticipateCharacters(Vector3 position)
+    public void SpawnParticipateCharacters()
     {
         var deployed = GetParticipateCharacters();
+        var spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
+        var setPoints = GameObject.FindGameObjectsWithTag("SetPoint").Select(go =>go.transform).ToList(); //Set 위치
 
         for (int i = 0; i < deployed.Count; i++)
         {
             CharacterInstance charInstance = deployed[i];
-            //Transform spawnPoint = spawnPoints[i]; //스폰 포인트가 필요할 것으로 보여짐.
 
-            GameObject go = GameObject.Instantiate(charInstance.charPrefab, position , Quaternion.identity); // 스폰포인트 안넣었음.
+            Vector3 random = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+            Vector3 spawn = spawnPoint.transform.position + random;
+
+            GameObject go = GameObject.Instantiate(charInstance.charPrefab, spawn , Quaternion.identity);
+            //GameObject go = GameObject.Instantiate(charInstance.charPrefab, position, Quaternion.identity);
 
             CharacterBehaviour behaviour = go.GetComponent<CharacterBehaviour>();
             if (behaviour != null)
             {
-                behaviour.Init(charInstance); // 캐릭터 데이터 전달
+                behaviour.Init(charInstance, setPoints[i]); // 캐릭터 데이터 전달
             }
         }
     }
@@ -231,6 +236,7 @@ public class CharacterManager
             return false;
         }
 
+
         character.RankUp();
 
         int consumed = 0;
@@ -262,9 +268,15 @@ public class CharacterManager
     public void EditorFunction()
     {
         CreateCharacter(1001);
+        CreateCharacter(1002);
+        CreateCharacter(1003);
+        CreateCharacter(1004);
         SelectParticipate(0);
+        SelectParticipate(1);
+        SelectParticipate(2);
+        SelectParticipate(3);
 
-        SpawnParticipateCharacters(Vector3.zero); // 스폰 호출
+        SpawnParticipateCharacters(); // 스폰 호출
     }
     public void EditorFunctionEnhance()
     {

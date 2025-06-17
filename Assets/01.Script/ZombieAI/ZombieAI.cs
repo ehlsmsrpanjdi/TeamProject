@@ -57,18 +57,22 @@ public class ZombieAI : MonoBehaviour, IDamageable
         if (animator == null) animator = GetComponent<Animator>();
         if (statHandler == null) statHandler = GetComponent<ZombieStatHandler>();
 
-        target = GameObject.FindWithTag("Player")?.transform; // 플레이어 찾기
+        target = GameObject.FindWithTag("Player")?.transform;
 
-        statHandler.ResetHealth(); // 체력 초기화
+        statHandler.ResetHealth();
+        ChangeState(State.Chase);
 
-        ChangeState(State.Chase); // 초기 상태를 추적으로 설정
+        // Rigidbody 초기화
+        rb.isKinematic = false;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true;
 
-        // velocity는 isKinematic이 false일 때만 세팅 가능하도록 수정
-        rb.isKinematic = false;    // 먼저 물리 적용 상태로 변경
-        rb.velocity = Vector3.zero; // 속도 초기화
-        rb.isKinematic = true;     // 다시 키네매틱 모드로 변경
+        // Collider 다시 켜기
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = true;
 
-        // 현재 위치를 NavMesh 위로 보정
+        // NavMesh 위치 보정
         if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 1f, NavMesh.AllAreas))
         {
             transform.position = hit.position;
@@ -78,12 +82,15 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
         animator.Rebind();
 
-        // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
+        // 애니메이션 상태 초기화 (기본적으로 움직임으로 시작)
         if (animator != null && animator.runtimeAnimatorController != null)
-            animator.SetBool("", true);
+        {
+            animator.SetBool("IsMoving", true);
+        }
 
         agent.speed = statHandler.MoveSpeed;
     }
+
 
     private void Awake()
     {
@@ -119,7 +126,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
         }
     }
 
-    // 플레이어를 추적하는 상태
     private void Chase()
     {
         if (target == null) return;
@@ -133,7 +139,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
             return;
         }
 
-        // 플레이어와 일정 거리 이상 떨어져 있으면 이동
+        // 이동 상태
         if (dist > stopDistance)
         {
             if (agent.isOnNavMesh)
@@ -146,24 +152,30 @@ public class ZombieAI : MonoBehaviour, IDamageable
                 Debug.LogWarning("[Chase] agent가 NavMesh 위에 없음");
             }
 
-            // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
-            if (animator != null && animator.runtimeAnimatorController != null)
-                animator.SetBool("", true);
+            // 상태값 변경 시에만 애니메이션 변경
+            if (animator != null && animator.runtimeAnimatorController != null &&
+                !animator.GetBool("IsMoving"))
+            {
+                animator.SetBool("IsMoving", true);
+            }
         }
         else
         {
             agent.isStopped = true;
 
-            // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
-            if (animator != null && animator.runtimeAnimatorController != null)
-                animator.SetBool("", false);
+            if (animator != null && animator.runtimeAnimatorController != null &&
+                animator.GetBool("IsMoving"))
+            {
+                animator.SetBool("IsMoving", false);
+            }
 
-            // 플레이어를 향해 부드럽게 회전
+            // 플레이어를 향해 회전
             Vector3 lookDir = target.position - transform.position;
             lookDir.y = 0;
             if (lookDir != Vector3.zero)
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir),
-                    10f * Time.deltaTime);
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), 10f * Time.deltaTime);
+            }
         }
     }
 
@@ -185,8 +197,11 @@ public class ZombieAI : MonoBehaviour, IDamageable
         agent.ResetPath(); // 이동 경로 초기화
 
         // 애니메이터가 있고, 컨트롤러가 할당된 경우 애니메이션 이동 중지 처리
-        if (animator != null && animator.runtimeAnimatorController != null)
+        if (animator != null && animator.runtimeAnimatorController != null &&
+            animator.GetBool("IsMoving"))
+        {
             animator.SetBool("IsMoving", false);
+        }
 
         transform.LookAt(target); // 플레이어를 바라봄
 
@@ -196,6 +211,11 @@ public class ZombieAI : MonoBehaviour, IDamageable
         if (attackTimer >= statHandler.AttackDelay)
         {
             Debug.Log("[ZombieAI] 공격 시도");
+
+            if (animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.SetTrigger("Attack");
+            }
 
             // 공격 타입에 따라 근접 또는 투사체 공격 분기 처리
             if (attackType == AttackType.Melee)
@@ -303,10 +323,20 @@ public class ZombieAI : MonoBehaviour, IDamageable
         bool isDead = statHandler.TakeDamage(amount);
         if (isDead)
         {
+            // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
+            if (animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.SetTrigger("Die");
+            }
             Die();
         }
         else
         {
+            // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
+            if (animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.SetTrigger("hit");
+            }
             StartCoroutine(FlashRed());
             StartKnockback(attackerPosition, knockbackForce);
         }
@@ -375,7 +405,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
             rb.velocity = Vector3.zero;
             rb.isKinematic = true;
         }
-
         // 콜라이더 비활성화
         Collider col = GetComponent<Collider>();
         if (col != null) col.enabled = false;
@@ -392,10 +421,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
             Player.Instance.AddGold(reward);
             Debug.Log($"[ZombieAI] 골드 {reward} 획득 (스테이지 {currentStage}, 반복 모드: {isRetry})");
         }
-
-        // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
-        if (animator != null && animator.runtimeAnimatorController != null)
-            animator.SetTrigger("");
 
         // 풀에 반환 대기 시작
         string zombieKey = (attackType == AttackType.Projectile) ? "Zombie2" : "Zombie1";

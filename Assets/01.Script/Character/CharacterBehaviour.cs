@@ -202,26 +202,28 @@ public class CharacterBehaviour : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
-    //스킬사용 (액티브로 하기로 했음)
-    //public bool UseSkill(int skillIndex, Vector3 position)
-    //{
+    //스킬사용(액티브로 하기로 했음)
+    public bool UseSkill(int skillIndex, Vector3 position)
+    {
 
-    //    if (skillIndex < 0 || skillIndex >= charInstance.HasSkill().Count)
-    //    {
-    //        Debug.Log("스킬 인덱스가 잘못되었습니다.");
-    //        return false;
-    //    }
+        if (skillIndex < 0 || skillIndex >= charInstance.HasSkill().Count)
+        {
+            Debug.Log("스킬 인덱스가 잘못되었습니다.");
+            return false;
+        }
 
-    //    Skill skill = charInstance.HasSkill()[skillIndex];
+        Skill skill = charInstance.HasSkill()[skillIndex];
 
-    //    if (!skill.isActive)
-    //    {
-    //        Debug.Log($"스킬 {skill.skillName} is Not Activated");
-    //        return false;
-    //    }
-    //    position = transform.position;
-    //    //return  skill.UseSkill(skillIndex, position);
-    //}
+        if (!skill.isActive)
+        {
+            Debug.Log($"스킬 {skill.skillName} is Not Activated");
+            return false;
+        }
+        position = transform.position;
+        skill.UseSkill(skillIndex, position);
+
+        return true;
+    }
 
 
     //죽음. 바리게이트와 캐릭터의 체력을 연결 시킬 예정.

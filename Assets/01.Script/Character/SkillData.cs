@@ -90,8 +90,23 @@ public class Skill
         SkillSO so = SkillData.Instance.GetAllSkill(index);
         if(so == null)
         {
+            Debug.Log($"스킬 {index} SkillSO를 찾을 수 없습니다.");
             return;
         }
+        if(so.skillPrefab == null)
+        {
+            Debug.Log($"스킬 {index} 프리팹을 찾을 수 없습니다.");
+        }
+
+        GameObject go = GameObject.Instantiate(so.skillPrefab, chrPosition, Quaternion.identity); //프리팹 소환
+        Vector3 throwDirection = go.transform.forward + Vector3.up * 0.5f; //던지는 방향. 어떻게 던져지는지 확인안됨
+
+        Grenade grenade = go.GetComponent<Grenade>(); //스킬 프리팹 컴포넌트 획득
+        if( grenade != null)
+        {
+            grenade.Explosion(throwDirection, so.skillRange, so.skillDamage); //던지고 터지는건 grenade에서 처리
+        }
+        
     }
 
 

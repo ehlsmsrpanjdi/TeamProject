@@ -59,7 +59,9 @@ public class UIAgentHire : UIBase
             return;
         }
 
-        List<DrawResult> list = GachaManager.Instance.DrawCharacter(GachaType.Normal, 1);
+
+       List<DrawResult> list = GachaManager.Instance.DrawCharacter(GachaType.Normal, 1);
+
 
         if (list.Count != 0)
         {

@@ -12,4 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f367600710d331f41ab2d7d9ba339a2a, type: 3}
   m_Name: PremiumGachaTable
   m_EditorClassIdentifier: 
-  gachaRateList: []
+  gachaRateList:
+  - rank: 0
+    rate: 30
+  - rank: 1
+    rate: 25
+  - rank: 2
+    rate: 20
+  - rank: 3
+    rate: 15
+  - rank: 4
+    rate: 8
+  - rank: 5
+    rate: 2

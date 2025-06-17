@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 250b9fd913da1b246ae57630d4231f6d, type: 3}
   m_Name: GachaTableList
   m_EditorClassIdentifier: 
-  gachaRateMappingList: []
+  gachaRateMappingList:
+  - type: 0
+    rateTable: {fileID: 11400000, guid: 7688e612533794a48af1229c91371a88, type: 2}

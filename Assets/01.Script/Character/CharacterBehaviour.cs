@@ -11,7 +11,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     private float lastAttackTime;
 
-    public CharacterInstance charInstance;
+    private CharacterInstance charInstance;
 
     private CharAnimController animController;
     public Animator animator;

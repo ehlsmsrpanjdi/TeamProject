@@ -18,18 +18,13 @@ public class CharacterManager
             if (instance == null)
             {
                 instance = new CharacterManager();
-                instance.Init();
+                
             }
             return instance;
         }
         set { instance = value; }
     }
-
-    
-    public void Init()
-    {
-        GachaManager.Instance.OnCharacterDraw += CreateCharacterOndraw;
-    }
+       
 
     private List<CharacterInstance> characters = new();
     private Dictionary<int, CharacterInstance> participated = new();
@@ -241,7 +236,7 @@ public class CharacterManager
         int consumed = 0;
         for (int i = characters.Count -1; i >= 0 && consumed < requiredCount -1; i--) // 포문 뒤에서부터 돌리기. 리스트 제거를 뒤에서부터 하기 위해서.
         {
-            if (characters[i] != character && characters[i].key == character.key) // 보유리스트 안의 캐릭터가 랭크업을 시도한 캐릭터가 아니거나, 키가 같으면
+            if (characters[i] != character && characters[i].key == character.key && characters[i].currentRank ==character.currentRank) // 보유리스트 안의 캐릭터가 랭크업을 시도한 캐릭터가 아니거나, 키가 같으면
             {
                 characters.RemoveAt(i); //제거
                 consumed++; //소모값 1개 추가. 요구 수량까지 진행
@@ -249,7 +244,7 @@ public class CharacterManager
 
         }
         Debug.Log("랭크업 성공");
-        GetAllCharacters(); //캐릭터 리스트 업데이트
+        //GetAllCharacters(); 필요없음.
 
         return true;
 

@@ -2,18 +2,18 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
+// 좀비 행동 상태
+public enum State
+{
+    Idle,
+    Chase,
+    Attack,
+    Die
+}
+
 [RequireComponent(typeof(ZombieStatHandler))]
 public class ZombieAI : MonoBehaviour, IDamageable
 {
-    // 좀비 행동 상태
-    public enum State
-    {
-        Idle,
-        Chase,
-        Attack,
-        Die
-    }
-
     // 공격 타입 구분용 열거형 (enum)
     public enum AttackType
     {
@@ -371,8 +371,9 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
         if (rb != null)
         {
-            rb.isKinematic = true;
+            rb.isKinematic = false;
             rb.velocity = Vector3.zero;
+            rb.isKinematic = true;
         }
 
         // 콜라이더 비활성화

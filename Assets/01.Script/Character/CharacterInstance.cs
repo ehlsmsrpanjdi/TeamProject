@@ -188,6 +188,7 @@ public class CharacterInstance
     {
         return enhancementLevel;
     }
+
     /// <summary>
     /// 랭크업 >> CharacterManager에서 가지고 감.
     /// </summary>

@@ -1,144 +1,115 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 풀링 시스템 클래스 (MonoBehaviour로 자동 생성 및 관리)
-public class ObjectPool : MonoBehaviour
+public static class ObjectPool
 {
-    public static ObjectPool Instance;
+    // 각 오브젝트 종류에 대한 풀. key로 식별하고 큐에 비활성화된 오브젝트를 보관함.
+    private static Dictionary<string, Queue<GameObject>> pool = new();
 
-    // 타입 기반 풀
-    private Dictionary<Type, Queue<Component>> typePools = new();   // T 타입 기반 큐
-    private Dictionary<Type, Component> typePrefabs = new();        // T 타입별 프리팹
+    // key에 대응하는 프리팹 정보. Resources.Load()로 불러온 프리팹을 저장함.
+    private static Dictionary<string, GameObject> prefabMap = new();
 
-    // 키 기반 풀
-    private Dictionary<string, Queue<Component>> keyPools = new(); // 문자열 키 기반 큐
-    private Dictionary<string, Component> keyPrefabs = new();      // 키별 프리팹
+    // Initialize()가 한 번만 실행되도록 막기 위한 플래그
+    private static bool initialized = false;
 
-    // 게임 시작 전에 자동 실행되어 ObjectPool 오브젝트 생성 및 초기화
-    // Awake보다 먼저 실행되어 확실한 선처리 가능
-    // 별도의 추가 스크립트없이 오브젝트 풀링까지 한번에 작성가능
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void CreateInstance()
+    // 오브젝트 풀에 등록할 항목들을 정의하는 내부 클래스
+    private class PoolSetting
     {
-        // 중복 방지
-        if (Instance != null) return;
+        public string key;       // 키 이름 (예: "Zombie1")
+        public string path;      // Resources 내 프리팹 경로
+        public int count;        // 초기 생성 수량
 
-        // GameObject 생성 및 컴포넌트 부착
-        GameObject go = new GameObject("[ObjectPool]");
-        Instance = go.AddComponent<ObjectPool>();
-        DontDestroyOnLoad(go);
-
-        // Resources에서 프리팹 로드
-        var zombie1 = Resources.Load<Zombie>("Zombie/Zombie");
-        var zombie2 = Resources.Load<Zombie>("Zombie/Zombie2");
-        var projectile = Resources.Load<ZombieProjectile>("Zombie/ZombieProjectile");
-
-        // 프리팹 로드
-        Instance.Register("Zombie1", zombie1, 50);
-        Instance.Register("Zombie2", zombie2, 25);
-        Instance.Register("Projectile", projectile, 20);
-
-        Debug.Log("[ObjectPool] 자동 초기화 및 프리팹 등록 완료");
-    }
-
-    // ---------- 타입 기반 등록 ----------
-    public void Register<T>(T prefab, int count = 10) where T : Component
-    {
-        var type = typeof(T);
-        if (typePools.ContainsKey(type)) return;
-
-        typePools[type] = new Queue<Component>();
-        typePrefabs[type] = prefab;
-
-        for (int i = 0; i < count; i++)
+        public PoolSetting(string key, string path, int count)
         {
-            T obj = Instantiate(prefab, transform);
-            obj.gameObject.SetActive(false);
-            typePools[type].Enqueue(obj);
+            this.key = key;
+            this.path = path;
+            this.count = count;
         }
     }
 
-    // ---------- 키 기반 등록 ----------
-    public void Register<T>(string key, T prefab, int count = 10) where T : Component
+    //=================================================================================
+
+    // 등록할 오브젝트 풀 리스트. (추가작성 가능)
+    private static List<PoolSetting> settings = new()
     {
-        if (keyPools.ContainsKey(key)) return;
+        new PoolSetting("Zombie1", "Zombie/Zombie", 100),
+        new PoolSetting("Zombie2", "Zombie/Zombie2", 50),
+        new PoolSetting("Projectile", "Zombie/ZombieProjectile", 20),
+    };
 
-        keyPools[key] = new Queue<Component>();
-        keyPrefabs[key] = prefab;
+    //=================================================================================
 
-        for (int i = 0; i < count; i++)
+    // 실제 오브젝트 풀을 초기화
+    private static void Initialize()
+    {
+        // 이미 초기화된 경우 중복 실행 방지
+        if (initialized) return;
+        initialized = true;
+
+        // 사전 정의된 오브젝트 풀 리스트(settings)에 따라 각 오브젝트 풀 생성
+        foreach (var setting in settings)
         {
-            T obj = Instantiate(prefab, transform);
-            obj.gameObject.SetActive(false);
-            keyPools[key].Enqueue(obj);
+            // Resources 폴더에서 프리팹 로드 (경로 예: "Zombie/Zombie")
+            GameObject prefab = Resources.Load<GameObject>(setting.path);
+
+            // 프리팹이 없으면 해당 항목 건너뜀
+            if (prefab == null)
+            {
+                continue;
+            }
+            // key에 해당하는 프리팹과 큐를 딕셔너리에 저장
+            prefabMap[setting.key] = prefab;                  // 나중에 참조용
+            pool[setting.key] = new Queue<GameObject>();       // 오브젝트 보관용 큐
+
+            // 설정된 수량만큼 오브젝트를 미리 생성하여 비활성화 상태로 큐에 삽입
+            for (int i = 0; i < setting.count; i++)
+            {
+                GameObject obj = GameObject.Instantiate(prefab); // 복제 생성
+                obj.SetActive(false);                            // 오브젝트 비활성화
+                pool[setting.key].Enqueue(obj);                  // 큐에 저장
+            }
         }
     }
 
-    // ---------- 타입 기반 Get ---------- 큐에서 꺼내서 반환하며, 없을 경우 새로 생성
-    public T Get<T>() where T : Component
-    {
-        var type = typeof(T);
 
-        if (typePools.TryGetValue(type, out var queue) && queue.Count > 0)
+    // key에 해당하는 오브젝트를 풀에서 꺼냄. 없으면 null 반환.
+    public static GameObject Get(string key)
+    {
+        // 초기화가 안 되어 있으면 자동으로 Initialize 실행 (최초 1회)
+        if (!initialized) Initialize();
+
+        // 해당 key에 대한 풀 자체가 없거나, 큐에 오브젝트가 없으면 null 반환
+        if (!pool.ContainsKey(key) || pool[key].Count == 0)
         {
-            var obj = queue.Dequeue() as T;
-            obj.gameObject.SetActive(true);
-            return obj;
+            // 풀에 등록되지 않았거나, 모두 사용 중인 상태
+            return null;
         }
 
-        if (typePrefabs.TryGetValue(type, out var prefab))
-        {
-            var obj = Instantiate(prefab as T, transform);
-            obj.gameObject.SetActive(true);
-            return obj;
-        }
+        // 큐에서 오브젝트 하나 꺼냄
+        GameObject obj = pool[key].Dequeue();
 
-        Debug.LogError($"[ObjectPool] 등록되지 않은 타입: {type}");
-        return null;
+        // 꺼낸 오브젝트를 활성화해서 씬에 등장시킴
+        obj.SetActive(true);
+
+        // 호출한 쪽으로 반환
+        return obj;
     }
 
-    // ---------- 타입 기반 Return ---------- 사용 완료된 오브젝트를 비활성화 후 다시 큐에 넣음
-    public void Return<T>(T obj) where T : Component
+    // key에 해당하는 오브젝트를 다시 풀에 반환
+    public static void Return(string key, GameObject obj)
     {
-        var type = typeof(T);
-        obj.gameObject.SetActive(false);
+        // 초기화가 안 되어 있으면 자동으로 Initialize 실행
+        if (!initialized) Initialize();
 
-        if (!typePools.ContainsKey(type))
-            typePools[type] = new Queue<Component>();
+        // 오브젝트를 비활성화
+        obj.SetActive(false);
 
-        typePools[type].Enqueue(obj);
+        // key에 해당하는 풀(queue)이 없으면 새로 생성
+        if (!pool.ContainsKey(key))
+            pool[key] = new Queue<GameObject>();
+
+        // 비활성화된 오브젝트를 다시 큐에 넣음
+        pool[key].Enqueue(obj);
     }
 
-    // ---------- 키 기반 Get ----------
-    public T Get<T>(string key) where T : Component
-    {
-        if (keyPools.TryGetValue(key, out var queue) && queue.Count > 0)
-        {
-            var obj = queue.Dequeue() as T;
-            obj.gameObject.SetActive(true);
-            return obj;
-        }
-
-        if (keyPrefabs.TryGetValue(key, out var prefab))
-        {
-            var obj = Instantiate(prefab as T, transform);
-            obj.gameObject.SetActive(true);
-            return obj;
-        }
-
-        Debug.LogError($"[ObjectPool] 등록되지 않은 키: {key}");
-        return null;
-    }
-
-    // ---------- 키 기반 Return ----------
-    public void Return<T>(string key, T obj) where T : Component
-    {
-        obj.gameObject.SetActive(false);
-
-        if (!keyPools.ContainsKey(key))
-            keyPools[key] = new Queue<Component>();
-
-        keyPools[key].Enqueue(obj);
-    }
 }

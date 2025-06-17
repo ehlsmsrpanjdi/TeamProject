@@ -37,6 +37,33 @@ public class DebugWindow : EditorWindow
         {
             GachaManager.Instance.DrawCharacter(GachaType.Premium, 1);
         }
+
+        if (GUILayout.Button("캐릭터 스폰"))
+        {
+            CharacterManager.Instance.EditorFunction();
+        }
+
+        if (GUILayout.Button("바리게이트 체력 전달"))
+        {
+            Barricade.instance.SetHealth();
+        }
+
+        if (GUILayout.Button("캐릭터 강화"))
+        {
+            CharacterManager.Instance.EditorFunctionEnhance();
+        }
+
+        if (GUILayout.Button("캐릭터 랭크업"))
+        {
+            CharacterManager.Instance.EditorFunctionRankUp();
+        }
+
+        if (GUILayout.Button("캐릭터 뽑기"))
+        {
+            CharacterManager.Instance.EditorFunctionCreat();
+        }
+
+
         #region //팀장자리
         if (GUILayout.Button("다이아 1000개 획득"))
         {

@@ -23,7 +23,7 @@ public class UIStatus : UIBase
         Player player = Player.Instance;
 
         player.OnGoldChanged += SetGold;
-        player.OnDiamondChanged += SetGold;
+        player.OnDiamondChanged += SetDia;
 
         SetGold(player.Data.gold);
         SetDia(player.Data.diamond);
@@ -31,10 +31,7 @@ public class UIStatus : UIBase
 
     public void OnOptionClick()
     {
-        if (false == UIManager.Instance.GetUI<UIOption>().gameObject.activeSelf)
-        {
-            OptionButton.OnClick = UIManager.Instance.OpenUI<UIOption>;
-        }
+        UIManager.Instance.OpenUI<UIOption>(UIManager.Instance.GetMainCanvas());
     }
 
     public void SetGold(int _Gold)

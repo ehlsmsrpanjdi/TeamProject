@@ -35,12 +35,15 @@ public class Barricade : MonoBehaviour, IDamageable
         currentHealth -= amount;
         Debug.Log($"대미지 {amount} 받음 → 남은 체력: {currentHealth}");
 
-        // 체력이 0 이하일 경우 스테이지 실패
+         // 체력이 0 이하일 경우 스테이지 실패
         if (currentHealth <= 0)
         {
-            Debug.Log("스테이지 실패");
-            // 이전 스테이지로 돌아가기 >> 누구랑 연결?
-
+            WaveManager waveManager = FindObjectOfType<WaveManager>();
+            if (waveManager != null)
+            {
+                Debug.Log("사망 호출");
+                waveManager.OnPlayerDead();
+            }
         }
     }
 }

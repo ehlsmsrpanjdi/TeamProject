@@ -8,14 +8,15 @@ public class ZombieSpawner : MonoBehaviour
     [Header("스폰 범위 크기 (X,Z)")]
     public Vector2 spawnAreaSize = new Vector2(10f, 10f);
 
-    // 좀비 n마리 소환
-    public void SpawnWave(int zombieCount, bool isWeak)
+    public int SpawnWave(int zombieCount, bool isWeak)
     {
+        int spawnSuccess = 0;
+
         for (int i = 0; i < zombieCount; i++)
         {
             Vector3 randomPos = GetRandomPositionInArea();
 
-            // NavMesh 위로 위치 보정
+            // NavMesh 위 위치 보정
             if (UnityEngine.AI.NavMesh.SamplePosition(randomPos, out UnityEngine.AI.NavMeshHit hit, 1f, UnityEngine.AI.NavMesh.AllAreas))
             {
                 randomPos = hit.position;
@@ -26,25 +27,43 @@ public class ZombieSpawner : MonoBehaviour
                 continue;
             }
 
-            // 10% 확률로 Zombie2, 아니면 Zombie1
             string zombieKey = (Random.value <= 0.1f) ? "Zombie2" : "Zombie1";
+            GameObject obj = ObjectPool.Get(zombieKey);
 
-            Zombie zombie = ObjectPool.Instance.Get<Zombie>(zombieKey);
-            if (zombie == null) continue;
+            if (obj == null)
+            {
+                Debug.LogWarning($"[ZombieSpawner] 풀 부족 또는 ObjectPool 미할당 - {zombieKey} 생성 실패");
+                continue;
+            }
 
-            zombie.transform.position = randomPos;
+            obj.transform.position = randomPos + Vector3.up * 0.05f;
+            obj.transform.rotation = Quaternion.identity;
 
-            // 약화 모드일 경우 좀비 스탯을 약하게 조정
+            ZombieAI ai = obj.GetComponent<ZombieAI>();
+            if (ai != null)
+            {
+                ai.EnableAgent();
+            }
+            else
+            {
+                Debug.LogWarning($"[ZombieSpawner] ZombieAI 컴포넌트 없음: {obj.name}");
+            }
+
             if (isWeak)
             {
-                ZombieStatHandler statHandler = zombie.GetComponent<ZombieStatHandler>();
+                ZombieStatHandler statHandler = obj.GetComponent<ZombieStatHandler>();
                 if (statHandler != null)
                     statHandler.ApplyWeakPenalty();
+                else
+                    Debug.LogWarning($"[ZombieSpawner] ZombieStatHandler 없음: {obj.name}");
             }
+
+            spawnSuccess++;
         }
+
+        return spawnSuccess;
     }
 
-    // 소환 구역 내 랜덤 위치 계산
     private Vector3 GetRandomPositionInArea()
     {
         Vector3 center = spawnAreaCenter.position;
@@ -57,7 +76,6 @@ public class ZombieSpawner : MonoBehaviour
         return new Vector3(center.x + randX, center.y, center.z + randZ);
     }
 
-    // 에디터에서 스폰 구역 시각화
     private void OnDrawGizmos()
     {
         if (spawnAreaCenter == null) return;

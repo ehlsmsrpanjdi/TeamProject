@@ -52,6 +52,7 @@ public class Skill
     public int skillKey;
     public string skillName;
     public string skillDescription;
+    public Sprite skillImage;
     public float skillDamage;
     public float skillCooldown;
     public Rank requiredRank; //스킬의 랭크요구치
@@ -64,6 +65,7 @@ public class Skill
         this.skillKey = so.skillKey;
         this.skillName = so.skillName;
         this.skillDescription = so.skillDescription;
+        this.skillImage = so.skillIcon;
         this.skillDamage = so.skillDamage;
         this.skillCooldown = so.skillCooldown;
         this.requiredRank = so.requiredRank;

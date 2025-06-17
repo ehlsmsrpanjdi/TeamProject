@@ -37,6 +37,11 @@ public class InventorySlot : MonoBehaviour
         inventoryImage.SetSprite(NoneSprite);
     }
 
+    public void ResetSprite()
+    {
+        inventoryImage.SetSprite(NoneSprite);
+    }
+
     private void Start()
     {
         if(NoneSprite == null)

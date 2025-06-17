@@ -44,6 +44,7 @@ public class UIOption : UIBase
             {
                 SceneManager.LoadScene(SampleScene);
                 Manager.OpenUI<UILobby>(Manager.GetMainCanvas());
+                Manager.GetUI<UIStatus>(Manager.GetMainCanvas()).transform.SetAsLastSibling();
                 Manager.CloseUI<UISkillViewer>(Manager.GetBattleCanvas());
                 Manager.CloseUI<UIStage>(Manager.GetBattleCanvas());
                 Manager.CloseUI<UIBattleMemberViewer>(Manager.GetBattleCanvas());

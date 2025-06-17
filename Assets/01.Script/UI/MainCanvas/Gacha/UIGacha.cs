@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class UIGacha : UIBase
 {
-    [SerializeField] GameObject GachaCameraObject;
     [SerializeField] OnClickImage OnClickBackGround;
-
+    GachaCamera GachaComponent;
     GameObject SpawnBox;
 
     bool IsOpening = false;
@@ -14,20 +13,15 @@ public class UIGacha : UIBase
 
     Coroutine CloseCoroutineValue;
 
-    const string GachaCamera = "GachaCamera";
+    const string GachaCamera = "UI/GachaCamera";
 
     private void Reset()
     {
-        GachaCameraObject = GameObject.Find(GachaCamera);
         OnClickBackGround = GetComponentInChildren<OnClickImage>();
     }
 
     public void Awake()
     {
-        if (GachaCameraObject != null)
-        {
-            GachaCameraObject = GameObject.Find(GachaCamera);
-        }
         OnClickBackGround.NoHoverColor();
         OnClickBackGround.OnClick = OnClickGachaUI;
     }
@@ -38,7 +32,11 @@ public class UIGacha : UIBase
         IsOpening = false;
         IsOpen = false;
         gameObject.transform.FadeOutXY();
-        GachaCamera GachaComponent = GachaCameraObject.GetComponent<GachaCamera>();
+        if (null == GachaComponent)
+        {
+            GameObject GachaObj = Resources.Load<GameObject>(GachaCamera);
+            GachaComponent = Instantiate(GachaObj).GetComponent<GachaCamera>();
+        }
         SpawnBox = GachaComponent.SpawnNormalBox();
     }
 
@@ -63,7 +61,7 @@ public class UIGacha : UIBase
             Tween tween = SpawnBox.transform.ScaleUp(1.5f);
             tween.OnComplete(() =>
         {
-            if(true == gameObject.activeSelf)
+            if (true == gameObject.activeSelf)
             {
                 Destroy(SpawnBox);
                 CloseCoroutineValue = StartCoroutine(CloseCoroutine());
@@ -74,7 +72,7 @@ public class UIGacha : UIBase
         }
         else
         {
-            if(CloseCoroutineValue != null)
+            if (CloseCoroutineValue != null)
             {
                 StopCoroutine(CloseCoroutineValue);
                 CloseCoroutineValue = null;
@@ -87,7 +85,8 @@ public class UIGacha : UIBase
     IEnumerator CloseCoroutine()
     {
         yield return new WaitForSeconds(3f);
-        if (true == gameObject.activeSelf){
+        if (true == gameObject.activeSelf)
+        {
             Close();
         }
     }

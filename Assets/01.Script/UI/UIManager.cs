@@ -31,9 +31,9 @@ public class UIManager : MonoBehaviour
     //[SerializeField] UIBase[] MainUI;
     //[SerializeField] UIBase[] BattleUI;
 
-    [SerializeField] Canvas mainCanvas;
+    Canvas mainCanvas;
     const string MainCanvasName = "MainCanvas";
-    [SerializeField] Canvas battleCanvas;
+    Canvas battleCanvas;
     const string BattleCanvasName = "BattleCanvas";
 
     const string BattleMemberViewer = "UI/Canvas/BattleMemberViewer";

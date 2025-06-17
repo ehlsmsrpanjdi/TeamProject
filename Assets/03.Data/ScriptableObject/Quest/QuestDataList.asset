@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 4af7aab8188cc394ebe5b8279fc5aa27, type: 3}
   m_Name: QuestDataList
-  m_EditorClassIdentifier: Assembly-CSharp::QuestDataListSO
+  m_EditorClassIdentifier: 
   quests:
   - {fileID: 11400000, guid: 5155220da017f6549b936ad4a68b71a7, type: 2}
   - {fileID: 11400000, guid: d03d4a62e2f69a9498dd0f7d187db18a, type: 2}

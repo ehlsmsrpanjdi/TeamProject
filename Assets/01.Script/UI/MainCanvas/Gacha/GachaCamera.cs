@@ -5,22 +5,24 @@ public class GachaCamera : MonoBehaviour
     Vector3 GachaBallPosition = new Vector3(0, 0, 7);
     Vector3 GachaBallRotation = new Vector3(0, 60, 0);
 
-    [SerializeField] GameObject NormalBox;
-
-
-    [SerializeField] GameObject HighBox;
+    GameObject NormalBox;
+    GameObject HighBox;
 
     const string NormalGachaBall = "UI/NormalGachaBall";
     const string HighGachaBall = "UI/HighGachaBall";
 
-    private void Reset()
+    private void Start()
     {
-        NormalBox = Resources.Load<GameObject>(NormalGachaBall);
-        HighBox = Resources.Load<GameObject>(HighGachaBall);
+
     }
 
     public GameObject SpawnNormalBox()
     {
+        if (NormalBox == null)
+        {
+            NormalBox = Resources.Load<GameObject>(NormalGachaBall);
+            HighBox = Resources.Load<GameObject>(HighGachaBall);
+        }
         Vector3 BoxPosition = gameObject.transform.position + GachaBallPosition;
         Vector3 BoxRotation = gameObject.transform.rotation.eulerAngles + GachaBallRotation;
         GameObject obj = Instantiate(NormalBox);

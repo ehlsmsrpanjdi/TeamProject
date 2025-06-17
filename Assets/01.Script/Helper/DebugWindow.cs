@@ -216,6 +216,70 @@ public class DebugWindow : EditorWindow
             }
         }
 
+        if (GUILayout.Button("일반 웨이브 시작"))
+        {
+            if (Application.isPlaying)
+            {
+                WaveManager wm = FindObjectOfType<WaveManager>();
+                wm?.StartNormalWaveExternally();
+            }
+        }
+
+        if (GUILayout.Button("다음 스테이지로 진입"))
+        {
+            if (Application.isPlaying)
+            {
+                WaveManager wm = FindObjectOfType<WaveManager>();
+                wm?.ProceedToNextStage();
+            }
+        }
+
+        if (GUILayout.Button("반복 웨이브 시작 (약화 모드)"))
+        {
+            if (Application.isPlaying)
+            {
+                WaveManager wm = FindObjectOfType<WaveManager>();
+                wm?.StartRepeatWaveExternally();
+            }
+        }
+
+        if (GUILayout.Button("모든 좀비 강제 사망"))
+        {
+            if (Application.isPlaying)
+            {
+                var allZombies = GameObject.FindGameObjectsWithTag("Zombie");
+                foreach (var obj in allZombies)
+                {
+                    ZombieAI ai = obj.GetComponent<ZombieAI>();
+                    if (ai != null && !ai.IsDead)
+                    {
+                        ai.TakeDamage(9999, obj.transform.position + Vector3.back, 0f);
+                    }
+                }
+            }
+        }
+
+        if (GUILayout.Button("모든 좀비 제거"))
+        {
+            if (Application.isPlaying)
+            {
+                var allZombies = GameObject.FindGameObjectsWithTag("Zombie");
+                foreach (var obj in allZombies)
+                {
+                    ZombieAI ai = obj.GetComponent<ZombieAI>();
+                    if (ai != null)
+                    {
+                        if (obj.name.Contains("Zombie1"))
+                            ai.ResetAndReturnToPool("Zombie1");
+                        else if (obj.name.Contains("Zombie2"))
+                            ai.ResetAndReturnToPool("Zombie2");
+                        else
+                            GameObject.Destroy(obj);
+                    }
+                }
+            }
+        }
+
         #endregion
     }
 }

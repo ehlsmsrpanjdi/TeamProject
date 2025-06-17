@@ -33,7 +33,7 @@ public class WaveManager : MonoBehaviour
             }
         }
 
-        currentWaveCoroutine = StartCoroutine(StartNormalWave());
+        //currentWaveCoroutine = StartCoroutine(StartNormalWave());
     }
 
     private IEnumerator StartNormalWave()
@@ -49,7 +49,7 @@ public class WaveManager : MonoBehaviour
 
         int stage = Player.Instance.Data.currentStage;
         int totalCount = stage * zombiesPerWave;
-        int spawnBatch = 5;
+        int spawnBatch = 5; //몇번 나눠서 올것인가
         int zombiesPerBatch = Mathf.CeilToInt((float)totalCount / spawnBatch);
 
         yield return new WaitForSeconds(waveInterval);
@@ -61,7 +61,7 @@ public class WaveManager : MonoBehaviour
             int count = Mathf.Min(zombiesPerBatch, remaining);
             int spawned = spawner.SpawnWave(count, false);
             totalSpawned += spawned;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.1f); //스폰간격
         }
 
         aliveZombies = totalSpawned;
@@ -78,7 +78,7 @@ public class WaveManager : MonoBehaviour
 
         int stage = retryStage;
         int totalCount = stage * zombiesPerWave;
-        int spawnBatch = 5;
+        int spawnBatch = 5; //몇번 나눠서 올것인가
         int zombiesPerBatch = Mathf.CeilToInt((float)totalCount / spawnBatch);
 
         yield return new WaitForSeconds(waveInterval);
@@ -90,7 +90,7 @@ public class WaveManager : MonoBehaviour
             int count = Mathf.Min(zombiesPerBatch, remaining);
             int spawned = spawner.SpawnWave(count, true);
             totalSpawned += spawned;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.1f); //스폰간격
         }
 
         aliveZombies = totalSpawned;
@@ -183,6 +183,24 @@ public class WaveManager : MonoBehaviour
 
         aliveZombies = 0;
     }
+    public void StartNormalWaveExternally()
+    {
+        if (currentWaveCoroutine != null)
+            StopCoroutine(currentWaveCoroutine);
 
+        currentWaveCoroutine = StartCoroutine(StartNormalWave());
+    }
+
+    public void StartRepeatWaveExternally()
+    {
+        if (currentWaveCoroutine != null)
+            StopCoroutine(currentWaveCoroutine);
+
+        retryStage = Player.Instance.Data.currentStage;
+        isRetryWeakMode = true;
+        isWaitingNextStage = true;
+
+        currentWaveCoroutine = StartCoroutine(StartRepeatWave());
+    }
     public bool IsWeakMode() => isRetryWeakMode;
 }

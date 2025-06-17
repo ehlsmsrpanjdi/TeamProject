@@ -2,18 +2,18 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-// 좀비 행동 상태
-public enum State
-{
-    Idle,
-    Chase,
-    Attack,
-    Die
-}
-
 [RequireComponent(typeof(ZombieStatHandler))]
 public class ZombieAI : MonoBehaviour, IDamageable
 {
+    // 좀비 행동 상태
+    public enum State
+    {
+        Idle,
+        Chase,
+        Attack,
+        Die
+    }
+
     // 공격 타입 구분용 열거형 (enum)
     public enum AttackType
     {
@@ -476,4 +476,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
             agent.isStopped = false;
         }
     }
+
+    public bool IsDead => currentState == State.Die;
 }

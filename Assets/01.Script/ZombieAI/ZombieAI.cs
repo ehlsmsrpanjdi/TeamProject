@@ -398,7 +398,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         {
             int currentStage = Player.Instance.Data.currentStage;
 
-            bool isRetry = FindObjectOfType<WaveManager>()?.IsWeakMode() == true;
+            bool isRetry = WaveManager.Instance.IsWeakMode();
             int baseReward = currentStage * 10;
             int reward = isRetry ? Mathf.CeilToInt(baseReward * 0.1f) : baseReward;
 

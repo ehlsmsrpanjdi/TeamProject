@@ -271,13 +271,13 @@ public class CharacterManager
     public void EditorFunction()
     {
         CreateCharacter(1002);
-        CreateCharacter(1003);
-        CreateCharacter(1004);
-        CreateCharacter(1005);
+        //CreateCharacter(1003);
+        //CreateCharacter(1004);
+        //CreateCharacter(1005);
         SelectParticipate(0);
-        SelectParticipate(1);
-        SelectParticipate(2);
-        SelectParticipate(3);
+        //SelectParticipate(1);
+        //SelectParticipate(2);
+        //SelectParticipate(3);
 
         SpawnParticipateCharacters(); // 스폰 호출
     }

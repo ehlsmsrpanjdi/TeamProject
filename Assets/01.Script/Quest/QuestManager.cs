@@ -86,8 +86,8 @@ public class QuestManager : MonoBehaviour
         // 액션으로 진행도 전달
         OnQuestCompleted?.Invoke(progress);
 
-        OnQuestUpdated?.Invoke(0, (float) dailyQuests[0].CurrentValue / (float) dailyQuests[0].TargetValue);;
-        OnQuestUpdated?.Invoke(2, (float) dailyQuests[2].CurrentValue / (float) dailyQuests[2].TargetValue);;
+        OnQuestUpdated?.Invoke(0, (float) dailyQuests[0].CurrentValue / (float) dailyQuests[0].TargetValue);
+        OnQuestUpdated?.Invoke(2, (float) dailyQuests[2].CurrentValue / (float) dailyQuests[2].TargetValue);
     }
 
     #endregion
@@ -267,7 +267,6 @@ public class QuestManager : MonoBehaviour
         if (attackQuest == null || attackQuest.IsCompleted)
             return;
 
-        // attackQuest.CurrentValue++;
         attackQuest.CurrentValue = Mathf.Min(attackQuest.CurrentValue + 1, attackQuest.TargetValue);
         OnQuestUpdated?.Invoke(attackQuest.Id, (float) attackQuest.CurrentValue / (float) attackQuest.TargetValue);
 
@@ -286,6 +285,9 @@ public class QuestManager : MonoBehaviour
         var allClearQuest = dailyQuests.Find(q => q.Type == QuestType.AllClear);
         if (allClearQuest == null || allClearQuest.IsCompleted)
             return;
+
+        allClearQuest.CurrentValue = dailyQuests.Count(q => q.IsCompleted && q.Type != QuestType.AllClear);
+        OnQuestCompleted?.Invoke(allClearQuest.CurrentValue);
 
         // 'AllClear' 퀘스트를 제외한 모든 퀘스트가 완료되었는지 확인
         bool allOthersCompleted = dailyQuests

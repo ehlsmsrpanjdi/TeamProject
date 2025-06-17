@@ -15,10 +15,3 @@ public class QuestDataSO : ScriptableObject
         return new QuestData(id, title, description, type, targetValue);
     }
 }
-
-
-[CreateAssetMenu(fileName = "QuestDataList", menuName = "Quest/QuestDataList")]
-public class QuestDataListSO : ScriptableObject
-{
-    public List<QuestDataSO> quests;
-}

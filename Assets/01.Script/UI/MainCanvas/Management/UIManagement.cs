@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,6 +18,7 @@ public class UIManagement : UIBase
         Close_Button = this.TryFindChild(Img_Close).GetComponent<OnClickImage>();
         Inventory = GetComponentInChildren<UIInventory>(true);
         characterStatus = GetComponentInChildren<CharacterStatus>(true);
+
     }
 
     public void IsJoin(bool _Value)
@@ -41,7 +43,18 @@ public class UIManagement : UIBase
         }
         Inventory.OnInventoryOpen(sprites);
         sprites.Clear();
+        transform.FadeOutXY();
     }
+
+    public override void Close()
+    {
+        Tween tween = transform.FadeInXY();
+        tween.OnComplete(() =>
+        {
+            base.Close();
+        });
+    }
+
 
     public void SetStatusView(int _index)
     {
@@ -51,7 +64,6 @@ public class UIManagement : UIBase
     void CloseButtonOn()
     {
         Close();
-        UIManager.Instance.OpenUI<UILobby>();
     }
 
     public void OnClickJoin(int _index)

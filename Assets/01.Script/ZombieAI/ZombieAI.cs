@@ -371,8 +371,9 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
         if (rb != null)
         {
-            rb.isKinematic = true;
+            rb.isKinematic = false;
             rb.velocity = Vector3.zero;
+            rb.isKinematic = true;
         }
 
         // 콜라이더 비활성화

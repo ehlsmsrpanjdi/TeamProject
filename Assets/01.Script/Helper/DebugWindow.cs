@@ -29,10 +29,7 @@ public class DebugWindow : EditorWindow
         {
             GachaManager.Instance.DrawCharacter(GachaType.Normal, 1);
         }
-        if (GUILayout.Button("스폰 버튼"))
-        {
-            CharacterManager.Instance.EditorFunction();
-        }
+     
         if (GUILayout.Button("프리미엄 뽑기 버튼"))
         {
             GachaManager.Instance.DrawCharacter(GachaType.Premium, 1);

@@ -982,10 +982,10 @@ Animator:
   m_GameObject: {fileID: 1374702107769640116}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 6394fe946fddfaf41bfac9f21431cf99, type: 3}
-  m_Controller: {fileID: 9100000, guid: 7a02fba000faabb4090e1f15749e05a6, type: 2}
-  m_CullingMode: 0
+  m_Controller: {fileID: 9100000, guid: 7534003ee385d204b8511def45f5a04c, type: 2}
+  m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1010,6 +1010,7 @@ MonoBehaviour:
   duration: 0
   animator: {fileID: 0}
   isAttacking: 0
+  isMoving: 0
 --- !u!1 &1537327181517182966
 GameObject:
   m_ObjectHideFlags: 0

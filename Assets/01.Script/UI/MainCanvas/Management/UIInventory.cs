@@ -16,6 +16,14 @@ public class UIInventory : MonoBehaviour
         }
     }
 
+    public void ResetSprite()
+    {
+        foreach (InventorySlot slot in inventorySlots)
+        {
+            slot.ResetSprite();
+        }
+    }
+
     public void OnParticipate(int _index)
     {
         inventorySlots[_index].OnParticipate();

@@ -59,6 +59,8 @@ public class UIManagement : UIBase
     {
         List<CharacterInstance> list = CharacterManager.Instance.GetAllCharacters();
 
+        Inventory.ResetSprite();
+
         foreach (CharacterInstance character in list)
         {
             CharacterDataSO So = CharacterData.instance.GetData(character.key);

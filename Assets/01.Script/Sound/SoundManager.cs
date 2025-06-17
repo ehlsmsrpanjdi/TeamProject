@@ -18,6 +18,13 @@ public enum SfxType // SFX 타입
     Gacha,
     Skill,
     UI,
+    Running,
+    Clear,
+    ZAttack,
+    ZDie,
+    ZMove,
+    ZSpawn,
+    ZTakeDamage,
     // 필요한 효과음 타입 추가
 }
 

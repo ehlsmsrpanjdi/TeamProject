@@ -149,6 +149,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
             // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
             if (animator != null && animator.runtimeAnimatorController != null)
                 animator.SetBool("", true);
+            SoundManager.Instance.PlaySFX(SfxType.ZMove, -1);
         }
         else
         {
@@ -187,6 +188,8 @@ public class ZombieAI : MonoBehaviour, IDamageable
         // 애니메이터가 있고, 컨트롤러가 할당된 경우 애니메이션 이동 중지 처리
         if (animator != null && animator.runtimeAnimatorController != null)
             animator.SetBool("IsMoving", false);
+
+        SoundManager.Instance.PlaySFX(SfxType.ZAttack, -1);
 
         transform.LookAt(target); // 플레이어를 바라봄
 
@@ -307,6 +310,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         }
         else
         {
+            SoundManager.Instance.PlaySFX(SfxType.ZTakeDamage, -1);
             StartCoroutine(FlashRed());
             StartKnockback(attackerPosition, knockbackForce);
         }
@@ -396,6 +400,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
         if (animator != null && animator.runtimeAnimatorController != null)
             animator.SetTrigger("");
+        SoundManager.Instance.PlaySFX(SfxType.ZDie, -1);
 
         // 풀에 반환 대기 시작
         string zombieKey = (attackType == AttackType.Projectile) ? "Zombie2" : "Zombie1";

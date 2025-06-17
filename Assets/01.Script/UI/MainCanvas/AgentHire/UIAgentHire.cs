@@ -59,7 +59,7 @@ public class UIAgentHire : UIBase
             return;
         }
 
-       List<DrawResult> list = GachaManager.Instance.DrawCharacter(1);
+       List<DrawResult> list = GachaManager.Instance.DrawCharacter(GachaType.Normal, 1);
 
        if (list.Count != 0)
        {
@@ -79,7 +79,7 @@ public class UIAgentHire : UIBase
             return;
         }
 
-        List<DrawResult> list = GachaManager.Instance.DrawCharacter(10);
+        List<DrawResult> list = GachaManager.Instance.DrawCharacter(GachaType.Normal, 10);
 
         if (list.Count != 0)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using System.Linq;
 
 public class Player
 {
@@ -26,13 +27,12 @@ public class Player
     public event Action<int> OnGoldChanged;
     public event Action<int> OnDiamondChanged;
 
-    //private string saveFilePath;
+    private string saveFilePath;
 
     private void Init()
     {
-        //saveFilePath = Path.Combine(Application.persistentDataPath, "PlayerData.json");
-        //LoadPlayerData();
-        Data = new PlayerData();
+        saveFilePath = Path.Combine(Application.persistentDataPath, "PlayerData.json");
+        LoadPlayerData();
     }
 
     public void AddGold(int amount)
@@ -41,6 +41,7 @@ public class Player
         {
             Data.gold += amount;
             OnGoldChanged?.Invoke(Data.gold);
+            SavePlayerData();
         }
     }
 
@@ -50,6 +51,7 @@ public class Player
         {
             Data.gold -= amount;
             OnGoldChanged?.Invoke(Data.gold);
+            SavePlayerData();
             return true;
         }
         return false;
@@ -61,6 +63,7 @@ public class Player
         {
             Data.diamond += amount;
             OnDiamondChanged?.Invoke(Data.diamond);
+            SavePlayerData();
         }
     }
 
@@ -70,12 +73,13 @@ public class Player
         {
             Data.diamond -= amount;
             OnDiamondChanged?.Invoke(Data.diamond);
+            SavePlayerData();
             return true;
         }
         return false;
     }
 
-    /*public void LoadPlayerData()
+    public void LoadPlayerData()
     {
         if (File.Exists(saveFilePath))
         {
@@ -86,11 +90,55 @@ public class Player
         {
             Data = new PlayerData();
         }
-    }*/
+    }
 
-    /*public void SavePlayerData()
+    public void SavePlayerData()
     {
         string json = JsonUtility.ToJson(Data);
         File.WriteAllText(saveFilePath, json);
-    }*/
+    }
+
+    public void SaveCharacters(List<CharacterInstance> characters)
+    {
+        Data.characterInstances.Clear();
+        foreach (var character in characters)
+        {
+            Data.characterInstances.Add(new CharacterSaveData(character));
+        }
+        SavePlayerData();
+    }
+
+    public List<CharacterInstance> LoadCharacters()
+    {
+        List<CharacterInstance> loadedCharacters = new List<CharacterInstance>();
+        foreach (var character in Data.characterInstances)
+        {
+            CharacterDataSO charSO = CharacterData.instance.GetData(character.key);
+            if (charSO != null)
+            {
+                CharacterInstance charInstance = new CharacterInstance(charSO);
+
+                charInstance.UpdateRank(character.currentRank);
+                charInstance.enhancementLevel = character.enhancementlevel;
+
+                loadedCharacters.Add(charInstance);
+            }
+        }
+        return loadedCharacters;
+    }
+
+    public void SaveParticipateCharacter(List<CharacterInstance> participateCharacters)
+    {
+        Data.particpateCharacterKeys.Clear();
+        foreach (var character in participateCharacters)
+        {
+            Data.particpateCharacterKeys.Add(character.key);
+        }
+        SavePlayerData();
+    }
+
+    public List<int> LoadParticipateCharacter()
+    {
+        return Data.particpateCharacterKeys;
+    }
 }

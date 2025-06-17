@@ -277,6 +277,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     private IEnumerator MoveToSpawn(Vector3 position)
     {
+        
         animController.Moving(true);
         float speed = 3f;
         while (Vector3.Distance(transform.position, position) > 0.1f)

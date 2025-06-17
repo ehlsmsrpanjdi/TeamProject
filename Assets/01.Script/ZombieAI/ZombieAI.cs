@@ -476,4 +476,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
             agent.isStopped = false;
         }
     }
+
+    public bool IsDead => currentState == State.Die;
 }

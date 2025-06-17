@@ -161,7 +161,7 @@ public class CharacterManager
     public void SpawnParticipateCharacters()
     {
         var deployed = GetParticipateCharacters();
-        var spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
+        var spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint"); // 스폰 위치
         var setPoints = GameObject.FindGameObjectsWithTag("SetPoint").Select(go =>go.transform).ToList(); //Set 위치
 
         for (int i = 0; i < deployed.Count; i++)

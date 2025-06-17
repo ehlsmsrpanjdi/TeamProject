@@ -56,10 +56,6 @@ public class UIQuestScroll : UIBase
         Tween tween = transform.FadeInXY();
         tween.OnComplete(() =>
         {
-            foreach(QuestLog Log in questList)
-            {
-                Destroy(Log);
-            }
             base.Close();
         });
     }
@@ -72,7 +68,6 @@ public class UIQuestScroll : UIBase
         log.SetQuestName(_info.Title);
         log.SetQuestDescription(_info.Description);
         log.SetInfo(_info);
-        log.SetValue(_info);
         questList.Add(log);
     }
 }

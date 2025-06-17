@@ -188,8 +188,6 @@ public class CharacterManager
       
     public bool EnhanceCharacter(int index)
     {
-        
-        
         if(index <0 || index >= characters.Count)
         {
             return false;
@@ -202,7 +200,6 @@ public class CharacterManager
         }
 
         character.Enhance();
-        Player.Instance.UseGold(1000); //골드 사용
         return true;
     }
 
@@ -250,7 +247,6 @@ public class CharacterManager
             }
 
         }
-        Player.Instance.UseGold(5000); //골드 사용
         character.RankUp();
         Debug.Log("랭크업 성공");
         //GetAllCharacters(); 필요없음.
@@ -270,14 +266,14 @@ public class CharacterManager
     #if UNITY_EDITOR
     public void EditorFunction()
     {
+        CreateCharacter(1001);
         CreateCharacter(1002);
-        //CreateCharacter(1003);
-        //CreateCharacter(1004);
-        //CreateCharacter(1005);
+        CreateCharacter(1003);
+        CreateCharacter(1004);
         SelectParticipate(0);
-        //SelectParticipate(1);
-        //SelectParticipate(2);
-        //SelectParticipate(3);
+        SelectParticipate(1);
+        SelectParticipate(2);
+        SelectParticipate(3);
 
         SpawnParticipateCharacters(); // 스폰 호출
     }

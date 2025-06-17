@@ -40,12 +40,19 @@ public class Barricade : MonoBehaviour, IDamageable
          // 체력이 0 이하일 경우 스테이지 실패
         if (currentHealth <= 0)
         {
+            
+
             WaveManager waveManager = FindObjectOfType<WaveManager>();
             if (waveManager != null)
             {
-                 
-                Debug.Log("사망 호출");
-                waveManager.OnPlayerDead();
+                var behaviours = FindObjectsOfType<CharacterBehaviour>();
+                foreach (var behaviour in behaviours)
+                {
+                    behaviour.Die();
+                    Debug.Log("사망 호출");
+                    waveManager.OnPlayerDead();
+                }
+                
             }
         }
     }

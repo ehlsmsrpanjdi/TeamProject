@@ -263,9 +263,30 @@ public class CharacterBehaviour : MonoBehaviour
 
 
     //죽음. 바리게이트와 캐릭터의 체력을 연결 시킬 예정.
-    void Die()
+    public void Die()
     {
         isAttacking = false;
+
+        GameObject target = GameObject.FindGameObjectWithTag("SpawnPoint");
+
+        var position = target.transform.position;
+        
+        float speed = 3f;
+        while (Vector3.Distance(transform.position, position) > 0.1f)
+        {
+            Vector3 dir = (position - transform.position).normalized;
+            if (dir != Vector3.zero)
+            {
+                Quaternion lookRot = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, Time.deltaTime * 5f);
+            }
+
+            transform.position = Vector3.MoveTowards(transform.position, position, speed * Time.deltaTime);
+            isMoving = true;
+            animController.Moving(true);
+            break;
+        }
+
     }
 
     //Interface 처리

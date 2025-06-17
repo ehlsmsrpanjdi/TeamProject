@@ -6,6 +6,28 @@ using System;
 public class WaveManager : MonoBehaviour
 {
     public Action OnWaveClearAction;
+    public Action OnWaveStartAction;
+    private static WaveManager instance;
+
+    public static WaveManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<WaveManager>();
+
+                if (instance == null)
+                {
+                    GameObject obj = new GameObject("WaveManager");
+                    instance = obj.AddComponent<WaveManager>();
+                }
+            }
+
+            return instance;
+        }
+    }
+
 
     [Header("웨이브 설정")]
     public int zombiesPerWave = 5;
@@ -41,6 +63,7 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator StartNormalWave()
     {
+        OnWaveStartAction?.Invoke();
         if (isWaveSpawning) yield break;
         isWaveSpawning = true;
 
@@ -135,9 +158,7 @@ public class WaveManager : MonoBehaviour
         }
 
         isWaitingNextStage = true;
-
-        ClearAllZombies();
-        currentWaveCoroutine = StartCoroutine(StartRepeatWave());
+        //currentWaveCoroutine = StartCoroutine(StartRepeatWave());
     }
 
     public void ProceedToNextStage()

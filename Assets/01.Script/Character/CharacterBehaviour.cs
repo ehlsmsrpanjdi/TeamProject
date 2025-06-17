@@ -262,14 +262,20 @@ public class CharacterBehaviour : MonoBehaviour
     }
 
 
-    //죽음. 바리게이트와 캐릭터의 체력을 연결 시킬 예정.
     public void Die()
     {
         isAttacking = false;
+        isMoving = true;
 
         GameObject target = GameObject.FindGameObjectWithTag("SpawnPoint");
+        if (target != null)
+        {
+            StartCoroutine(MoveToSpawn(target.transform.position));
+        }
+    }
 
-        var position = target.transform.position;
+    private IEnumerator MoveToSpawn(Vector3 position)
+    {
         
         float speed = 3f;
         while (Vector3.Distance(transform.position, position) > 0.1f)
@@ -282,10 +288,12 @@ public class CharacterBehaviour : MonoBehaviour
             }
 
             transform.position = Vector3.MoveTowards(transform.position, position, speed * Time.deltaTime);
-            isMoving = true;
-            animController.Moving(true);
-            break;
+
+            yield return null;
         }
+
+        animController.Moving(false);
+        isMoving = false;
 
     }
 

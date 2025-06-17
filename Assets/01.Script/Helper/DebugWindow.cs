@@ -13,7 +13,7 @@ public class DebugWindow : EditorWindow
         // 창을 띄운다
         GetWindow<DebugWindow>("MyDebugWindow");
     }
-
+    static int StageValue = 0;
     private void OnGUI()
     {
         GUILayout.Label("이건 커스텀 에디터 창입니다!", EditorStyles.boldLabel);
@@ -25,6 +25,14 @@ public class DebugWindow : EditorWindow
         {
 
         }
+
+        StageValue = EditorGUILayout.IntField("StageValue", StageValue);
+
+        if (GUILayout.Button("스테이지 set"))
+        {
+            Player.Instance.Data.currentStage = StageValue;
+        }
+
         if (GUILayout.Button("뽑기 버튼"))
         {
             GachaManager.Instance.DrawCharacter(GachaType.Normal, 1);
@@ -222,14 +230,14 @@ public class DebugWindow : EditorWindow
             }
         }
 
-        if (GUILayout.Button("다음 스테이지로 진입"))
-        {
-            if (Application.isPlaying)
-            {
-                WaveManager wm = FindObjectOfType<WaveManager>();
-                wm?.ProceedToNextStage();
-            }
-        }
+        //if (GUILayout.Button("다음 스테이지로 진입"))
+        //{
+        //    if (Application.isPlaying)
+        //    {
+        //        WaveManager wm = FindObjectOfType<WaveManager>();
+        //        //wm?.ProceedToNextStage();
+        //    }
+        //}
 
         if (GUILayout.Button("반복 웨이브 시작 (약화 모드)"))
         {

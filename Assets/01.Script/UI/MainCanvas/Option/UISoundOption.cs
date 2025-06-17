@@ -22,6 +22,13 @@ public class UISoundOption : UIBase
         Return.OnClick = ReturnButtonOn;
     }
 
+    private void Start()
+    {
+        MusicSlider[0].onValueChanged.AddListener(SoundManager.Instance.SetMasterVolume);
+        MusicSlider[0].onValueChanged.AddListener(SoundManager.Instance.SetBgmVolume);
+        MusicSlider[0].onValueChanged.AddListener(SoundManager.Instance.SetSfxVolume);
+    }
+
     public override void Open()
     {
         base.Open();

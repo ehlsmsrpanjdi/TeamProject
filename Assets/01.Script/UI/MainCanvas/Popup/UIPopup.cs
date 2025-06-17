@@ -33,6 +33,7 @@ public class UIPopup : UIBase
     public override void Open()
     {
         base.Open();
+        transform.SetAsLastSibling();
         transform.FadeOutXY();
     }
 

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   key: 1005
   characterName: "\uC81C\uB9AC"
-  characterImage: {fileID: 21300000, guid: cb032ec3f4d3a2345a5c07614d5b0d3c, type: 3}
+  characterImage: {fileID: 21300000, guid: 2d46781ed107186478c9a23d6b3104d1, type: 3}
   baseAttack: 70
   baseHealth: 750
   startRank: 1

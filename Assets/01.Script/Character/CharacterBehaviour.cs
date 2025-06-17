@@ -162,11 +162,18 @@ public class CharacterBehaviour : MonoBehaviour
         Collider closestEnemy = GetClosestEnemy();
         if (closestEnemy == null) return;
 
+        
+        //if (State.Die == closestEnemy.GetComponent<ZombieAI>().currentState) // 타겟 몬스터의 상태 체크
+        //{
+        //    return;
+        //}
+        
         LookRotation(closestEnemy.transform);
 
         IDamageable target = closestEnemy.GetComponent<IDamageable>();
         if (target != null)
         {
+            
             float damage = charInstance != null ? charInstance.GetCurrentAttack() : 10;
             target.TakeDamage((int)damage, transform.position, knockbackForce: 1);
             //Debug.Log($"{charInstance.charcterName} 공격 데미지: {damage}");

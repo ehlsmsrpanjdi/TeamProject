@@ -58,8 +58,9 @@ public class UIQuestScroll : UIBase
         {
             foreach(QuestLog Log in questList)
             {
-                Destroy(Log);
+                Destroy(Log.gameObject);
             }
+            questList.Clear();
             base.Close();
         });
     }
@@ -68,6 +69,7 @@ public class UIQuestScroll : UIBase
     {
         GameObject logObject = Instantiate(questLogPrefab);
         logObject.transform.SetParent(contentObject.transform);
+        logObject.transform.localScale = new Vector3(1, 1, 1);
         QuestLog log = logObject.GetComponent<QuestLog>();
         log.SetQuestName(_info.Title);
         log.SetQuestDescription(_info.Description);

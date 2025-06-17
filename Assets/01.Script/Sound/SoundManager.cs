@@ -68,17 +68,20 @@ public class SoundManager : MonoBehaviour
         Init(bgmSource, sfxSource);
     }
 
-    public void Init(AudioSource bgmSource, AudioSource sfxSource)
+    private void Start()
     {
-        this.bgmSource = bgmSource;
-        this.sfxSource = sfxSource;
-        this.bgmSource.loop = true;
-
         LoadSounds();
         LoadVolumeSettings();
         SetMasterVolume(MasterVolume);
         SetBgmVolume(BgmVolume);
         SetSfxVolume(SfxVolume);
+    }
+
+    public void Init(AudioSource bgmSource, AudioSource sfxSource)
+    {
+        this.bgmSource = bgmSource;
+        this.sfxSource = sfxSource;
+        this.bgmSource.loop = true;
     }
 
     private void LoadSounds()

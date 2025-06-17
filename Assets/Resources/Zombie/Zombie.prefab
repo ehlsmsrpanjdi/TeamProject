@@ -927,7 +927,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackType: 0
-  firePoint: {fileID: 0}
+  firePoint: {fileID: 647765322640797090}
   stopDistance: 2
   flashDuration: 0.1
   knockbackRecoverTime: 0.3

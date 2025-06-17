@@ -233,9 +233,13 @@ public class ZombieAI : MonoBehaviour, IDamageable
                     Debug.LogWarning("[ZombieAI] 대상이 IDamageable 아님");
                 }
             }
+            //원거리 공격
             if (attackType == AttackType.Projectile && firePoint != null && target != null)
             {
                 Vector3 velocity = CalculateProjectileVelocity(firePoint.position, target.position);
+                if (velocity.y < 0.5f)
+                    velocity.y = 0.5f;
+
                 if (velocity == Vector3.zero)
                 {
                     Debug.LogWarning("[ProjectileAttack] 속도 0 → 직선 대체");
@@ -245,7 +249,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
                 GameObject obj = ObjectPool.Get("Projectile");
                 if (obj != null)
                 {
-                    obj.transform.position = firePoint.position;
+                    obj.transform.position = firePoint.position + Vector3.up * 0.5f;
                     obj.transform.rotation = Quaternion.LookRotation(velocity);
 
                     var proj = obj.GetComponent<ZombieProjectile>();
@@ -265,7 +269,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
                     Debug.LogWarning("[ZombieAI] 투사체 풀에서 꺼내기 실패");
                 }
             }
-
 
             attackTimer = 0f; // 타이머 초기화
         }

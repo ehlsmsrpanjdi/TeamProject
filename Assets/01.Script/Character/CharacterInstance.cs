@@ -210,5 +210,27 @@ public class CharacterInstance
 
         return true;
     }
+
+    public bool UseSkill(int skillIndex)
+    {
+
+        if (skillIndex < 0 || skillIndex >= HasSkill().Count)
+        {
+            Debug.Log("스킬 인덱스가 잘못되었습니다.");
+            return false;
+        }
+
+        Skill skill = HasSkill()[skillIndex];
+
+        if (!skill.isActive)
+        {
+            Debug.Log($"스킬 {skill.skillName} is Not Activated");
+            return false;
+        }
+         
+        //skill.UseSkill(skillIndex);
+
+        return true;
+    }
 }
 

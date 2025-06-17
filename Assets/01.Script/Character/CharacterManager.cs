@@ -25,6 +25,7 @@ public class CharacterManager
         set { instance = value; }
     }
 
+    
     public void Init()
     {
         GachaManager.Instance.OnCharacterDraw += CreateCharacterOndraw;
@@ -228,7 +229,7 @@ public class CharacterManager
         var charRank = character.rankInfo.FirstOrDefault(r => r.rank == character.currentRank); //선택된 캐릭터의 랭크인포 전달 (리스트로 가지고 있어서 이런식으로 줌)
 
         int requiredCount = charRank.requiredOwnedCount; //랭크인포의 랭크업 요구 수량 전달
-        var sameCharacter = characters.Where(sc => sc.key == character.key).ToList(); //동일한 키를 가지고 있는 캐릭터만 선택하여 리스트화
+        var sameCharacter = characters.Where(sc => sc.key == character.key && sc.currentRank == character.currentRank).ToList(); //동일한 키, 동일한 등급을 가지고 있는 캐릭터만 선택하여 리스트화
         if(sameCharacter.Count < requiredCount)
         {
             Debug.Log("강화에 필요한 수량이 부족합니다.");

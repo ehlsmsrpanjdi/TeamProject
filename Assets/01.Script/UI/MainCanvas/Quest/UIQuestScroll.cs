@@ -64,7 +64,7 @@ public class UIQuestScroll : UIBase
             base.Close();
         });
     }
-
+    //
     public void AddQuest(QuestDisplayInfo _info)
     {
         GameObject logObject = Instantiate(questLogPrefab);

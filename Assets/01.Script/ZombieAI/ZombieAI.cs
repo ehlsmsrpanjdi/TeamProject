@@ -82,10 +82,11 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
         animator.Rebind();
 
-        // 애니메이션 상태 초기화 (기본적으로 움직임으로 시작)
+
         if (animator != null && animator.runtimeAnimatorController != null)
         {
             animator.SetBool("IsMoving", true);
+
         }
 
         agent.speed = statHandler.MoveSpeed;

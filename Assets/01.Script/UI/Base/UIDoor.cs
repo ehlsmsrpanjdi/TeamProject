@@ -31,6 +31,7 @@ public class UIDoor : UIBase
     public override void Open()
     {
         base.Open();
+        transform.SetAsLastSibling();
         LeftDoorImg.gameObject.transform.MoveX(LeftPos, 0);
         Tween tween = RightDoorImg.gameObject.transform.MoveX(RightPos, 0);
         tween.OnComplete(() =>

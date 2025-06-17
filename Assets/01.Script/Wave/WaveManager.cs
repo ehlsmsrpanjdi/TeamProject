@@ -181,7 +181,7 @@ public class WaveManager : MonoBehaviour
                 else if (obj.name.Contains("Zombie2"))
                     ai.ResetAndReturnToPool("Zombie2");
                 else
-                    Object.Destroy(obj);
+                    Destroy(obj);
             }
         }
 

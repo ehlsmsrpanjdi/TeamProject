@@ -29,6 +29,8 @@ public class Barricade : MonoBehaviour, IDamageable
         Debug.Log($"{currentHealth}");
     }
 
+
+
     
 
     // 대미지를 받는 함수

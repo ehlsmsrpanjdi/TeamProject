@@ -18,6 +18,7 @@ MonoBehaviour:
   skillIcon: {fileID: 21300000, guid: 926010ccc46967444833ab0170da41b4, type: 3}
   skillDamage: 1000
   skillCooldown: 30
-  skillPrefab: {fileID: 0}
+  skillPrefab: {fileID: 4130891003160327331, guid: fd9fffb4336e0ba4b9d66c092c37733f,
+    type: 3}
   skillRange: 2
   requiredRank: 1

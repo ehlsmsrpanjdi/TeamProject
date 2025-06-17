@@ -262,6 +262,7 @@ public class CharacterBehaviour : MonoBehaviour
     }
 
 
+    //죽음. 바리게이트와 캐릭터의 체력을 연결 시킬 예정.
     public void Die()
     {
         isAttacking = false;
@@ -295,7 +296,6 @@ public class CharacterBehaviour : MonoBehaviour
 
         animController.Moving(false);
         isMoving = false;
-
     }
 
     //Interface 처리

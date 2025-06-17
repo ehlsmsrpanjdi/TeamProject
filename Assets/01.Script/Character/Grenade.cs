@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Grenade : MonoBehaviour
 {
-    private Rigidbody rigidbody;
+    private Rigidbody rb;
 
     private void Awake()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
     }
 
     public void Explosion(Vector3 direction, float range, float skillDamage)
@@ -16,7 +16,7 @@ public class Grenade : MonoBehaviour
         //방향 받아서 날아가는거 처리
         //몬스터피격 처리
         float throwForce = 10f; //던지는 힘
-        rigidbody.AddForce(direction.normalized * throwForce, ForceMode.Impulse);
+        rb.AddForce(direction.normalized * throwForce, ForceMode.Impulse);
 
         Collider[] hitEnemies = Physics.OverlapSphere(transform.position, range, LayerMask.GetMask("Zombie"));
 

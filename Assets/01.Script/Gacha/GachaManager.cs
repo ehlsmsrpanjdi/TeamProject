@@ -87,7 +87,7 @@ public class GachaManager
         }
 
         int currentCostPerDraw = costPerDraw;
-        
+
         switch (type)
         {
             case GachaType.Normal:
@@ -169,6 +169,15 @@ public class GachaManager
         }
         SoundManager.Instance.PlaySFX(SfxType.Gacha, -1);
         return resultList;
+    }
+
+    public bool IsOverSRank(DrawResult result)
+    {
+        if (result.character == null)
+        {
+            return false;
+        }
+        return result.character.startRank == Rank.S || result.character.startRank == Rank.SS || result.character.startRank == Rank.SSS;
     }
 
 }

@@ -270,10 +270,10 @@ public class CharacterManager
     #if UNITY_EDITOR
     public void EditorFunction()
     {
-        CreateCharacter(1001);
         CreateCharacter(1002);
         CreateCharacter(1003);
         CreateCharacter(1004);
+        CreateCharacter(1005);
         SelectParticipate(0);
         SelectParticipate(1);
         SelectParticipate(2);

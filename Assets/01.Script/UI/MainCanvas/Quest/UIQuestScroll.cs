@@ -17,22 +17,23 @@ public class UIQuestScroll : UIBase
 
     private void Reset()
     {
-        questLogPrefab = Resources.Load<GameObject>(QuestLog);
         contentObject = gameObject.GetComponentInChildren<HorizontalLayoutGroup>(true).gameObject;
 
         ReturnButton = GetComponentInChildren<OnClickImage>();
-
     }
 
     private void Awake()
+    {
+        ReturnButton.OnClick = OnReturnButtonclick;
+    }
+
+    private void Start()
     {
         if (null == questLogPrefab)
         {
             Resources.Load<GameObject>(QuestLog);
         }
-        ReturnButton.OnClick = OnReturnButtonclick;
     }
-
 
     void OnReturnButtonclick()
     {

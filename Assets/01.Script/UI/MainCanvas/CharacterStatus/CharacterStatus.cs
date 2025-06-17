@@ -15,7 +15,6 @@ public class CharacterStatus : MonoBehaviour
     const string Img_Awaken = "Img_Awaken";
 
     const string Img_WeaponImage = "Img_WeaponImage";
-    const string Img_AwakenImage = "Img_AwakenImage";
 
     const string Img_Character = "Img_Character";
 
@@ -34,7 +33,6 @@ public class CharacterStatus : MonoBehaviour
     [SerializeField] OnClickImage AwakenUpgrade_Button;
 
     [SerializeField] Image WeaponImage;
-    [SerializeField] Image AwakenImage;
 
     [SerializeField] Image CharacterImage;
 
@@ -54,7 +52,6 @@ public class CharacterStatus : MonoBehaviour
         AwakenUpgrade_Button = this.TryFindChild(Img_Awaken).GetComponent<OnClickImage>();
 
         WeaponImage = this.TryFindChild(Img_WeaponImage).GetComponent<Image>();
-        AwakenImage = this.TryFindChild(Img_AwakenImage).GetComponent<Image>();
 
         CharacterImage = this.TryFindChild(Img_Character).GetComponent<Image>();
 
@@ -106,7 +103,6 @@ public class CharacterStatus : MonoBehaviour
     public void SetStatusView(CharacterInstance _instance)
     {
         CharacterImage.sprite = _instance.characterImage;
-        AwakenImage.sprite = _instance.characterImage;
         WeaponImage.sprite = _instance.characterImage;
 
         StatusReset();
@@ -115,9 +111,10 @@ public class CharacterStatus : MonoBehaviour
     public void NoneView()
     {
         CharacterImage.sprite = null;
-        AwakenImage.sprite = null;
         WeaponImage.sprite = null;
 
+        SetStatus("None");
+        SetLvValue(0);
         SetAttackValue(0);
         SetHPValue(0);
     }
@@ -135,6 +132,10 @@ public class CharacterStatus : MonoBehaviour
     public void OnClickLvUpgrade()
     {
         CharacterInstance instance = CharacterManager.Instance.GetCharacter(Selected_Index);
+        if (instance == null)
+        {
+            return;
+        }
         instance.Enhance();
         StatusReset();
     }
@@ -142,6 +143,10 @@ public class CharacterStatus : MonoBehaviour
     public void OnClickRankUp()
     {
         CharacterInstance instance = CharacterManager.Instance.GetCharacter(Selected_Index);
+        if (instance == null)
+        {
+            return;
+        }
         UIManager Manager = UIManager.Instance;
         if (true == instance.RankUp())
         {

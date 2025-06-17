@@ -49,6 +49,7 @@ public class UIManager : MonoBehaviour
     const string UILobby = "UI/Canvas/UILobby";
     const string UIOption = "UI/Canvas/UIOption";
     const string UIPopup = "UI/Canvas/UIPopup";
+    const string UIDoor = "UI/Canvas/UIDoor";
     const string BattleCanvas = "UI/Canvas/BattleCanvas";
     const string MainCanvas = "UI/Canvas/MainCanvas";
 
@@ -94,6 +95,7 @@ public class UIManager : MonoBehaviour
         ResourcesPathDictionary.Add(typeof(UILobby), UILobby);
         ResourcesPathDictionary.Add(typeof(UIOption), UIOption);
         ResourcesPathDictionary.Add(typeof(UIPopup), UIPopup);
+        ResourcesPathDictionary.Add(typeof(UIDoor), UIDoor);
     }
 
     private void Awake()

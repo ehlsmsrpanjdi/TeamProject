@@ -96,7 +96,27 @@ public class UILobby : UIBase
 
     void OnBattleClick()
     {
+        UIManager Manager = UIManager.Instance;
+        UIDoor uiDoor = Manager.GetUI<UIDoor>(Manager.GetMainCanvas());
+        uiDoor.OnCloseAction = DoorCloseAction;
+        uiDoor.OnOpenAction = DoorOpenAction;
+        uiDoor.Open();
+    }
+
+    void DoorOpenAction()
+    {
+        UIManager Manager = UIManager.Instance;
+        Transform BattleCanvasTransform = Manager.GetBattleCanvas();
+        Manager.OpenUI<UIStage>(BattleCanvasTransform);
+        Manager.OpenUI<UIBattleMemberViewer>(BattleCanvasTransform);
+        Manager.OpenUI<UISkillViewer>(BattleCanvasTransform);
+    }
+
+    void DoorCloseAction()
+    {
         SceneManager.LoadScene(BattleSceneName);
+        UIManager Manager = UIManager.Instance;
+        Manager.CloseUI<UILobby>(Manager.GetMainCanvas());
     }
 
     void OnLobbyImageMouseEnter(BaseImage _Image, Image _BackgroundImg)

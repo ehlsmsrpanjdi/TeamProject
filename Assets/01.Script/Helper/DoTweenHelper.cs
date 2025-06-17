@@ -37,6 +37,11 @@ public static class DoTweenHelper
         return transform.DOScaleX(1, 0.5f).From(new Vector3(0, 1, 1)).SetEase(Ease.OutBack);
     }
 
+    public static Tween MoveX(this Transform transform, float startPos, float EndPos)
+    {
+        return transform.DOLocalMoveX(EndPos, 0.5f).From(startPos).SetEase(Ease.InQuart);
+    }
+
     public static Tween FadeInXY(this Transform transform)
     {
         Sequence seq = DOTween.Sequence();

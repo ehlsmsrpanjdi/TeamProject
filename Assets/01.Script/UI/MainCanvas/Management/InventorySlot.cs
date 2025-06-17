@@ -15,7 +15,7 @@ public class InventorySlot : MonoBehaviour
     {
         inventoryImage = GetComponent<InventoryImage>();
         EquipImg = this.TryFindChild(Img_Equip).GetComponent<Image>();
-        NoneSprite = Resources.Load<Sprite>(Img_None);
+
         inventoryImage.SetSprite(NoneSprite);
     }
 
@@ -30,10 +30,6 @@ public class InventorySlot : MonoBehaviour
         {
             inventoryImage = GetComponent<InventoryImage>();
         }
-        if(NoneSprite == null)
-        {
-            NoneSprite = Resources.Load<Sprite>(Img_None);
-        }
         if (inventoryImage == null)
         {
             inventoryImage.NoneSprite = NoneSprite;
@@ -43,6 +39,11 @@ public class InventorySlot : MonoBehaviour
 
     private void Start()
     {
+        if(NoneSprite == null)
+        {
+            NoneSprite = Resources.Load<Sprite>(Img_None);
+        }
+
         inventoryImage.OnClickAction = OnClickSlot;
         EquipImg.gameObject.SetActive(false);
     }

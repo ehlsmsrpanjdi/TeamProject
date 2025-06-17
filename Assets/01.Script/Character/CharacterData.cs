@@ -32,10 +32,15 @@ public class CharacterData : MonoBehaviour
         characterList = null;
     }
 
-    private void Reset()
+    private void Start()
     {
         characterList = new List<CharacterDataSO>(Resources.LoadAll<CharacterDataSO>("CharacterData"));
     }
+
+    //private void Reset()
+    //{
+    //    characterList = new List<CharacterDataSO>(Resources.LoadAll<CharacterDataSO>("CharacterData"));
+    //}
 
     public CharacterDataSO GetData(int key)
     {

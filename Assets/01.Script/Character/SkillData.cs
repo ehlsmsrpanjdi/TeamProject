@@ -86,6 +86,12 @@ public class Skill
         //전달받은 스킬키에 맞는 스킬 프리팹 소환
         //던진다
         //프리팹에 달려있는 스크립트에서 물리작용 처리
+
+        SkillSO so = SkillData.Instance.GetAllSkill(index);
+        if(so == null)
+        {
+            return;
+        }
     }
 
 

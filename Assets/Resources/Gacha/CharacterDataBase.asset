@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: CharacterDataBase
   m_EditorClassIdentifier: 
   SSSCharacterList: []
-  SSCharacterList: []
-  SCharacterList: []
+  SSCharacterList:
+  - {fileID: 11400000, guid: 70224e4e564a6834c9f22c951f3bbcb3, type: 2}
+  SCharacterList:
+  - {fileID: 11400000, guid: 769d92a178fb7f940b78c823bd764c77, type: 2}
   ACharacterList:
   - {fileID: 11400000, guid: c84dd35dc1ebc5148997f4b75a6ce5c5, type: 2}
   BCharacterList:

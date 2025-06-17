@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public enum BgmType
+public enum BgmType // BGM 타입
 {
     Lobby,
     Battle,
     GameOver,
 }
 
-public enum SfxType
+public enum SfxType // SFX 타입
 {
     Attack,
     Hit,
@@ -50,13 +50,14 @@ public class SoundManager : MonoBehaviour
     private AudioSource bgmSource;
     private AudioSource sfxSource;
 
-    private Dictionary<BgmType, List<AudioClip>> bgm = new Dictionary<BgmType, List<AudioClip>>();
-    private Dictionary<SfxType, List<AudioClip>> sfx = new Dictionary<SfxType, List<AudioClip>>();
+    private Dictionary<BgmType, List<AudioClip>> bgm = new Dictionary<BgmType, List<AudioClip>>(); // BGM 오디오 클립들을 타입별로 저장하는 딕셔너리
+    private Dictionary<SfxType, List<AudioClip>> sfx = new Dictionary<SfxType, List<AudioClip>>(); // SFX 오디오 클립들을 타입별로 저장하는 딕셔너리
 
     public float MasterVolume { get; private set; }
     public float BgmVolume { get; private set; }
     public float SfxVolume { get; private set; }
 
+    // 볼륨 설정은 PlayerPrefs를 통해 저장
     private const string MASTER_VOLUME_KEY = "MasterVolume";
     private const string BGM_VOLUME_KEY = "BgmVolume";
     private const string SFX_VOLUME_KEY = "SfxVolume";
@@ -86,13 +87,14 @@ public class SoundManager : MonoBehaviour
 
     private void LoadSounds()
     {
-        foreach (BgmType bgmType in System.Enum.GetValues(typeof(BgmType)))
+        // Resources 폴더에서 모든 BGM 및 SFX 오디오 클립을 로드
+        foreach (BgmType bgmType in System.Enum.GetValues(typeof(BgmType))) // 모든 BgmType 열거형을 순회
         {
-            string path = $"Sounds/BGM/{bgmType.ToString()}";
-            AudioClip[] clips = Resources.LoadAll<AudioClip>(path).OrderBy(c => c.name).ToArray();
+            string path = $"Sounds/BGM/{bgmType.ToString()}"; // Bgm 클립이 저장된 경로
+            AudioClip[] clips = Resources.LoadAll<AudioClip>(path).OrderBy(c => c.name).ToArray(); // 해당 경로의 모든 오디오 클립을 로드하고 이름 순으로 정렬
             if (clips.Length > 0)
             {
-                bgm.Add(bgmType, new List<AudioClip>(clips));
+                bgm.Add(bgmType, new List<AudioClip>(clips)); // 딕셔너리에 추가
             }
         }
 
@@ -102,7 +104,7 @@ public class SoundManager : MonoBehaviour
             AudioClip[] clips = Resources.LoadAll<AudioClip>(path).OrderBy(c => c.name).ToArray();
             if (clips.Length > 0)
             {
-                sfx.Add(sfxType, new List<AudioClip>(clips));
+                sfx.Add(sfxType, new List<AudioClip>(clips)); // Bgm과 동일하게 딕셔너리에 추가한다.
             }
         }
     }

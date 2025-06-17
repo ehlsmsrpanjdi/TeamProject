@@ -67,6 +67,7 @@ public class QuestManager : MonoBehaviour
          {
              var loadedData = LoadQuestsFromJson(); // 데이터 불러와서
              ApplySavedProgress(loadedData.Quests); // 불러온 데이터 적용.
+             HandleQuestCompleted(); // 일퀘 완료여부 확인해서 반환.
          }
 
          CheckAllDailyQuests(); // 초기화 및 로드 후 퀘스트 상태 점검

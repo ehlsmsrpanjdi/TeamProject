@@ -57,18 +57,22 @@ public class ZombieAI : MonoBehaviour, IDamageable
         if (animator == null) animator = GetComponent<Animator>();
         if (statHandler == null) statHandler = GetComponent<ZombieStatHandler>();
 
-        target = GameObject.FindWithTag("Player")?.transform; // 플레이어 찾기
+        target = GameObject.FindWithTag("Player")?.transform;
 
-        statHandler.ResetHealth(); // 체력 초기화
+        statHandler.ResetHealth();
+        ChangeState(State.Chase);
 
-        ChangeState(State.Chase); // 초기 상태를 추적으로 설정
+        // Rigidbody 초기화
+        rb.isKinematic = false;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.isKinematic = true;
 
-        // velocity는 isKinematic이 false일 때만 세팅 가능하도록 수정
-        rb.isKinematic = false;    // 먼저 물리 적용 상태로 변경
-        rb.velocity = Vector3.zero; // 속도 초기화
-        rb.isKinematic = true;     // 다시 키네매틱 모드로 변경
+        // Collider 다시 켜기
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = true;
 
-        // 현재 위치를 NavMesh 위로 보정
+        // NavMesh 위치 보정
         if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 1f, NavMesh.AllAreas))
         {
             transform.position = hit.position;
@@ -78,12 +82,16 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
         animator.Rebind();
 
-        // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
         if (animator != null && animator.runtimeAnimatorController != null)
-            animator.SetBool("", true);
+        {
+            animator.SetBool("IsMoving", true);
+            animator.SetBool("IsAttacking", false);
+            animator.SetBool("IsDead", false);
+        }
 
         agent.speed = statHandler.MoveSpeed;
     }
+
 
     private void Awake()
     {
@@ -149,7 +157,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
             // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
             if (animator != null && animator.runtimeAnimatorController != null)
-                animator.SetBool("", true);
+                animator.SetBool("IsMoving", true);
         }
         else
         {
@@ -157,7 +165,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
             // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
             if (animator != null && animator.runtimeAnimatorController != null)
-                animator.SetBool("", false);
+                animator.SetBool("IsMoving", false);
 
             // 플레이어를 향해 부드럽게 회전
             Vector3 lookDir = target.position - transform.position;
@@ -188,6 +196,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         // 애니메이터가 있고, 컨트롤러가 할당된 경우 애니메이션 이동 중지 처리
         if (animator != null && animator.runtimeAnimatorController != null)
             animator.SetBool("IsMoving", false);
+        animator.SetBool("IsAttacking", true);
 
         transform.LookAt(target); // 플레이어를 바라봄
 
@@ -247,8 +256,12 @@ public class ZombieAI : MonoBehaviour, IDamageable
                 }
             }
 
-
             attackTimer = 0f; // 타이머 초기화
+
+            if (animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.SetBool("IsAttacking", false); // 공격 종료
+            }
         }
     }
 
@@ -389,7 +402,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         {
             int currentStage = Player.Instance.Data.currentStage;
 
-            bool isRetry = FindObjectOfType<WaveManager>()?.IsWeakMode() == true;
+            bool isRetry = WaveManager.Instance.IsWeakMode();
             int baseReward = currentStage * 10;
             int reward = isRetry ? Mathf.CeilToInt(baseReward * 0.1f) : baseReward;
 
@@ -397,9 +410,12 @@ public class ZombieAI : MonoBehaviour, IDamageable
             Debug.Log($"[ZombieAI] 골드 {reward} 획득 (스테이지 {currentStage}, 반복 모드: {isRetry})");
         }
 
-        // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
         if (animator != null && animator.runtimeAnimatorController != null)
-            animator.SetTrigger("");
+        {
+            animator.SetBool("IsMoving", false);
+            animator.SetBool("IsAttacking", false);
+            animator.SetBool("IsDead", true);
+        }
 
         // 풀에 반환 대기 시작
         string zombieKey = (attackType == AttackType.Projectile) ? "Zombie2" : "Zombie1";
@@ -459,7 +475,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         // 애니메이션 트리거 및 상태 초기화
         if (animator != null && animator.runtimeAnimatorController != null)
         {
-            animator.ResetTrigger("Attack");
+            animator.ResetTrigger("IsAttack");
             animator.ResetTrigger("Hit");
             animator.ResetTrigger("Die");
             animator.SetBool("IsMoving", false);

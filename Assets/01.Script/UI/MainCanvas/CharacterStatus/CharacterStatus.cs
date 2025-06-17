@@ -131,35 +131,35 @@ public class CharacterStatus : MonoBehaviour
 
     public void OnClickLvUpgrade()
     {
-        CharacterInstance instance = CharacterManager.Instance.GetCharacter(Selected_Index);
-        if (instance == null)
+
+        bool IsUpgraded = CharacterManager.Instance.EnhanceCharacter(Selected_Index);
+        if (false == IsUpgraded)
         {
+            UIManager Manager = UIManager.Instance;
+            UIPopup Popup = Manager.GetUI<UIPopup>(Manager.GetMainCanvas());
+            Popup.SetText("재화가 모자릅니다");
+            Popup.Open();
             return;
         }
-        instance.Enhance();
         StatusReset();
     }
 
     public void OnClickRankUp()
     {
-        CharacterInstance instance = CharacterManager.Instance.GetCharacter(Selected_Index);
-        if (instance == null)
-        {
-            return;
-        }
+        bool IsRankedUp = CharacterManager.Instance.RankUpCharacter(Selected_Index);
         UIManager Manager = UIManager.Instance;
-        if (true == instance.RankUp())
+        if (false == IsRankedUp)
+        {
+            UIPopup Popup = UIManager.Instance.GetUI<UIPopup>(Manager.GetMainCanvas());
+            Popup.Open();
+            Popup.SetText("같은 등급의 동일한 캐릭터가 없습니다");
+        }
+        else
         {
             UIManagement Management = Manager.GetUI<UIManagement>(Manager.GetMainCanvas());
             Management.InventoryReset(Selected_Index);
             StatusReset();
             SetStatusView(Selected_Index);
-        }
-        else
-        {
-            UIPopup Popup = UIManager.Instance.GetUI<UIPopup>(Manager.GetMainCanvas());
-            Popup.Open();
-            Popup.SetText("같은 등급의 동일한 캐릭터가 없습니다");
         }
     }
 

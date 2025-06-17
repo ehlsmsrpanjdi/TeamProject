@@ -26,7 +26,7 @@ public class UIInventory : MonoBehaviour
         inventorySlots[_index].OffParticipate();
     }
 
-    public void OnInventoryOpen(List<Sprite> _Sprites)
+    public void OnInventoryOpen(List<Sprite> _Sprites, int _index = 0)
     {
         List<int> participates = CharacterManager.Instance.GetParticipateCharactersAsDictionary().Keys.ToList<int>();
 
@@ -40,9 +40,9 @@ public class UIInventory : MonoBehaviour
             inventorySlots[participatedIndex].OnParticipate();
         }
 
-        if (true == CharacterManager.Instance.IsParticipating(0))
+        if (true == CharacterManager.Instance.IsParticipating(_index))
         {
-            inventorySlots[0].OnClickSlot();
+            inventorySlots[_index].OnClickSlot();
         }
         else
         {
@@ -50,5 +50,4 @@ public class UIInventory : MonoBehaviour
             management.NoneView();
         }
     }
-
 }

@@ -17,7 +17,6 @@ public class UIHireScroll : UIBase
 
     private void Reset()
     {
-        hireLogPrefab = Resources.Load<GameObject>(HireLog);
         contentObject = gameObject.GetComponentInChildren<HorizontalLayoutGroup>(true).gameObject;
 
         ReturnButton = GetComponentInChildren<OnClickImage>();
@@ -27,6 +26,14 @@ public class UIHireScroll : UIBase
     private void Awake()
     {
         ReturnButton.OnClick = OnReturnButttonClick;
+    }
+
+    private void Start()
+    {
+        if(hireLogPrefab == null)
+        {
+            hireLogPrefab = Resources.Load<GameObject>(HireLog);
+        }
     }
 
     void OnReturnButttonClick()

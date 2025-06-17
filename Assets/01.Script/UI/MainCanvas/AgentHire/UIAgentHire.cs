@@ -50,7 +50,7 @@ public class UIAgentHire : UIBase
 
     void ClickGachaOneTime()
     {
-        if(true == UIManager.Instance.GetUI<UIGacha>(UIManager.Instance.GetMainCanvas()).gameObject.activeSelf)
+        if (true == UIManager.Instance.GetUI<UIGacha>(UIManager.Instance.GetMainCanvas()).gameObject.activeSelf)
         {
             return;
         }
@@ -59,12 +59,20 @@ public class UIAgentHire : UIBase
             return;
         }
 
+
        List<DrawResult> list = GachaManager.Instance.DrawCharacter(GachaType.Normal, 1);
 
-       if (list.Count != 0)
-       {
-           UIManager.Instance.OpenUI<UIGacha>(UIManager.Instance.GetMainCanvas());
-       }
+
+        if (list.Count != 0)
+        {
+            UIManager.Instance.OpenUI<UIGacha>(UIManager.Instance.GetMainCanvas());
+        }
+        else
+        {
+            UIPopup Popup = UIManager.Instance.GetUI<UIPopup>(UIManager.Instance.GetMainCanvas());
+            Popup.SetText("재화가 모자릅니다");
+            Popup.Open();
+        }
 
     }
 
@@ -84,6 +92,12 @@ public class UIAgentHire : UIBase
         if (list.Count != 0)
         {
             UIManager.Instance.OpenUI<UIGacha>(UIManager.Instance.GetMainCanvas());
+        }
+        else
+        {
+            UIPopup Popup = UIManager.Instance.GetUI<UIPopup>(UIManager.Instance.GetMainCanvas());
+            Popup.SetText("재화가 모자릅니다");
+            Popup.Open();
         }
     }
 

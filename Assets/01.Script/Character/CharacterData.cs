@@ -18,6 +18,7 @@ public class CharacterData : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            SetData();
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -33,7 +34,7 @@ public class CharacterData : MonoBehaviour
         //characterList = null;
     }
 
-    private void Start()
+    private void SetData()
     {
         //characterList = new List<CharacterDataSO>(Resources.LoadAll<CharacterDataSO>("CharacterData"));
     }

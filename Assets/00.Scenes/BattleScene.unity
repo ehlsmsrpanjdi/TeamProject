@@ -465,7 +465,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1960827aece27c418fdbb42c7d51b32, type: 3}
---- !u!1001 &1336276335
+--- !u!1001 &1533786190
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -477,11 +477,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CharacterData
-      objectReference: {fileID: 0}
-    - target: {fileID: 5169853640856272303, guid: ad02e9d289e199f4497ac38e255d1e8f,
-        type: 3}
-      propertyPath: characterList.Array.size
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6127550043101437953, guid: ad02e9d289e199f4497ac38e255d1e8f,
         type: 3}
@@ -702,4 +697,4 @@ SceneRoots:
   - {fileID: 451363002}
   - {fileID: 215076665}
   - {fileID: 869197359}
-  - {fileID: 1336276335}
+  - {fileID: 1533786190}

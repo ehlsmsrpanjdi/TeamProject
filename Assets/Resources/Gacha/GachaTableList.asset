@@ -15,5 +15,3 @@ MonoBehaviour:
   gachaRateMappingList:
   - type: 0
     rateTable: {fileID: 11400000, guid: 7688e612533794a48af1229c91371a88, type: 2}
-  - type: 1
-    rateTable: {fileID: 11400000, guid: a02697a3091c9234db34559149fbed6a, type: 2}

@@ -41,6 +41,7 @@ public class Player
         {
             Data.gold += amount;
             OnGoldChanged?.Invoke(Data.gold);
+            SavePlayerData();
         }
     }
 
@@ -50,6 +51,7 @@ public class Player
         {
             Data.gold -= amount;
             OnGoldChanged?.Invoke(Data.gold);
+            SavePlayerData();
             return true;
         }
         return false;
@@ -61,6 +63,7 @@ public class Player
         {
             Data.diamond += amount;
             OnDiamondChanged?.Invoke(Data.diamond);
+            SavePlayerData();
         }
     }
 
@@ -70,6 +73,7 @@ public class Player
         {
             Data.diamond -= amount;
             OnDiamondChanged?.Invoke(Data.diamond);
+            SavePlayerData();
             return true;
         }
         return false;

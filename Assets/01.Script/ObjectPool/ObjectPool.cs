@@ -37,6 +37,11 @@ public static class ObjectPool
         new PoolSetting("Projectile", "Zombie/ZombieProjectile", 20),
     };
 
+    public static void ResetPool()
+    {
+        pool.Clear();
+    }
+
     //=================================================================================
 
     // 실제 오브젝트 풀을 초기화

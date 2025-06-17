@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIOption : UIBase
 {
@@ -24,11 +22,51 @@ public class UIOption : UIBase
     {
         Continue.OnClick = OnContinueButtonClick;
         Option.OnClick = OnOptionClick;
+        Exit.OnClick = OnExitClick;
 
         Continue.Init();
         Exit.Init();
         Option.Init();
     }
+
+    const string BattleScene = "BattleScene";
+    const string SampleScene = "SampleScene";
+
+    void OnExitClick()
+    {
+        UIManager Manager = UIManager.Instance;
+        UIDoor uiDoor = Manager.GetUI<UIDoor>(Manager.GetMainCanvas());
+        string SceneName = SceneManager.GetActiveScene().name;
+        Close();
+        if (SceneName == BattleScene)
+        {
+            uiDoor.OnCloseAction = () =>
+            {
+                SceneManager.LoadScene(SampleScene);
+                Manager.OpenUI<UILobby>(Manager.GetMainCanvas());
+                Manager.GetUI<UIStatus>(Manager.GetMainCanvas()).transform.SetAsLastSibling();
+                Manager.CloseUI<UISkillViewer>(Manager.GetBattleCanvas());
+                Manager.CloseUI<UIStage>(Manager.GetBattleCanvas());
+                Manager.CloseUI<UIBattleMemberViewer>(Manager.GetBattleCanvas());
+            };
+            uiDoor.Open();
+        }
+
+        if (SceneName == SampleScene)
+        {
+            uiDoor.OnCloseAction = () =>
+            {
+#if UNITY_EDITOR
+                // 에디터에서는 Play 모드를 종료
+                UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
+            };
+            uiDoor.Open();
+        }
+    }
+
 
     void OnContinueButtonClick()
     {

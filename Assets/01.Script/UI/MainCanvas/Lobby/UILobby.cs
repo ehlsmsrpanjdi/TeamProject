@@ -80,7 +80,13 @@ public class UILobby : UIBase
 
     void OnQuestClick()
     {
-        UIManager.Instance.OpenUI<UIQuestScroll>(UIManager.Instance.GetMainCanvas());
+        UIManager Manager = UIManager.Instance;
+        UIQuestScroll QuestScroll = Manager.GetUI<UIQuestScroll>(Manager.GetMainCanvas());
+        if (true == QuestScroll.gameObject.activeSelf)
+        {
+            return;
+        }
+        QuestScroll.Open();
         Quest_Button.transform.KillDoTween();
         QuestBackGround.transform.KillDoTween();
         QuestBackGround.transform.FadeInX();

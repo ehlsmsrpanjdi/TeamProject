@@ -25,16 +25,17 @@ public class CharacterData : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        characterList = new List<CharacterDataSO>(Resources.LoadAll<CharacterDataSO>("CharacterData"));
         foreach (CharacterDataSO characterData in characterList)
         {
             Data.Add(characterData.key, characterData);
         }
-        characterList = null;
+        //characterList = null;
     }
 
     private void Start()
     {
-        characterList = new List<CharacterDataSO>(Resources.LoadAll<CharacterDataSO>("CharacterData"));
+        //characterList = new List<CharacterDataSO>(Resources.LoadAll<CharacterDataSO>("CharacterData"));
     }
 
     //private void Reset()

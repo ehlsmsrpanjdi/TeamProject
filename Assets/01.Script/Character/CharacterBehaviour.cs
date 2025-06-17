@@ -294,7 +294,6 @@ public class CharacterBehaviour : MonoBehaviour
 
         animController.Moving(false);
         isMoving = false;
-
     }
 
     //Interface 처리

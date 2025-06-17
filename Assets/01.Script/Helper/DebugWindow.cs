@@ -221,14 +221,6 @@ public class DebugWindow : EditorWindow
             }
         }
 
-        if (GUILayout.Button("일반 웨이브 시작"))
-        {
-            if (Application.isPlaying)
-            {
-                WaveManager wm = FindObjectOfType<WaveManager>();
-                wm?.StartNormalWaveExternally();
-            }
-        }
 
         //if (GUILayout.Button("다음 스테이지로 진입"))
         //{
@@ -239,14 +231,7 @@ public class DebugWindow : EditorWindow
         //    }
         //}
 
-        if (GUILayout.Button("반복 웨이브 시작 (약화 모드)"))
-        {
-            if (Application.isPlaying)
-            {
-                WaveManager wm = FindObjectOfType<WaveManager>();
-                wm?.StartRepeatWaveExternally();
-            }
-        }
+
 
         if (GUILayout.Button("모든 좀비 강제 사망"))
         {

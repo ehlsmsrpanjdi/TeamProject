@@ -12,7 +12,10 @@ public class Barricade : MonoBehaviour, IDamageable
     public void Awake()
     {
         instance = this;
+        IsDead = false;
     }
+
+    bool IsDead = false;
 
 
     //체력 초기화. 현재 참전 중인 캐릭터들의 체력을 넘겨 받음.
@@ -40,9 +43,10 @@ public class Barricade : MonoBehaviour, IDamageable
          // 체력이 0 이하일 경우 스테이지 실패
         if (currentHealth <= 0)
         {
-            
+            if (true == IsDead) return;
+            IsDead = true;
 
-            WaveManager waveManager = FindObjectOfType<WaveManager>();
+            WaveManager waveManager = WaveManager.Instance;
             if (waveManager != null)
             {
                 var behaviours = FindObjectsOfType<CharacterBehaviour>();
@@ -52,8 +56,15 @@ public class Barricade : MonoBehaviour, IDamageable
                     Debug.Log("사망 호출");
                     waveManager.OnPlayerDead();
                 }
-                
+                StartCoroutine(RunAway());
             }
         }
     }
+
+    IEnumerator RunAway()
+    {
+        yield return new WaitForSeconds(3f);
+        WaveManager.Instance.RunAwayStage();
+    }
+
 }

@@ -1,4 +1,4 @@
-using System.Collections;
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +12,7 @@ public class UIHireScroll : UIBase
 
     [SerializeField] OnClickImage ReturnButton;
 
+
     const string HireLog = "UI/HireLog";
 
     private void Reset()
@@ -20,16 +21,22 @@ public class UIHireScroll : UIBase
         contentObject = gameObject.GetComponentInChildren<HorizontalLayoutGroup>(true).gameObject;
 
         ReturnButton = GetComponentInChildren<OnClickImage>();
+
     }
 
     private void Awake()
     {
-        ReturnButton.OnClick = UIManager.Instance.CloseUI<UIHireScroll>;
+        ReturnButton.OnClick = OnReturnButttonClick;
+    }
+
+    void OnReturnButttonClick()
+    {
+        UIManager.Instance.CloseUI<UIHireScroll>(UIManager.Instance.GetMainCanvas());
     }
 
     private void OnDisable()
     {
-        foreach(HireLog log in HireList)
+        foreach (HireLog log in HireList)
         {
             Destroy(log.gameObject);
         }
@@ -42,6 +49,22 @@ public class UIHireScroll : UIBase
         logObject.transform.SetParent(contentObject.transform);
         HireLog log = logObject.GetComponent<HireLog>();
         log.SetHireImage(_Result.character.characterImage);
+        logObject.transform.localScale = new Vector3(1, 1, 1);
         HireList.Add(log);
+    }
+
+    public override void Open()
+    {
+        base.Open();
+        transform.FadeOutXY();
+    }
+
+    public override void Close()
+    {
+        Tween tween = transform.FadeInXY();
+        tween.OnComplete(() =>
+        {
+            base.Close();
+        });
     }
 }

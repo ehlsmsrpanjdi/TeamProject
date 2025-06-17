@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &739590353088753547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 94561766844657700}
+  - component: {fileID: 2063312060691606027}
+  - component: {fileID: 6406125504556458204}
+  m_Layer: 0
+  m_Name: PoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &94561766844657700
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739590353088753547}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.4495127, y: 0.030168533, z: 0.7077904}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2063312060691606027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739590353088753547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d8747347cc80084f96e3b112d7b650d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6406125504556458204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739590353088753547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47be83e6924e0ba4bb38bf6e5cc196ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zombie1Prefab: {fileID: 4806424681439193448, guid: 6ae4665cf501c6e47ad19a37c19b2364,
+    type: 3}
+  zombie2Prefab: {fileID: 5400570706436370484, guid: fc96083695b180342a4b0b1e894cb4e1,
+    type: 3}
+  zombie1PoolSize: 50
+  zombie2PoolSize: 25
+  zombieProjectilePrefab: {fileID: 3449229794247248090, guid: bf8470b2a64e65049ae85d05f369e43f,
+    type: 3}
+  projectilePoolSize: 20

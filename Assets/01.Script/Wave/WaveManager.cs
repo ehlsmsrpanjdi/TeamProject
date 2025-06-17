@@ -1,63 +1,188 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class WaveManager : MonoBehaviour
 {
-    [Header("웨이브")]
-    public int currentWave = 1;
-    [Header("생성될 좀비 수")]
+    [Header("웨이브 설정")]
     public int zombiesPerWave = 5;
-    [Header("웨이브 간 대기시간")]
     public float waveInterval = 5f;
-
-    [Header("좀비 스포너")]
     public ZombieSpawner spawner;
+    [SerializeField] private GameObject Barricade;
 
-    private int aliveZombies = 0;               // 현재 살아 있는 좀비 수
-    private bool isWaveSpawning = false;        // 웨이브 생성 중 여부
+    [Header("UI")]
+    [SerializeField] private GameObject nextStageButtonUI;
 
-    // 매 프레임마다 좀비 수를 확인하여 웨이브 조건 만족 시 시작
-    private void Update()
+    private int aliveZombies = 0;
+    private bool isWaveSpawning = false;
+    private bool isRetryWeakMode = false;
+    private bool isWaitingNextStage = false;
+    private int retryStage = -1;
+    private Coroutine currentWaveCoroutine;
+
+    private void Start()
     {
-        if (!isWaveSpawning && aliveZombies <= 0)
-            StartCoroutine(StartNextWave());
-    }
-
-    // 다음 웨이브를 일정 간격으로 나눠서 소환
-    private IEnumerator StartNextWave()
-    {
-        isWaveSpawning = true;
-
-        Debug.Log($"[WaveManager] 다음 웨이브 시작 대기: {waveInterval}초");
-        yield return new WaitForSeconds(waveInterval);
-
-        int totalCount = currentWave * zombiesPerWave;         // 전체 소환할 좀비 수
-        int spawnBatch = 5;                                     // 몇 번에 나눠서 소환할지
-        int zombiesPerBatch = Mathf.CeilToInt((float)totalCount / spawnBatch); // 한 번에 소환할 수
-
-        for (int i = 0; i < spawnBatch; i++)
+        if (nextStageButtonUI != null)
         {
-            // 남은 좀비 수 계산
-            int remainingZombies = totalCount - (i * zombiesPerBatch);
-            // 마지막 배치일 경우 남은 좀비 수만큼 소환
-            int countToSpawn = Mathf.Min(zombiesPerBatch, remainingZombies);
-
-            spawner.SpawnWave(countToSpawn); // 좀비 소환
-            Debug.Log($"[WaveManager] {i + 1}/{spawnBatch}차 소환 - {countToSpawn}마리");
-            yield return new WaitForSeconds(0.1f); // 다음 소환까지 대기
+            Button btn = nextStageButtonUI.GetComponent<Button>();
+            if (btn != null)
+            {
+                btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(ProceedToNextStage);
+                nextStageButtonUI.SetActive(false);
+            }
         }
 
-        aliveZombies = totalCount; // 총 좀비 수 등록
-        Debug.Log($"[WaveManager] 웨이브 {currentWave} 시작 - 총 좀비 수: {aliveZombies}");
+        currentWaveCoroutine = StartCoroutine(StartNormalWave());
+    }
 
-        currentWave++;
+    private IEnumerator StartNormalWave()
+    {
+        if (isWaveSpawning) yield break;
+        isWaveSpawning = true;
+
+        isRetryWeakMode = false;
+        isWaitingNextStage = false;
+        retryStage = -1;
+
+        ClearAllZombies();
+
+        int stage = Player.Instance.Data.currentStage;
+        int totalCount = stage * zombiesPerWave;
+        int spawnBatch = 5;
+        int zombiesPerBatch = Mathf.CeilToInt((float)totalCount / spawnBatch);
+
+        yield return new WaitForSeconds(waveInterval);
+
+        int totalSpawned = 0;
+        for (int i = 0; i < spawnBatch; i++)
+        {
+            int remaining = totalCount - (i * zombiesPerBatch);
+            int count = Mathf.Min(zombiesPerBatch, remaining);
+            int spawned = spawner.SpawnWave(count, false);
+            totalSpawned += spawned;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        aliveZombies = totalSpawned;
+        Debug.Log($"[WaveManager] 일반 웨이브 - 스테이지: {stage}, 생성된 좀비 수: {totalSpawned}");
         isWaveSpawning = false;
     }
 
-    // 좀비가 사망했을 때 호출
+    private IEnumerator StartRepeatWave()
+    {
+        if (isWaveSpawning) yield break;
+        isWaveSpawning = true;
+
+        ClearAllZombies();
+
+        int stage = retryStage;
+        int totalCount = stage * zombiesPerWave;
+        int spawnBatch = 5;
+        int zombiesPerBatch = Mathf.CeilToInt((float)totalCount / spawnBatch);
+
+        yield return new WaitForSeconds(waveInterval);
+
+        int totalSpawned = 0;
+        for (int i = 0; i < spawnBatch; i++)
+        {
+            int remaining = totalCount - (i * zombiesPerBatch);
+            int count = Mathf.Min(zombiesPerBatch, remaining);
+            int spawned = spawner.SpawnWave(count, true);
+            totalSpawned += spawned;
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        aliveZombies = totalSpawned;
+        Debug.Log($"[WaveManager] 반복(약화) 웨이브 - 스테이지: {stage}, 생성된 좀비 수: {totalSpawned}");
+
+        nextStageButtonUI?.SetActive(true);
+
+        isWaveSpawning = false;
+    }
+
     public void OnZombieDied()
     {
         aliveZombies--;
-        Debug.Log($"[WaveManager] 좀비 사망 → 남은 수: {aliveZombies}");
+
+        if (aliveZombies <= 0)
+        {
+            if (!isRetryWeakMode)
+            {
+                isRetryWeakMode = true;
+                isWaitingNextStage = true;
+                retryStage = Player.Instance.Data.currentStage;
+                currentWaveCoroutine = StartCoroutine(StartRepeatWave());
+            }
+            else if (isRetryWeakMode && isWaitingNextStage)
+            {
+                currentWaveCoroutine = StartCoroutine(StartRepeatWave());
+            }
+        }
     }
+
+    public void OnPlayerDead()
+    {
+        if (!isRetryWeakMode)
+        {
+            Player.Instance.Data.currentStage = Mathf.Max(1, Player.Instance.Data.currentStage - 1);
+            retryStage = Player.Instance.Data.currentStage;
+            isRetryWeakMode = true;
+        }
+
+        isWaitingNextStage = true;
+
+        ClearAllZombies();
+        currentWaveCoroutine = StartCoroutine(StartRepeatWave());
+    }
+
+    public void ProceedToNextStage()
+    {
+        if (!isWaitingNextStage) return;
+
+        Debug.Log("[WaveManager] 다음 스테이지로 진입");
+
+        isWaitingNextStage = false;
+        isRetryWeakMode = false;
+
+        if (currentWaveCoroutine != null)
+        {
+            StopCoroutine(currentWaveCoroutine);
+            currentWaveCoroutine = null;
+        }
+
+        nextStageButtonUI?.SetActive(false);
+
+        ClearAllZombies();
+        currentWaveCoroutine = StartCoroutine(NextWaveAfterIncrement());
+    }
+
+    private IEnumerator NextWaveAfterIncrement()
+    {
+        yield return new WaitForSeconds(0.1f);
+        Player.Instance.Data.currentStage++;
+        currentWaveCoroutine = StartCoroutine(StartNormalWave());
+    }
+
+    private void ClearAllZombies()
+    {
+        var allZombies = GameObject.FindGameObjectsWithTag("Zombie");
+        foreach (var obj in allZombies)
+        {
+            ZombieAI ai = obj.GetComponent<ZombieAI>();
+            if (ai != null)
+            {
+                if (obj.name.Contains("Zombie1"))
+                    ai.ResetAndReturnToPool("Zombie1");
+                else if (obj.name.Contains("Zombie2"))
+                    ai.ResetAndReturnToPool("Zombie2");
+                else
+                    Object.Destroy(obj);
+            }
+        }
+
+        aliveZombies = 0;
+    }
+
+    public bool IsWeakMode() => isRetryWeakMode;
 }

@@ -181,19 +181,144 @@ public class CharacterManager
         }
     }
 
+    /// <summary>
+    /// 선택 슬롯의 캐릭터 강화
+    /// </summary>
+      
+    public bool EnhanceCharacter(int index)
+    {
+        if(index <0 || index >= characters.Count)
+        {
+            return false;
+        }
+
+        CharacterInstance character = characters[index];
+        if(character == null)
+        {
+            return false;
+        }
+
+        character.Enhance();
+        return true;
+    }
+
+    /// <summary>
+    /// 랭크 업 기능
+    /// </summary>
+    public bool RankUpCharacter(int index)
+    {
+        if(index < 0  || index >= characters.Count)
+        {
+            return false;
+        }
+
+        CharacterInstance character = characters[index];
+        if (character == null)
+        {
+            return false;
+        }
+
+        // 필요한것
+        // 현재 캐릭터의 랭크 정보
+        // 현재 캐릭터의 랭크
+        // 현재 캐릭터의 랭크업에 필요한 요구 수량
+        // 리스트에 동일한 랭크의 캐릭터가 있는지
+        // 랭크업이 됐으면 캐릭터 삭제
+
+        var charRank = character.rankInfo.FirstOrDefault(r => r.rank == character.currentRank); //선택된 캐릭터의 랭크인포 전달 (리스트로 가지고 있어서 이런식으로 줌)
+
+        int requiredCount = charRank.requiredOwnedCount; //랭크인포의 랭크업 요구 수량 전달
+        var sameCharacter = characters.Where(sc => sc.key == character.key).ToList(); //동일한 키를 가지고 있는 캐릭터만 선택하여 리스트화
+        if(sameCharacter.Count < requiredCount)
+        {
+            Debug.Log("강화에 필요한 수량이 부족합니다.");
+            return false;
+        }
+
+        character.RankUp();
+
+        int consumed = 0;
+        for (int i = characters.Count -1; i >= 0 && consumed < requiredCount -1; i--) // 포문 뒤에서부터 돌리기. 리스트 제거를 뒤에서부터 하기 위해서.
+        {
+            if (characters[i] != character && characters[i].key == character.key) // 보유리스트 안의 캐릭터가 랭크업을 시도한 캐릭터가 아니거나, 키가 같으면
+            {
+                characters.RemoveAt(i); //제거
+                consumed++; //소모값 1개 추가. 요구 수량까지 진행
+            }
+
+        }
+        Debug.Log("랭크업 성공");
+        GetAllCharacters(); //캐릭터 리스트 업데이트
+
+        return true;
+
+    }
+
+    /// <summary>
+    /// 참전 캐릭터의 모든 체력 합산 >> 바리게이트에서 가지고 감
+    /// </summary>
+    public float GetTotalHealt()
+    {
+        return participated.Values.Sum(character => character.GetCurrentHealth());
+    }
 
     #if UNITY_EDITOR
     public void EditorFunction()
     {
-        CreateCharacter(1001);
-        CreateCharacter(1002);
-
+        CreateCharacter(1005);
         SelectParticipate(0);
-        SelectParticipate(1);
 
         SpawnParticipateCharacters(Vector3.zero); // 스폰 호출
-
-
     }
-    #endif
+    public void EditorFunctionEnhance()
+    {
+        EnhanceCharacter(0);
+    }
+
+    public void EditorFunctionCreat()
+    {
+        CreateCharacter(1001);
+        CreateCharacter(1001);
+
+        foreach (var character in characters)
+        {
+            Debug.Log($"생성된 캐릭터 이름: {character.charcterName}\n 생성된 캐릭터 랭크: {character.currentRank}");
+            Debug.Log($"공격력: {character.GetCurrentAttack()}\n 체력 : {character.GetCurrentHealth()}");
+            List<Skill> activeSkills = character.GetActiveSkills();
+
+            if (activeSkills.Count > 0)
+            {
+                string skillNames = string.Join(", ", activeSkills.Select(skill => skill.skillName));
+                Debug.Log($"활성화된 스킬: {skillNames}");
+            }
+            else
+            {
+                Debug.Log("활성화된 스킬이 없습니다.");
+            }
+
+        }
+    }
+
+    public void EditorFunctionRankUp()
+    {
+        RankUpCharacter(0);
+        foreach (var character in characters)
+        {
+            Debug.Log($"캐릭터 이름: {character.charcterName}\n 캐릭터 랭크: {character.currentRank}");
+            Debug.Log($"공격력: {character.GetCurrentAttack()}\n 체력 : {character.GetCurrentHealth()}");
+            List<Skill> activeSkills = character.GetActiveSkills();
+
+            if (activeSkills.Count > 0)
+            {
+                string skillNames = string.Join(", ", activeSkills.Select(skill => skill.skillName));
+                Debug.Log($"활성화된 스킬: {skillNames}");
+            }
+            else
+            {
+                Debug.Log("활성화된 스킬이 없습니다.");
+            }
+        }
+    }
+
+#endif
 }

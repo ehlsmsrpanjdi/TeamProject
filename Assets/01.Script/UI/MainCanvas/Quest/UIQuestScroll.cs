@@ -1,4 +1,4 @@
-using System.Collections;
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +12,7 @@ public class UIQuestScroll : UIBase
 
     [SerializeField] OnClickImage ReturnButton;
 
+
     const string QuestLog = "UI/QuestLog";
 
     private void Reset()
@@ -20,11 +21,22 @@ public class UIQuestScroll : UIBase
         contentObject = gameObject.GetComponentInChildren<HorizontalLayoutGroup>(true).gameObject;
 
         ReturnButton = GetComponentInChildren<OnClickImage>();
+
     }
 
     private void Awake()
     {
-        ReturnButton.OnClick = UIManager.Instance.CloseUI<UIQuestScroll>;
+        if (null == questLogPrefab)
+        {
+            Resources.Load<GameObject>(QuestLog);
+        }
+        ReturnButton.OnClick = OnReturnButtonclick;
+    }
+
+
+    void OnReturnButtonclick()
+    {
+        UIManager.Instance.CloseUI<UIQuestScroll>(UIManager.Instance.GetMainCanvas());
     }
 
     public override void Open()
@@ -35,6 +47,16 @@ public class UIQuestScroll : UIBase
         {
             AddQuest(info);
         }
+        transform.FadeOutXY();
+    }
+
+    public override void Close()
+    {
+        Tween tween = transform.FadeInXY();
+        tween.OnComplete(() =>
+        {
+            base.Close();
+        });
     }
 
     public void AddQuest(QuestDisplayInfo _info)

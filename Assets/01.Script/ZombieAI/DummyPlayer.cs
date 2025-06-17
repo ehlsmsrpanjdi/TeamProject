@@ -22,6 +22,14 @@ public class DummyPlayer : MonoBehaviour, IDamageable
         if (currentHealth <= 0)
         {
             Debug.Log("[DummyPlayer] 사망 처리");
+
+            WaveManager waveManager = FindObjectOfType<WaveManager>();
+            if (waveManager != null)
+            {
+                Debug.Log("[DummyPlayer] WaveManager에 사망 알림 호출");
+                waveManager.OnPlayerDead();
+            }
+
             gameObject.SetActive(false);
         }
     }

@@ -1,5 +1,4 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -131,35 +130,52 @@ public class CharacterStatus : MonoBehaviour
 
     public void OnClickLvUpgrade()
     {
-        CharacterInstance instance = CharacterManager.Instance.GetCharacter(Selected_Index);
-        if (instance == null)
+        UIManager Manager = UIManager.Instance;
+        if (100 <= CharacterManager.Instance.GetCharacter(Selected_Index).GetEnhancementLevel())
         {
+            UIPopup Popup = Manager.GetUI<UIPopup>(Manager.GetMainCanvas());
+            Popup.SetText("최대 강화에 도달했습니다.");
+            Popup.Open();
             return;
         }
-        instance.Enhance();
+
+        bool IsUpgraded = CharacterManager.Instance.EnhanceCharacter(Selected_Index);
+        if (false == IsUpgraded)
+        {
+            UIPopup Popup = Manager.GetUI<UIPopup>(Manager.GetMainCanvas());
+            Popup.SetText("재화가 모자릅니다");
+            Popup.Open();
+            return;
+        }
         StatusReset();
     }
 
     public void OnClickRankUp()
     {
-        CharacterInstance instance = CharacterManager.Instance.GetCharacter(Selected_Index);
-        if (instance == null)
+        UIManager Manager = UIManager.Instance;
+        if (Rank.SSS == CharacterManager.Instance.GetCharacter(Selected_Index).currentRank)
         {
+            UIPopup Popup = UIManager.Instance.GetUI<UIPopup>(Manager.GetMainCanvas());
+            Popup.Open();
+            Popup.SetText("최대 랭크에 도달했습니다");
             return;
         }
-        UIManager Manager = UIManager.Instance;
-        if (true == instance.RankUp())
+
+        bool IsRankedUp = CharacterManager.Instance.RankUpCharacter(Selected_Index);
+        if (false == IsRankedUp)
+        {
+            UIPopup Popup = UIManager.Instance.GetUI<UIPopup>(Manager.GetMainCanvas());
+            Popup.Open();
+            Popup.SetText("같은 등급의 동일한 캐릭터가 없습니다");
+            return;
+        }
+        else
         {
             UIManagement Management = Manager.GetUI<UIManagement>(Manager.GetMainCanvas());
             Management.InventoryReset(Selected_Index);
             StatusReset();
             SetStatusView(Selected_Index);
-        }
-        else
-        {
-            UIPopup Popup = UIManager.Instance.GetUI<UIPopup>(Manager.GetMainCanvas());
-            Popup.Open();
-            Popup.SetText("같은 등급의 동일한 캐릭터가 없습니다");
+            return;
         }
     }
 
@@ -175,16 +191,25 @@ public class CharacterStatus : MonoBehaviour
     public void OnClickJoin()
     {
         bool IsParticipated = CharacterManager.Instance.IsParticipating(Selected_Index);
+        UIManager Manager = UIManager.Instance;
         if (true == IsParticipated)
         {
             IsJoin(!IsParticipated);
             CharacterManager.Instance.RemoveParticipate(Selected_Index);
-            UIManager.Instance.GetUI<UIManagement>(UIManager.Instance.GetMainCanvas()).OffClickJoin(Selected_Index);
+            Manager.GetUI<UIManagement>(Manager.GetMainCanvas()).OffClickJoin(Selected_Index);
         }
         else
         {
+            int ParticipatedCount = CharacterManager.Instance.GetParticipateCharacters().Count;
+            if (ParticipatedCount >= 4)
+            {
+                UIPopup Popup = Manager.GetUI<UIPopup>(Manager.GetMainCanvas());
+                Popup.SetText("인원 초과");
+                Popup.Open();
+                return;
+            }
             CharacterManager.Instance.SelectParticipate(Selected_Index);
-            UIManager.Instance.GetUI<UIManagement>(UIManager.Instance.GetMainCanvas()).OnClickJoin(Selected_Index);
+            Manager.GetUI<UIManagement>(Manager.GetMainCanvas()).OnClickJoin(Selected_Index);
             IsJoin(!IsParticipated);
         }
     }

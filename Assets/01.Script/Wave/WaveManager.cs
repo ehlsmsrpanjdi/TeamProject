@@ -122,7 +122,7 @@ public class WaveManager : MonoBehaviour
         aliveZombies = totalSpawned;
         Debug.Log($"[WaveManager] 반복(약화) 웨이브 - 스테이지: {stage}, 생성된 좀비 수: {totalSpawned}");
 
-        nextStageButtonUI?.SetActive(true);
+        // nextStageButtonUI?.SetActive(true);
 
         isWaveSpawning = false;
     }

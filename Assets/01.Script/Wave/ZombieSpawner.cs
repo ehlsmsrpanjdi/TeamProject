@@ -12,6 +12,8 @@ public class ZombieSpawner : MonoBehaviour
     {
         int spawnSuccess = 0;
 
+        SoundManager.Instance.PlaySFX(SfxType.ZSpawn, -1);
+
         for (int i = 0; i < zombieCount; i++)
         {
             Vector3 randomPos = GetRandomPositionInArea();
@@ -38,8 +40,6 @@ public class ZombieSpawner : MonoBehaviour
 
             obj.transform.position = randomPos + Vector3.up * 0.05f;
             obj.transform.rotation = Quaternion.identity;
-
-            SoundManager.Instance.PlaySFX(SfxType.ZSpawn, -1);
 
             ZombieAI ai = obj.GetComponent<ZombieAI>();
             if (ai != null)

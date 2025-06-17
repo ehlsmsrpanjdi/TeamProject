@@ -1,13 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class QuestLog : MonoBehaviour
 {
     [SerializeField] OnClickImage ConfirmButton;
+    QuestDisplayInfo quest_info;
 
     const string QuestNameText = "QuestNameText";
     const string QuestDescriptionText = "QuestDescriptionText";
@@ -33,8 +31,13 @@ public class QuestLog : MonoBehaviour
         QuestDescription.text = description;
     }
 
-    public void SetQuestAction(Action _Action)
+    public void SetInfo(QuestDisplayInfo _info)
     {
-        ConfirmButton.OnClick = _Action;
+        quest_info = _info;
+    }
+
+    public void SetQuestAction()
+    {
+        QuestManager.Instance.ClaimReward(quest_info.Id);
     }
 }

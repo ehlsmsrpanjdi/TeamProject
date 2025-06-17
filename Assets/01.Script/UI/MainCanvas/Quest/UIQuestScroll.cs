@@ -67,6 +67,7 @@ public class UIQuestScroll : UIBase
         QuestLog log = logObject.GetComponent<QuestLog>();
         log.SetQuestName(_info.Title);
         log.SetQuestDescription(_info.Description);
+        log.SetInfo(_info);
         questList.Add(log);
     }
 }

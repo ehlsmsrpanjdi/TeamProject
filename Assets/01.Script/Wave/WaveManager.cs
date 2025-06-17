@@ -1,9 +1,12 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 public class WaveManager : MonoBehaviour
 {
+    public Action OnWaveClearAction;
+
     [Header("웨이브 설정")]
     public int zombiesPerWave = 5;
     public float waveInterval = 5f;
@@ -109,6 +112,7 @@ public class WaveManager : MonoBehaviour
         {
             if (!isRetryWeakMode)
             {
+                OnWaveClearAction?.Invoke();
                 isRetryWeakMode = true;
                 isWaitingNextStage = true;
                 retryStage = Player.Instance.Data.currentStage;

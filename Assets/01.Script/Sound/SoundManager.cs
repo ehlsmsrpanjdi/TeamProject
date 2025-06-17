@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
 public enum BgmType
 {
@@ -17,7 +16,8 @@ public enum SfxType
     Die,
     Item,
     Gacha,
-    Skill
+    Skill,
+    UI,
     // 필요한 효과음 타입 추가
 }
 

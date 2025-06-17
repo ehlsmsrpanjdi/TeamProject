@@ -100,7 +100,6 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-
         DictionaryAddFunction();
         //CheakCanvas();
         //foreach (UIBase UI in BattleUI)

@@ -33,6 +33,7 @@ public class UISoundOption : UIBase
     {
         base.Open();
         transform.FadeOutXY();
+        transform.SetAsLastSibling();
     }
 
     void ReturnButtonOn()

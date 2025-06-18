@@ -12,7 +12,10 @@ public class Barricade : MonoBehaviour, IDamageable
     public void Awake()
     {
         instance = this;
+        IsDead = false;
     }
+
+    bool IsDead = false;
 
 
     //체력 초기화. 현재 참전 중인 캐릭터들의 체력을 넘겨 받음.
@@ -23,10 +26,16 @@ public class Barricade : MonoBehaviour, IDamageable
     //웨이브 마다 체력이 세팅이 되도록
     //체력은 그냥 캐릭터의 체력 합산
     //무한 반복 웨이브가 오면 체력은 무한으로?
+
+    public void Start()
+    {
+        SetHealth();
+    }
+
     public void SetHealth()
     {
         currentHealth = CharacterManager.Instance.GetTotalHealt();
-        Debug.Log($"{currentHealth}");
+        //Debug.Log($"{currentHealth}");
     }
 
     
@@ -40,13 +49,28 @@ public class Barricade : MonoBehaviour, IDamageable
          // 체력이 0 이하일 경우 스테이지 실패
         if (currentHealth <= 0)
         {
-            WaveManager waveManager = FindObjectOfType<WaveManager>();
+            if (true == IsDead) return;
+            IsDead = true;
+
+            WaveManager waveManager = WaveManager.Instance;
             if (waveManager != null)
             {
-                 
-                Debug.Log("사망 호출");
-                waveManager.OnPlayerDead();
+                var behaviours = FindObjectsOfType<CharacterBehaviour>();
+                foreach (var behaviour in behaviours)
+                {
+                    behaviour.Die();
+                    Debug.Log("사망 호출");
+                    waveManager.OnPlayerDead();
+                }
+                StartCoroutine(RunAway());
             }
         }
     }
+
+    IEnumerator RunAway()
+    {
+        yield return new WaitForSeconds(3f);
+        WaveManager.Instance.RunAwayStage();
+    }
+
 }

@@ -31,11 +31,13 @@ public class UIDoor : UIBase
     public override void Open()
     {
         base.Open();
+        transform.SetAsLastSibling();
         LeftDoorImg.gameObject.transform.MoveX(LeftPos, 0);
         Tween tween = RightDoorImg.gameObject.transform.MoveX(RightPos, 0);
         tween.OnComplete(() =>
         {
             OnCloseAction?.Invoke();
+            OnCloseAction = null;
             StartCoroutine(CloseCoroutine());
         });
     }
@@ -49,12 +51,12 @@ public class UIDoor : UIBase
     public override void Close()
     {
         OnOpenAction?.Invoke();
+        OnOpenAction = null;
         LeftDoorImg.gameObject.transform.MoveX(0, LeftPos);
         Tween tween = RightDoorImg.gameObject.transform.MoveX(0, RightPos);
         tween.OnComplete(() =>
         {
-            OnCloseAction = null;
-            OnOpenAction = null;
+
             base.Close();
         });
     }

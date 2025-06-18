@@ -18,16 +18,18 @@ public class CharacterManager
             if (instance == null)
             {
                 instance = new CharacterManager();
-                
+                instance.characters = Player.Instance.LoadCharacters();
+
             }
             return instance;
         }
         set { instance = value; }
     }
-       
+
 
     private List<CharacterInstance> characters = new();
     private Dictionary<int, CharacterInstance> participated = new();
+
 
     /// <summary>
     /// 캐릭터 데이터를 기반으로 인스턴스를 생성하고 등록
@@ -43,6 +45,8 @@ public class CharacterManager
         }
         CharacterInstance newCharacter = new CharacterInstance(data);
         characters.Add(newCharacter);
+        Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
 
         return newCharacter;
     }
@@ -57,6 +61,8 @@ public class CharacterManager
         }
         CharacterInstance newCharacter = new CharacterInstance(data);
         characters.Add(newCharacter);
+        Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
     }
 
     /// <summary>
@@ -84,6 +90,8 @@ public class CharacterManager
             return;
         }
         characters.RemoveAt(index);
+        Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
     }
 
     /// <summary>
@@ -185,7 +193,7 @@ public class CharacterManager
     /// <summary>
     /// 선택 슬롯의 캐릭터 강화
     /// </summary>
-      
+
     public bool EnhanceCharacter(int index)
     {
         if(index <0 || index >= characters.Count)
@@ -199,7 +207,12 @@ public class CharacterManager
             return false;
         }
 
+        Player.Instance.UseGold(1000);
+
         character.Enhance();
+        QuestManager.Instance.OnEnchantButtonPressed();
+        Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
         return true;
     }
 
@@ -235,7 +248,6 @@ public class CharacterManager
             Debug.Log("강화에 필요한 수량이 부족합니다.");
             return false;
         }
-        
 
         int consumed = 0;
         for (int i = characters.Count -1; i >= 0 && consumed < requiredCount -1; i--) // 포문 뒤에서부터 돌리기. 리스트 제거를 뒤에서부터 하기 위해서.
@@ -248,6 +260,8 @@ public class CharacterManager
 
         }
         character.RankUp();
+        Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
         Debug.Log("랭크업 성공");
         //GetAllCharacters(); 필요없음.
 

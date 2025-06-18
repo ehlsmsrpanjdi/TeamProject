@@ -185,6 +185,6 @@ public class GachaManager
         {
             return false;
         }
-        return result.character.startRank == Rank.S || result.character.startRank == Rank.SS || result.character.startRank == Rank.SSS;
+        return result.character.startRank == Rank.A || result.character.startRank == Rank.S || result.character.startRank == Rank.SS || result.character.startRank == Rank.SSS;
     }
 }

@@ -6,11 +6,11 @@ public class Grenade : MonoBehaviour
 {
     private Rigidbody rb;
 
-    private float throwForce = 10f;
-    private float explosionDelay = 2f;
-    private LayerMask enemyLayer;
+    private float throwForce = 10f; // 던지는 힘
+    private float explosionDelay = 2f; // 폭발까지의 지연시간
+    private LayerMask enemyLayer; // 데미지를 입을 폭발 범위 내 적들
 
-    //private GameObject explosionEffect;
+    //private GameObject explosionEffect; // 폭발효과 (파티클 이펙트 등)
 
     private float explosionRange;
     private float grenadeDamage;
@@ -19,7 +19,7 @@ public class Grenade : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         enemyLayer = LayerMask.GetMask("Zombie");
-        //explosionEffect = Resources.Load<GameObject>("Effects/GrenadeEffect"); 경로 예시, 실제 이펙트 넣으려면 게임오브젝트 이름에 맞춰서 경로 지정해야함.
+        //explosionEffect = Resources.Load<GameObject>("Effects/GrenadeEffect"); 경로 예시이고, 실제 이펙트 넣으려면 게임오브젝트 이름에 맞춰서 경로 지정해야함.
     }
 
     public void GrenadeThrow(Vector3 direction, float range, float skillDamage)

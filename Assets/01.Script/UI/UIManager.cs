@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
 public class UIManager : MonoBehaviour
 {
     static UIManager instance;
@@ -28,6 +29,8 @@ public class UIManager : MonoBehaviour
         }
     }
 
+
+
     //[SerializeField] UIBase[] MainUI;
     //[SerializeField] UIBase[] BattleUI;
 
@@ -52,6 +55,8 @@ public class UIManager : MonoBehaviour
     const string UIDoor = "UI/Canvas/UIDoor";
     const string BattleCanvas = "UI/Canvas/BattleCanvas";
     const string MainCanvas = "UI/Canvas/MainCanvas";
+    const string UINextStage = "UI/Canvas/UINextStage";
+    const string OnSkillPopup = "UI/Canvas/OnSkillPopup";
 
     //[SerializeField] GameObject BattleMemberViewerPrefab;
     //[SerializeField] GameObject HireAgentPrefab;
@@ -96,10 +101,16 @@ public class UIManager : MonoBehaviour
         ResourcesPathDictionary.Add(typeof(UIOption), UIOption);
         ResourcesPathDictionary.Add(typeof(UIPopup), UIPopup);
         ResourcesPathDictionary.Add(typeof(UIDoor), UIDoor);
+        ResourcesPathDictionary.Add(typeof(UISkillPopup), OnSkillPopup);
+        ResourcesPathDictionary.Add(typeof(UINextStage), UINextStage);
     }
 
     private void Awake()
     {
+        if(instance != null)
+        {
+            Destroy(gameObject);
+        }
         DictionaryAddFunction();
         //CheakCanvas();
         //foreach (UIBase UI in BattleUI)
@@ -117,18 +128,21 @@ public class UIManager : MonoBehaviour
 
     public void Start()
     {
-        GameObject mainobj = Resources.Load<GameObject>(MainCanvas);
-        mainCanvas = Instantiate(mainobj).GetComponent<Canvas>();
+        if(mainCanvas == null)
+        {
+            GameObject mainobj = Resources.Load<GameObject>(MainCanvas);
+            mainCanvas = Instantiate(mainobj).GetComponent<Canvas>();
 
-        GameObject battleobj = Resources.Load<GameObject>(BattleCanvas);
-        battleCanvas = Instantiate(battleobj).GetComponent<Canvas>();
+            GameObject battleobj = Resources.Load<GameObject>(BattleCanvas);
+            battleCanvas = Instantiate(battleobj).GetComponent<Canvas>();
 
-        DontDestroyOnLoad(mainCanvas.gameObject);
-        DontDestroyOnLoad(battleCanvas.gameObject);
+            DontDestroyOnLoad(mainCanvas.gameObject);
+            DontDestroyOnLoad(battleCanvas.gameObject);
 
 
-        OpenUI<UILobby>(mainCanvas.gameObject.transform);
-        OpenUI<UIStatus>(mainCanvas.gameObject.transform);
+            OpenUI<UILobby>(mainCanvas.gameObject.transform);
+            OpenUI<UIStatus>(mainCanvas.gameObject.transform);
+        }
     }
 
     float ReleaseTime = 10f;

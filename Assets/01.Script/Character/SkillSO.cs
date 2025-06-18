@@ -14,6 +14,7 @@ public class SkillSO : ScriptableObject
     public GameObject skillPrefab;
     public float skillRange;
 
+
     public Rank requiredRank;
     //스킬 범위 추가 가능
 }

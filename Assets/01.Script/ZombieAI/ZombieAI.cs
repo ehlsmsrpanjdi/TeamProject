@@ -44,6 +44,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
     [Header("넉백회복")] public float knockbackRecoverTime = 0.3f;
 
+    [Header("피격효과")] [SerializeField] private GameObject bloodEffectPrefab;
     private float attackTimer; // 공격 딜레이 타이머
     private Color originalColor; // 원래 색상 저장
     private bool isKnockback = false; // 넉백 중인지 여부
@@ -82,11 +83,11 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
         animator.Rebind();
 
+
         if (animator != null && animator.runtimeAnimatorController != null)
         {
             animator.SetBool("IsMoving", true);
-            animator.SetBool("IsAttacking", false);
-            animator.SetBool("IsDead", false);
+
         }
 
         agent.speed = statHandler.MoveSpeed;
@@ -127,7 +128,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
         }
     }
 
-    // 플레이어를 추적하는 상태
     private void Chase()
     {
         if (target == null) return;
@@ -141,7 +141,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
             return;
         }
 
-        // 플레이어와 일정 거리 이상 떨어져 있으면 이동
+        // 이동 상태
         if (dist > stopDistance)
         {
             if (agent.isOnNavMesh)
@@ -154,24 +154,30 @@ public class ZombieAI : MonoBehaviour, IDamageable
                 Debug.LogWarning("[Chase] agent가 NavMesh 위에 없음");
             }
 
-            // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
-            if (animator != null && animator.runtimeAnimatorController != null)
+            // 상태값 변경 시에만 애니메이션 변경
+            if (animator != null && animator.runtimeAnimatorController != null &&
+                !animator.GetBool("IsMoving"))
+            {
                 animator.SetBool("IsMoving", true);
+            }
         }
         else
         {
             agent.isStopped = true;
 
-            // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
-            if (animator != null && animator.runtimeAnimatorController != null)
+            if (animator != null && animator.runtimeAnimatorController != null &&
+                animator.GetBool("IsMoving"))
+            {
                 animator.SetBool("IsMoving", false);
+            }
 
-            // 플레이어를 향해 부드럽게 회전
+            // 플레이어를 향해 회전
             Vector3 lookDir = target.position - transform.position;
             lookDir.y = 0;
             if (lookDir != Vector3.zero)
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir),
-                    10f * Time.deltaTime);
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), 10f * Time.deltaTime);
+            }
         }
     }
 
@@ -193,9 +199,11 @@ public class ZombieAI : MonoBehaviour, IDamageable
         agent.ResetPath(); // 이동 경로 초기화
 
         // 애니메이터가 있고, 컨트롤러가 할당된 경우 애니메이션 이동 중지 처리
-        if (animator != null && animator.runtimeAnimatorController != null)
+        if (animator != null && animator.runtimeAnimatorController != null &&
+            animator.GetBool("IsMoving"))
+        {
             animator.SetBool("IsMoving", false);
-        animator.SetBool("IsAttacking", true);
+        }
 
         transform.LookAt(target); // 플레이어를 바라봄
 
@@ -206,6 +214,11 @@ public class ZombieAI : MonoBehaviour, IDamageable
         {
             Debug.Log("[ZombieAI] 공격 시도");
 
+            if (animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.SetTrigger("Attack");
+            }
+            SoundManager.Instance.PlaySFX(SfxType.ZombieAttack, -1);
             // 공격 타입에 따라 근접 또는 투사체 공격 분기 처리
             if (attackType == AttackType.Melee)
             {
@@ -221,9 +234,13 @@ public class ZombieAI : MonoBehaviour, IDamageable
                     Debug.LogWarning("[ZombieAI] 대상이 IDamageable 아님");
                 }
             }
+            //원거리 공격
             if (attackType == AttackType.Projectile && firePoint != null && target != null)
             {
                 Vector3 velocity = CalculateProjectileVelocity(firePoint.position, target.position);
+                if (velocity.y < 1f)
+                    velocity.y = 1f;
+
                 if (velocity == Vector3.zero)
                 {
                     Debug.LogWarning("[ProjectileAttack] 속도 0 → 직선 대체");
@@ -233,7 +250,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
                 GameObject obj = ObjectPool.Get("Projectile");
                 if (obj != null)
                 {
-                    obj.transform.position = firePoint.position;
+                    obj.transform.position = firePoint.position + Vector3.up * 0.5f;
                     obj.transform.rotation = Quaternion.LookRotation(velocity);
 
                     var proj = obj.GetComponent<ZombieProjectile>();
@@ -255,11 +272,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
             }
 
             attackTimer = 0f; // 타이머 초기화
-
-            if (animator != null && animator.runtimeAnimatorController != null)
-            {
-                animator.SetBool("IsAttacking", false); // 공격 종료
-            }
         }
     }
 
@@ -316,23 +328,45 @@ public class ZombieAI : MonoBehaviour, IDamageable
         bool isDead = statHandler.TakeDamage(amount);
         if (isDead)
         {
+            SoundManager.Instance.PlaySFX(SfxType.ZombieDie, -1);
+            // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
+            if (animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.SetTrigger("Die");
+            }
+            PlayHitEffect();
             Die();
         }
         else
         {
-            StartCoroutine(FlashRed());
+            SoundManager.Instance.PlaySFX(SfxType.ZombieHit, -1);
+            // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
+            if (animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.SetTrigger("hit");
+            }
+            PlayHitEffect();
             StartKnockback(attackerPosition, knockbackForce);
         }
     }
 
-    // 붉은색 점멸 효과 코루틴
-    private IEnumerator FlashRed()
+    private void PlayHitEffect()
     {
-        if (zombieRenderer == null) yield break;
+        GameObject effect = ObjectPool.Get("BloodEffect");
+        if (effect == null) return;
 
-        zombieRenderer.material.color = Color.red;
-        yield return new WaitForSeconds(flashDuration);
-        zombieRenderer.material.color = originalColor;
+        Vector3 spawnPos = transform.position + Vector3.up * 0.3f;
+        effect.transform.position = spawnPos;
+        effect.transform.rotation = Quaternion.identity;
+        effect.transform.localScale = Vector3.one;
+        effect.SetActive(true);
+
+        StartCoroutine(ReturnEffect(effect, "BloodEffect", 2f));
+    }
+    private IEnumerator ReturnEffect(GameObject obj, string key, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ObjectPool.Return(key, obj);
     }
 
     // 넉백 효과 코루틴
@@ -388,7 +422,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
             rb.velocity = Vector3.zero;
             rb.isKinematic = true;
         }
-
         // 콜라이더 비활성화
         Collider col = GetComponent<Collider>();
         if (col != null) col.enabled = false;
@@ -398,19 +431,12 @@ public class ZombieAI : MonoBehaviour, IDamageable
         {
             int currentStage = Player.Instance.Data.currentStage;
 
-            bool isRetry = FindObjectOfType<WaveManager>()?.IsWeakMode() == true;
+            bool isRetry = WaveManager.Instance.IsWeakMode();
             int baseReward = currentStage * 10;
             int reward = isRetry ? Mathf.CeilToInt(baseReward * 0.1f) : baseReward;
 
             Player.Instance.AddGold(reward);
             Debug.Log($"[ZombieAI] 골드 {reward} 획득 (스테이지 {currentStage}, 반복 모드: {isRetry})");
-        }
-
-        if (animator != null && animator.runtimeAnimatorController != null)
-        {
-            animator.SetBool("IsMoving", false);
-            animator.SetBool("IsAttacking", false);
-            animator.SetBool("IsDead", true);
         }
 
         // 풀에 반환 대기 시작
@@ -464,14 +490,15 @@ public class ZombieAI : MonoBehaviour, IDamageable
         // 리지드바디 물리 속도 제거 및 고정
         if (rb != null)
         {
-            rb.isKinematic = true;
+            rb.isKinematic = false;
             rb.velocity = Vector3.zero;
+            rb.isKinematic = true;
         }
 
         // 애니메이션 트리거 및 상태 초기화
         if (animator != null && animator.runtimeAnimatorController != null)
         {
-            animator.ResetTrigger("IsAttack");
+            animator.ResetTrigger("Attack");
             animator.ResetTrigger("Hit");
             animator.ResetTrigger("Die");
             animator.SetBool("IsMoving", false);
@@ -492,6 +519,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
             agent.isStopped = false;
         }
     }
+
 
     public bool IsDead => currentState == State.Die;
 }

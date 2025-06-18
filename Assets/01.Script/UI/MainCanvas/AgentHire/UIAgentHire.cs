@@ -60,16 +60,33 @@ public class UIAgentHire : UIBase
         }
 
 
-       List<DrawResult> list = GachaManager.Instance.DrawCharacter(GachaType.Normal, 1);
+        List<DrawResult> list = GachaManager.Instance.DrawCharacter(GachaType.Normal, 1);
 
+        bool IsOverRank = false;
+        foreach (DrawResult drawResult in list)
+        {
+            IsOverRank = GachaManager.Instance.IsOverSRank(drawResult);
+        }
+        UIManager Manager = UIManager.Instance;
 
         if (list.Count != 0)
         {
-            UIManager.Instance.OpenUI<UIGacha>(UIManager.Instance.GetMainCanvas());
+            UIGacha Gacha = Manager.GetUI<UIGacha>(Manager.GetMainCanvas());
+            GachaCamera GachaComponent = Gacha.GetGachaCamera();
+            if (true == IsOverRank)
+            {
+                Gacha.SetBox(GachaComponent.SpawnHighBox());
+                Gacha.Open();
+            }
+            else
+            {
+                Gacha.SetBox(GachaComponent.SpawnNormalBox());
+                Gacha.Open();
+            }
         }
         else
         {
-            UIPopup Popup = UIManager.Instance.GetUI<UIPopup>(UIManager.Instance.GetMainCanvas());
+            UIPopup Popup = Manager.GetUI<UIPopup>(UIManager.Instance.GetMainCanvas());
             Popup.SetText("재화가 모자릅니다");
             Popup.Open();
         }
@@ -89,9 +106,31 @@ public class UIAgentHire : UIBase
 
         List<DrawResult> list = GachaManager.Instance.DrawCharacter(GachaType.Normal, 10);
 
+        bool IsOverRank = false;
+        foreach (DrawResult drawResult in list)
+        {
+            IsOverRank = GachaManager.Instance.IsOverSRank(drawResult);
+            if(true == IsOverRank)
+            {
+                break;
+            }
+        }
+        UIManager Manager = UIManager.Instance;
+
         if (list.Count != 0)
         {
-            UIManager.Instance.OpenUI<UIGacha>(UIManager.Instance.GetMainCanvas());
+            UIGacha Gacha = Manager.GetUI<UIGacha>(Manager.GetMainCanvas());
+            GachaCamera GachaComponent = Gacha.GetGachaCamera();
+            if (true == IsOverRank)
+            {
+                Gacha.SetBox(GachaComponent.SpawnHighBox());
+                Gacha.Open();
+            }
+            else
+            {
+                Gacha.SetBox(GachaComponent.SpawnNormalBox());
+                Gacha.Open();
+            }
         }
         else
         {

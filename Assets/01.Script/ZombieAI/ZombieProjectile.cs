@@ -39,6 +39,18 @@ public class ZombieProjectile : MonoBehaviour
     public void SetShooter(GameObject shooterObj)
     {
         shooter = shooterObj;
+
+        Collider myCol = GetComponent<Collider>();
+        if (myCol == null) return;
+
+        // 발사자의 모든 콜라이더 가져오기 (부모 + 자식 포함)
+        Collider[] shooterCols = shooterObj.GetComponentsInChildren<Collider>();
+
+        foreach (var col in shooterCols)
+        {
+            if (col != null)
+                Physics.IgnoreCollision(myCol, col, true); // 충돌 무시 설정
+        }
     }
 
     // 투사체에 속도 적용 (발사)
@@ -54,10 +66,17 @@ public class ZombieProjectile : MonoBehaviour
         ObjectPool.Return("Projectile", this.gameObject);
     }
 
-
-    // 트리거 구분
+    // 트리거 충돌 처리
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"[Projectile] Hit: {other.gameObject.name}");
+
+        if (other.gameObject == shooter)
+        {
+            Debug.Log("[Projectile] Ignored self-hit");
+            return;
+        }
+
         // 자신이 쏜 투사체면 무시
         if (other.gameObject == shooter)
             return;

@@ -67,6 +67,7 @@ public class QuestManager : MonoBehaviour
          {
              var loadedData = LoadQuestsFromJson(); // 데이터 불러와서
              ApplySavedProgress(loadedData.Quests); // 불러온 데이터 적용.
+             HandleQuestCompleted(); // 일퀘 완료여부 확인해서 반환.
          }
 
          CheckAllDailyQuests(); // 초기화 및 로드 후 퀘스트 상태 점검
@@ -84,6 +85,9 @@ public class QuestManager : MonoBehaviour
 
         // 액션으로 진행도 전달
         OnQuestCompleted?.Invoke(progress);
+
+        OnQuestUpdated?.Invoke(0, (float) dailyQuests[0].CurrentValue / (float) dailyQuests[0].TargetValue);
+        OnQuestUpdated?.Invoke(2, (float) dailyQuests[2].CurrentValue / (float) dailyQuests[2].TargetValue);
     }
 
     #endregion
@@ -263,7 +267,7 @@ public class QuestManager : MonoBehaviour
         if (attackQuest == null || attackQuest.IsCompleted)
             return;
 
-        attackQuest.CurrentValue++;
+        attackQuest.CurrentValue = Mathf.Min(attackQuest.CurrentValue + 1, attackQuest.TargetValue);
         OnQuestUpdated?.Invoke(attackQuest.Id, (float) attackQuest.CurrentValue / (float) attackQuest.TargetValue);
 
         if (attackQuest.CurrentValue >= attackQuest.TargetValue)
@@ -281,6 +285,9 @@ public class QuestManager : MonoBehaviour
         var allClearQuest = dailyQuests.Find(q => q.Type == QuestType.AllClear);
         if (allClearQuest == null || allClearQuest.IsCompleted)
             return;
+
+        allClearQuest.CurrentValue = dailyQuests.Count(q => q.IsCompleted && q.Type != QuestType.AllClear);
+        OnQuestCompleted?.Invoke(allClearQuest.CurrentValue);
 
         // 'AllClear' 퀘스트를 제외한 모든 퀘스트가 완료되었는지 확인
         bool allOthersCompleted = dailyQuests
@@ -315,8 +322,8 @@ public class QuestManager : MonoBehaviour
         if (playQuest != null && !playQuest.IsCompleted)
         {
             playTimeSeconds += 60; // 1분 증가
+            playQuest.CurrentValue = Mathf.Min(playTimeSeconds, playQuest.TargetValue);
             OnQuestUpdated?.Invoke(playQuest.Id, (float)playQuest.CurrentValue / (float) playQuest.TargetValue);
-            // Debug.Log($"플레이 시간 업데이트: {playTimeSeconds}초 / {playQuest.TargetValue}초");
 
             if (playTimeSeconds >= playQuest.TargetValue)
             {

@@ -32,9 +32,10 @@ public static class ObjectPool
     // 등록할 오브젝트 풀 리스트. (추가작성 가능)
     private static List<PoolSetting> settings = new()
     {
-        new PoolSetting("Zombie1", "Zombie/Zombie", 100),
-        new PoolSetting("Zombie2", "Zombie/Zombie2", 50),
+        new PoolSetting("Zombie1", "Zombie/Zombie", 50),
+        new PoolSetting("Zombie2", "Zombie/Zombie2", 20),
         new PoolSetting("Projectile", "Zombie/ZombieProjectile", 20),
+        new PoolSetting("BloodEffect", "Zombie/BloodEffect5", 50),
     };
 
     //=================================================================================
@@ -71,6 +72,10 @@ public static class ObjectPool
         }
     }
 
+    public static void ResetPool()
+    {
+        pool.Clear();
+    }
 
     // key에 해당하는 오브젝트를 풀에서 꺼냄. 없으면 null 반환.
     public static GameObject Get(string key)
@@ -81,12 +86,16 @@ public static class ObjectPool
         // 해당 key에 대한 풀 자체가 없거나, 큐에 오브젝트가 없으면 null 반환
         if (!pool.ContainsKey(key) || pool[key].Count == 0)
         {
-            // 풀에 등록되지 않았거나, 모두 사용 중인 상태
-            return null;
+            return GameObject.Instantiate(prefabMap[key]);
         }
 
         // 큐에서 오브젝트 하나 꺼냄
         GameObject obj = pool[key].Dequeue();
+
+        if (obj == null)
+        {
+            return GameObject.Instantiate(prefabMap[key]);
+        }
 
         // 꺼낸 오브젝트를 활성화해서 씬에 등장시킴
         obj.SetActive(true);

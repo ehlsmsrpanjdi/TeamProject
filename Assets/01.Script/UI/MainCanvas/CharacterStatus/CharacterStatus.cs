@@ -102,7 +102,7 @@ public class CharacterStatus : MonoBehaviour
     public void SetStatusView(CharacterInstance _instance)
     {
         CharacterImage.sprite = _instance.characterImage;
-        WeaponImage.sprite = _instance.characterImage;
+        WeaponImage.sprite = _instance.enhanceImage;
 
         StatusReset();
     }
@@ -182,7 +182,9 @@ public class CharacterStatus : MonoBehaviour
     public void StatusReset()
     {
         CharacterInstance instance = CharacterManager.Instance.GetCharacter(Selected_Index);
-        SetStatus(instance.charcterName);
+        Rank CurrentRank = instance.currentRank;
+        string RankText = RankToText.RankString(instance.currentRank);
+        SetStatus(instance.charcterName + "  {" + RankText + "}");
         SetLvValue(instance.GetEnhancementLevel());
         SetAttackValue((int)instance.GetCurrentAttack());
         SetHPValue((int)instance.GetCurrentHealth());

@@ -24,9 +24,13 @@ public class UISoundOption : UIBase
 
     private void Start()
     {
+        MusicSlider[0].value = SoundManager.Instance.MasterVolume;
+        MusicSlider[1].value = SoundManager.Instance.BgmVolume;
+        MusicSlider[2].value = SoundManager.Instance.SfxVolume;
+
         MusicSlider[0].onValueChanged.AddListener(SoundManager.Instance.SetMasterVolume);
-        MusicSlider[0].onValueChanged.AddListener(SoundManager.Instance.SetBgmVolume);
-        MusicSlider[0].onValueChanged.AddListener(SoundManager.Instance.SetSfxVolume);
+        MusicSlider[1].onValueChanged.AddListener(SoundManager.Instance.SetBgmVolume);
+        MusicSlider[2].onValueChanged.AddListener(SoundManager.Instance.SetSfxVolume);
     }
 
     public override void Open()

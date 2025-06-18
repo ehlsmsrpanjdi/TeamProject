@@ -1,5 +1,7 @@
 # Street of the Dead
 
+https://drive.google.com/drive/folders/1414DNmtGdu8qwczWWtfGomIlLUl41zoz?usp=sharing
+
   * [목차](#목차)
   * [🧭프로젝트 목적](#프로젝트-목적)
   * [📗게임 설명](#게임-설명)
@@ -27,15 +29,15 @@
 
 ### ◇ 로비
 
-https://github.com/user-attachments/assets/df23862b-412c-486e-a452-d321db1a8f96
+https://github.com/user-attachments/assets/50d30fcd-631f-4255-85ec-41fe17d959d7
 
 ### ◇ 가챠
 
-https://github.com/user-attachments/assets/146506e7-d404-4f94-b14f-57bc5e308546
+https://github.com/user-attachments/assets/6e3ba104-c627-44cd-9ed4-63d8dc7d8440
 
 ### ◇ 캐릭터 관리
 
-https://github.com/user-attachments/assets/48fa4358-8373-46b9-bc00-f63aecfcbcd4
+https://github.com/user-attachments/assets/128123d0-4ac2-441b-908e-26ff0346aa7a
 
 ### ◇ 배틀 씬
 

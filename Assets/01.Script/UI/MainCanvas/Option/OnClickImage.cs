@@ -22,6 +22,7 @@ public class OnClickImage : BaseImage, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         OnClick?.Invoke();
+        SoundManager.Instance.PlaySFX(SfxType.UI, 2);
         color = prevColor;
     }
 

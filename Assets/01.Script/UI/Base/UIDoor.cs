@@ -36,6 +36,7 @@ public class UIDoor : UIBase
         Tween tween = RightDoorImg.gameObject.transform.MoveX(RightPos, 0);
         tween.OnComplete(() =>
         {
+            SoundManager.Instance.PlaySFX(SfxType.UI, 3);
             OnCloseAction?.Invoke();
             OnCloseAction = null;
             StartCoroutine(CloseCoroutine());

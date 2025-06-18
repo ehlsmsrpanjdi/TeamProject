@@ -16,8 +16,9 @@ MonoBehaviour:
   skillName: Blast
   skillDescription: "\uB300\uD615 \uD3ED\uBC1C"
   skillIcon: {fileID: 21300000, guid: 50a6f87a62fc09f42b88dcca8e0d1c4b, type: 3}
-  skillDamage: 2000
-  skillCooldown: 45
-  skillPrefab: {fileID: 0}
+  skillDamage: 100
+  skillCooldown: 5
+  skillPrefab: {fileID: 1236873747393878517, guid: c71471bd83b0ecd478b10362fca631c6,
+    type: 3}
   skillRange: 5
   requiredRank: 2

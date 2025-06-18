@@ -203,6 +203,8 @@ public class CharacterManager
             return false;
         }
 
+        Player.Instance.UseGold(1000);
+        
         character.Enhance();
         QuestManager.Instance.OnEnchantButtonPressed();
         Player.Instance.SaveCharacters(characters);

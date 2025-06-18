@@ -52,3 +52,4 @@ MonoBehaviour:
     hpMultiplier: 1.6
     requiredOwnedCount: 0
     maxenhancementLevel: 100
+  enhanceImage: {fileID: 21300000, guid: 30279dc66559c714c950ec287239db07, type: 3}

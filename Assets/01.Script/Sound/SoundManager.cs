@@ -26,6 +26,7 @@ public enum SfxType // SFX 타입
     ZMove,
     ZSpawn,
     ZTakeDamage,
+    QuestClear,
     // 필요한 효과음 타입 추가
 }
 

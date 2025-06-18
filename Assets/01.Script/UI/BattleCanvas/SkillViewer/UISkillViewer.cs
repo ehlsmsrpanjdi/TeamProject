@@ -49,8 +49,11 @@ public class UISkillViewer : UIBase
         SelectedCharacter = _inst;
         for (int i = 0; i < skills.Count; i++)
         {
-            SkillList[i].SetImage(skills[i].skillImage);
-            SkillList[i].gameObject.SetActive(true);
+            UISkill skillUI = SkillList[i];
+            Skill skill = skills[i];
+            skillUI.SetCoolTime(skill.currentCooldown, skill.skillCooldown);
+            skillUI.SetImage(skill.skillImage);
+            skillUI.gameObject.SetActive(true);
         }
     }
 }

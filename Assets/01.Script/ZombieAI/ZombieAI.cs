@@ -44,6 +44,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
     [Header("넉백회복")] public float knockbackRecoverTime = 0.3f;
 
+    [Header("피격효과")] [SerializeField] private GameObject bloodEffectPrefab;
     private float attackTimer; // 공격 딜레이 타이머
     private Color originalColor; // 원래 색상 저장
     private bool isKnockback = false; // 넉백 중인지 여부
@@ -237,8 +238,8 @@ public class ZombieAI : MonoBehaviour, IDamageable
             if (attackType == AttackType.Projectile && firePoint != null && target != null)
             {
                 Vector3 velocity = CalculateProjectileVelocity(firePoint.position, target.position);
-                if (velocity.y < 0.5f)
-                    velocity.y = 0.5f;
+                if (velocity.y < 1f)
+                    velocity.y = 1f;
 
                 if (velocity == Vector3.zero)
                 {
@@ -332,6 +333,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
             {
                 animator.SetTrigger("Die");
             }
+            PlayHitEffect();
             Die();
         }
         else
@@ -341,19 +343,28 @@ public class ZombieAI : MonoBehaviour, IDamageable
             {
                 animator.SetTrigger("hit");
             }
-            StartCoroutine(FlashRed());
+            PlayHitEffect();
             StartKnockback(attackerPosition, knockbackForce);
         }
     }
 
-    // 붉은색 점멸 효과 코루틴
-    private IEnumerator FlashRed()
+    private void PlayHitEffect()
     {
-        if (zombieRenderer == null) yield break;
+        GameObject effect = ObjectPool.Get("BloodEffect");
+        if (effect == null) return;
 
-        zombieRenderer.material.color = Color.red;
-        yield return new WaitForSeconds(flashDuration);
-        zombieRenderer.material.color = originalColor;
+        Vector3 spawnPos = transform.position + Vector3.up * 0.3f;
+        effect.transform.position = spawnPos;
+        effect.transform.rotation = Quaternion.identity;
+        effect.transform.localScale = Vector3.one;
+        effect.SetActive(true);
+
+        StartCoroutine(ReturnEffect(effect, "BloodEffect", 2f));
+    }
+    private IEnumerator ReturnEffect(GameObject obj, string key, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ObjectPool.Return(key, obj);
     }
 
     // 넉백 효과 코루틴
@@ -505,6 +516,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
             agent.isStopped = false;
         }
     }
+
 
     public bool IsDead => currentState == State.Die;
 }

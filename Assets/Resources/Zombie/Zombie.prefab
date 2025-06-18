@@ -909,8 +909,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96eea7a17f571e140ba48d5ae307775e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaxHealth: 100
-  defaultDamage: 10
+  defaultMaxHealth: 150
+  defaultDamage: 20
   defaultMoveSpeed: 3
   defaultAttackDelay: 1.5
   defaultAttackRange: 2
@@ -931,6 +931,7 @@ MonoBehaviour:
   stopDistance: 2
   flashDuration: 0.1
   knockbackRecoverTime: 0.3
+  bloodEffectPrefab: {fileID: 100004, guid: 5aac6238f52473c4ab422c13d2511616, type: 3}
 --- !u!114 &382141258919649092
 MonoBehaviour:
   m_ObjectHideFlags: 0

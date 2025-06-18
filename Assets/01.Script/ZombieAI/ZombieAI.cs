@@ -44,6 +44,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
     [Header("넉백회복")] public float knockbackRecoverTime = 0.3f;
 
+    [Header("피격효과")] [SerializeField] private GameObject bloodEffectPrefab;
     private float attackTimer; // 공격 딜레이 타이머
     private Color originalColor; // 원래 색상 저장
     private bool isKnockback = false; // 넉백 중인지 여부
@@ -233,9 +234,13 @@ public class ZombieAI : MonoBehaviour, IDamageable
                     Debug.LogWarning("[ZombieAI] 대상이 IDamageable 아님");
                 }
             }
+            //원거리 공격
             if (attackType == AttackType.Projectile && firePoint != null && target != null)
             {
                 Vector3 velocity = CalculateProjectileVelocity(firePoint.position, target.position);
+                if (velocity.y < 1f)
+                    velocity.y = 1f;
+
                 if (velocity == Vector3.zero)
                 {
                     Debug.LogWarning("[ProjectileAttack] 속도 0 → 직선 대체");
@@ -245,7 +250,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
                 GameObject obj = ObjectPool.Get("Projectile");
                 if (obj != null)
                 {
-                    obj.transform.position = firePoint.position;
+                    obj.transform.position = firePoint.position + Vector3.up * 0.5f;
                     obj.transform.rotation = Quaternion.LookRotation(velocity);
 
                     var proj = obj.GetComponent<ZombieProjectile>();
@@ -265,7 +270,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
                     Debug.LogWarning("[ZombieAI] 투사체 풀에서 꺼내기 실패");
                 }
             }
-
 
             attackTimer = 0f; // 타이머 초기화
         }
@@ -329,6 +333,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
             {
                 animator.SetTrigger("Die");
             }
+            PlayHitEffect();
             Die();
         }
         else
@@ -338,19 +343,28 @@ public class ZombieAI : MonoBehaviour, IDamageable
             {
                 animator.SetTrigger("hit");
             }
-            StartCoroutine(FlashRed());
+            PlayHitEffect();
             StartKnockback(attackerPosition, knockbackForce);
         }
     }
 
-    // 붉은색 점멸 효과 코루틴
-    private IEnumerator FlashRed()
+    private void PlayHitEffect()
     {
-        if (zombieRenderer == null) yield break;
+        GameObject effect = ObjectPool.Get("BloodEffect");
+        if (effect == null) return;
 
-        zombieRenderer.material.color = Color.red;
-        yield return new WaitForSeconds(flashDuration);
-        zombieRenderer.material.color = originalColor;
+        Vector3 spawnPos = transform.position + Vector3.up * 0.3f;
+        effect.transform.position = spawnPos;
+        effect.transform.rotation = Quaternion.identity;
+        effect.transform.localScale = Vector3.one;
+        effect.SetActive(true);
+
+        StartCoroutine(ReturnEffect(effect, "BloodEffect", 2f));
+    }
+    private IEnumerator ReturnEffect(GameObject obj, string key, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ObjectPool.Return(key, obj);
     }
 
     // 넉백 효과 코루틴
@@ -474,8 +488,9 @@ public class ZombieAI : MonoBehaviour, IDamageable
         // 리지드바디 물리 속도 제거 및 고정
         if (rb != null)
         {
-            rb.isKinematic = true;
+            rb.isKinematic = false;
             rb.velocity = Vector3.zero;
+            rb.isKinematic = true;
         }
 
         // 애니메이션 트리거 및 상태 초기화
@@ -502,6 +517,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
             agent.isStopped = false;
         }
     }
+
 
     public bool IsDead => currentState == State.Die;
 }

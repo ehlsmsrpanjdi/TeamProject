@@ -32,9 +32,10 @@ public static class ObjectPool
     // 등록할 오브젝트 풀 리스트. (추가작성 가능)
     private static List<PoolSetting> settings = new()
     {
-        new PoolSetting("Zombie1", "Zombie/Zombie", 100),
-        new PoolSetting("Zombie2", "Zombie/Zombie2", 50),
+        new PoolSetting("Zombie1", "Zombie/Zombie", 50),
+        new PoolSetting("Zombie2", "Zombie/Zombie2", 20),
         new PoolSetting("Projectile", "Zombie/ZombieProjectile", 20),
+        new PoolSetting("BloodEffect", "Zombie/BloodEffect5", 50),
     };
 
     //=================================================================================

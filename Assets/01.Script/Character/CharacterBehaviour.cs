@@ -20,6 +20,9 @@ public class CharacterBehaviour : MonoBehaviour
 
     List<Skill> GainSkill;
 
+    public float currentCooldown = 0f;
+    
+
     public void Init(CharacterInstance data, Transform destination)
     {
         charInstance = data;
@@ -58,6 +61,7 @@ public class CharacterBehaviour : MonoBehaviour
         animController.SetAttack(true);
     }
 
+
     void Update()
     {
         if (isMoving == false)
@@ -70,6 +74,9 @@ public class CharacterBehaviour : MonoBehaviour
             lastAttackTime = Time.time;
 
         }
+
+        ReduceCooltime();
+        
     }
 
     /// <summary>
@@ -243,7 +250,7 @@ public class CharacterBehaviour : MonoBehaviour
     //스킬사용(액티브로 하기로 했음)
     public bool UseSkill(int skillIndex)
     {
-
+        
         if (skillIndex < 0 || skillIndex >= charInstance.GetActiveSkills().Count)
         {
             Debug.Log("스킬 인덱스가 잘못되었습니다.");
@@ -251,6 +258,8 @@ public class CharacterBehaviour : MonoBehaviour
         }
 
         Skill skill = GainSkill[skillIndex];
+
+        if (skill.skillCooldown > 0) return false;
 
         if (!skill.isActive)
         {
@@ -261,6 +270,24 @@ public class CharacterBehaviour : MonoBehaviour
 
         return true;
     }
+
+    public void ReduceCooltime()
+    {
+        
+        foreach(var time in GainSkill)
+        {
+           
+            time.skillCooldown = Mathf.Max(0f, time.skillCooldown - Time.deltaTime);
+        }
+        
+    }
+
+    public float GetSkillCooltime(int index)
+    {
+        return GainSkill[index].skillCooldown;
+    }
+
+
 
 
     public void Die()

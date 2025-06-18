@@ -218,9 +218,26 @@ public class CharacterInstance
         behaviour = _behaviour;
     }
 
-    public void ExcuteSkill(int _index)
+    public bool ExcuteSkill(int _index)
     {
-        behaviour.UseSkill(_index);
+        
+        return behaviour.UseSkill(_index);
     }
+
+    public float ExcuteCooltime(int _index)
+    {
+        return behaviour.GetSkillCooltime(_index);
+    }
+
+
+    //public void UpdateSkillCooldown(float time)
+    //{
+    //    foreach (var skill in learnedSkills)
+    //    {
+    //        skill.ReduceCooldown(time);
+    //    }
+    //}
+
+
 }
 

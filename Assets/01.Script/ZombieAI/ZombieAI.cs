@@ -218,7 +218,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
             {
                 animator.SetTrigger("Attack");
             }
-
+            SoundManager.Instance.PlaySFX(SfxType.ZombieAttack, -1);
             // 공격 타입에 따라 근접 또는 투사체 공격 분기 처리
             if (attackType == AttackType.Melee)
             {
@@ -328,6 +328,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         bool isDead = statHandler.TakeDamage(amount);
         if (isDead)
         {
+            SoundManager.Instance.PlaySFX(SfxType.ZombieDie, -1);
             // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
             if (animator != null && animator.runtimeAnimatorController != null)
             {
@@ -338,6 +339,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         }
         else
         {
+            SoundManager.Instance.PlaySFX(SfxType.ZombieHit, -1);
             // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
             if (animator != null && animator.runtimeAnimatorController != null)
             {

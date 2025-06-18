@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum BgmType // BGM 타입
 {
@@ -78,6 +79,7 @@ public class SoundManager : MonoBehaviour
         bgmSource = gameObject.AddComponent<AudioSource>();
         sfxSource = gameObject.AddComponent<AudioSource>();
         Init(bgmSource, sfxSource);
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Start()
@@ -87,6 +89,7 @@ public class SoundManager : MonoBehaviour
         SetMasterVolume(MasterVolume);
         SetBgmVolume(BgmVolume);
         SetSfxVolume(SfxVolume);
+        PlayBGM(BgmType.Lobby, -1);
     }
 
     public void Init(AudioSource bgmSource, AudioSource sfxSource)
@@ -187,5 +190,25 @@ public class SoundManager : MonoBehaviour
         MasterVolume = PlayerPrefs.GetFloat(MASTER_VOLUME_KEY, 1.0f);
         BgmVolume = PlayerPrefs.GetFloat(BGM_VOLUME_KEY, 1.0f);
         SfxVolume = PlayerPrefs.GetFloat(SFX_VOLUME_KEY, 1.0f);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        switch (scene.name)
+        {
+            case "SampleScene":
+                StopBGM();
+                PlayBGM(BgmType.Lobby, -1);
+                break;
+            case "BattleScene":
+                StopBGM();
+                PlayBGM(BgmType.Battle, -1);
+                break;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

@@ -194,32 +194,6 @@ public class WaveManager : MonoBehaviour
         Player.Instance.Data.currentStage = Mathf.Max(1, Player.Instance.Data.currentStage - 1);
     }
 
-    //public void ProceedToNextStage()
-    //{
-    //    if (!isWaitingNextStage) return;
-
-    //    Debug.Log("[WaveManager] 다음 스테이지로 진입");
-
-    //    isWaitingNextStage = false;
-    //    isRetryWeakMode = false;
-
-    //    if (currentWaveCoroutine != null)
-    //    {
-    //        StopCoroutine(currentWaveCoroutine);
-    //        currentWaveCoroutine = null;
-    //    }
-
-    //    ClearAllZombies();
-    //    currentWaveCoroutine = StartCoroutine(NextWaveAfterIncrement());
-    //}
-
-    //private IEnumerator NextWaveAfterIncrement()
-    //{
-    //    yield return new WaitForSeconds(0.1f);
-    //    Player.Instance.Data.currentStage++;
-    //    currentWaveCoroutine = StartCoroutine(StartNormalWave());
-    //}
-
     private void ClearAllZombies()
     {
         var allZombies = GameObject.FindGameObjectsWithTag("Zombie");

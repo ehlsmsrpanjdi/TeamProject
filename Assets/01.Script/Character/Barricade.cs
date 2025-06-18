@@ -35,7 +35,6 @@ public class Barricade : MonoBehaviour, IDamageable
     public void SetHealth()
     {
         currentHealth = CharacterManager.Instance.GetTotalHealt();
-        //Debug.Log($"{currentHealth}");
     }
 
     

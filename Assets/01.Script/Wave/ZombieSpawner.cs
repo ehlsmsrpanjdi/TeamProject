@@ -23,7 +23,6 @@ public class ZombieSpawner : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("[ZombieSpawner] NavMesh 위 위치를 찾지 못해 스킵됨");
                 continue;
             }
 
@@ -32,7 +31,6 @@ public class ZombieSpawner : MonoBehaviour
 
             if (obj == null)
             {
-                Debug.LogWarning($"[ZombieSpawner] 풀 부족 또는 ObjectPool 미할당 - {zombieKey} 생성 실패");
                 continue;
             }
 
@@ -44,18 +42,13 @@ public class ZombieSpawner : MonoBehaviour
             {
                 ai.EnableAgent();
             }
-            else
-            {
-                Debug.LogWarning($"[ZombieSpawner] ZombieAI 컴포넌트 없음: {obj.name}");
-            }
+
 
             if (isWeak)
             {
                 ZombieStatHandler statHandler = obj.GetComponent<ZombieStatHandler>();
                 if (statHandler != null)
                     statHandler.ApplyWeakPenalty();
-                else
-                    Debug.LogWarning($"[ZombieSpawner] ZombieStatHandler 없음: {obj.name}");
             }
 
             spawnSuccess++;
@@ -76,12 +69,4 @@ public class ZombieSpawner : MonoBehaviour
         return new Vector3(center.x + randX, center.y, center.z + randZ);
     }
 
-    private void OnDrawGizmos()
-    {
-        if (spawnAreaCenter == null) return;
-
-        Gizmos.color = Color.green;
-        Vector3 size = new Vector3(spawnAreaSize.x, 0.1f, spawnAreaSize.y);
-        Gizmos.DrawWireCube(spawnAreaCenter.position, size);
-    }
 }

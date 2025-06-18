@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 /// <summary>
@@ -46,7 +44,7 @@ public class CharacterData : MonoBehaviour
 
     public CharacterDataSO GetData(int key)
     {
-        Data.TryGetValue(key,out CharacterDataSO data);
+        Data.TryGetValue(key, out CharacterDataSO data);
         return data;
     }
 

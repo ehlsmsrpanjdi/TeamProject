@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.UI;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class DebugWindow : EditorWindow
 {
@@ -113,14 +109,6 @@ public class DebugWindow : EditorWindow
                 {
                     qm.OnEnchantButtonPressed();
                 }
-                else
-                {
-                    Debug.LogWarning("QuestManager가 씬에서 발견되지 않았습니다.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("플레이 모드에서만 실행할 수 있습니다.");
             }
         }
 
@@ -133,14 +121,6 @@ public class DebugWindow : EditorWindow
                 {
                     qm.ClaimReward(0);
                 }
-                else
-                {
-                    Debug.LogWarning("QuestManager가 씬에서 발견되지 않았습니다.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("플레이 모드에서만 실행할 수 있습니다.");
             }
         }
 

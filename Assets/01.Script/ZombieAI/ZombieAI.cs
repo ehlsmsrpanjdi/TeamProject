@@ -284,12 +284,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         return velocity;
     }
 
-    // 에디터에서 공격 범위를 시각화하는 함수
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, statHandler.AttackRange);
-    }
+ 
 
     // 상태 변경
     private void ChangeState(State newState)

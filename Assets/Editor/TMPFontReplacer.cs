@@ -1,9 +1,10 @@
+using TMPro;
 using UnityEditor;
 using UnityEngine;
-using TMPro;
 
 public class TMPFontReplacer : EditorWindow
 {
+#if UNITY_EDITOR
     TMP_FontAsset newFont;
 
     [MenuItem("Tools/Replace TMP Font")]
@@ -43,4 +44,6 @@ public class TMPFontReplacer : EditorWindow
 
         Debug.Log($"Replaced {count} TextMeshProUGUI components.");
     }
+#endif
 }
+

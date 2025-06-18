@@ -44,16 +44,20 @@ https://github.com/user-attachments/assets/48fa4358-8373-46b9-bc00-f63aecfcbcd4
 https://github.com/user-attachments/assets/5de271f4-13a9-4886-bb0d-7d7c149e5227
 
 #### 전투 씬 배치
-
-(추가 필요)
+Map
+ZombieSpawner
+WaveManager
+CharacterData
+EventSystem
 
 #### 용병(캐릭터) 공격 및 스킬
 
 (추가 필요)
 
 #### 좀비 종류 별 패턴(AI)
-
-(추가 필요)
+- 공격 타입은 근접과 원거리로 나뉘며, 원거리 좀비는 포물선 궤도로 투사체를 발사합니다
+- 넉백 중에는 공격과 이동이 중단되며, 일정 시간 후 상태가 복구됩니다
+- 사망 시 골드를 지급하고 일정 시간 후 오브젝트 풀로 반환됩니다
 
 </br>
 
@@ -67,7 +71,9 @@ https://github.com/user-attachments/assets/5de271f4-13a9-4886-bb0d-7d7c149e5227
 - (추가 바랍니다.)
   
 ### 스테이지 사이클
-- (추가 바랍니다.)
+- 웨이브가 시작되면 스테이지에 비례하여 좀비가 생성되고, 전부 처치 시 클리어됩니다. 바리게이트가 사망시 패배합니다.
+- 일반 웨이브의 진행이(클리어 & 패배) 끝나면 버튼이 활성화되고, 누를 때 다음 스테이지로 진입합니다. 사망 시 전 웨이브로 후퇴합니다.
+- 일반 웨이브를 진행이 끝나면 무한 웨이브가 시작됩니다. 무한 웨이브는 능력치와 습득재화가 1/10 입니다.
   
 ### 좀비 AI
 - (추가 바랍니다.)
@@ -111,3 +117,4 @@ https://github.com/user-attachments/assets/5de271f4-13a9-4886-bb0d-7d7c149e5227
 - 100 Best Effects Pack(https://assetstore.unity.com/packages/vfx/particles/spells/100-best-effects-pack-25634)
 - 배민 한나는열한살체(https://www.woowahan.com/fonts)
 - AI 생성 이미지
+- 

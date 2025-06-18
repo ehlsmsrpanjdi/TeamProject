@@ -100,13 +100,14 @@ public class Player
     public void SavePlayerData()
     {
         // 플레이어 데이터 저장
+        SaveCharacters(CharacterManager.Instance.GetAllCharacters());
         string json = JsonUtility.ToJson(Data);
         File.WriteAllText(saveFilePath, json);
     }
 
 
-    // 플레이어 데이터를 전부 저장하지 않고 캐릭터 목록만 저장할 필요가 있을 경우 주석해제 후 사용
-    /*public void SaveCharacters(List<CharacterInstance> characters)
+    //플레이어 데이터를 전부 저장하지 않고 캐릭터 목록만 저장할 필요가 있을 경우 주석해제 후 사용
+    public void SaveCharacters(List<CharacterInstance> characters)
     {
         // 현재 보유한 캐릭터 목록을 저장
         Data.characterInstances.Clear();
@@ -114,7 +115,6 @@ public class Player
         {
             Data.characterInstances.Add(new CharacterSaveData(character));
         }
-        SavePlayerData();
     }
 
     public List<CharacterInstance> LoadCharacters()
@@ -150,5 +150,5 @@ public class Player
     public List<int> LoadParticipateCharacter()
     {
         return Data.particpateCharacterKeys;
-    }*/
+    }
 }

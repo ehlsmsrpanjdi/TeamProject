@@ -18,13 +18,13 @@ public class CharacterManager
             if (instance == null)
             {
                 instance = new CharacterManager();
-                
+
             }
             return instance;
         }
         set { instance = value; }
     }
-       
+
 
     private List<CharacterInstance> characters = new();
     private Dictionary<int, CharacterInstance> participated = new();
@@ -185,11 +185,9 @@ public class CharacterManager
     /// <summary>
     /// 선택 슬롯의 캐릭터 강화
     /// </summary>
-      
+
     public bool EnhanceCharacter(int index)
     {
-        
-        
         if(index <0 || index >= characters.Count)
         {
             return false;
@@ -202,7 +200,7 @@ public class CharacterManager
         }
 
         character.Enhance();
-        Player.Instance.UseGold(1000); //골드 사용
+        QuestManager.Instance.OnEnchantButtonPressed();
         return true;
     }
 
@@ -238,7 +236,6 @@ public class CharacterManager
             Debug.Log("강화에 필요한 수량이 부족합니다.");
             return false;
         }
-        
 
         int consumed = 0;
         for (int i = characters.Count -1; i >= 0 && consumed < requiredCount -1; i--) // 포문 뒤에서부터 돌리기. 리스트 제거를 뒤에서부터 하기 위해서.
@@ -250,7 +247,6 @@ public class CharacterManager
             }
 
         }
-        Player.Instance.UseGold(5000); //골드 사용
         character.RankUp();
         Debug.Log("랭크업 성공");
         //GetAllCharacters(); 필요없음.
@@ -270,14 +266,14 @@ public class CharacterManager
     #if UNITY_EDITOR
     public void EditorFunction()
     {
+        CreateCharacter(1001);
         CreateCharacter(1002);
-        //CreateCharacter(1003);
-        //CreateCharacter(1004);
-        //CreateCharacter(1005);
+        CreateCharacter(1003);
+        CreateCharacter(1004);
         SelectParticipate(0);
-        //SelectParticipate(1);
-        //SelectParticipate(2);
-        //SelectParticipate(3);
+        SelectParticipate(1);
+        SelectParticipate(2);
+        SelectParticipate(3);
 
         SpawnParticipateCharacters(); // 스폰 호출
     }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,16 +18,24 @@ public class CharacterBehaviour : MonoBehaviour
     public bool isAttacking;
     public bool isMoving;
 
+    List<Skill> GainSkill;
+
+    //public float currentCooldown = 0f;
+    
+
     public void Init(CharacterInstance data, Transform destination)
     {
         charInstance = data;
-        var usableSkills = charInstance.GetActiveSkills(); // 현재 활성화 되어있는 스킬만 사용 가능한 스킬에 들어감.
+        charInstance.SetBehaviour(this);
+        GainSkill = charInstance.GetActiveSkills(); // 현재 활성화 되어있는 스킬만 사용 가능한 스킬에 들어감.
 
         animator = GetComponent<Animator>();
         animController = new CharAnimController(animator);
 
         isMoving = true;
         StartCoroutine(MoveSetPosition(destination));
+
+        charInstance.SetSkillCooltime();
 
         //animController.SetAttack(true);
     }
@@ -56,6 +63,7 @@ public class CharacterBehaviour : MonoBehaviour
         animController.SetAttack(true);
     }
 
+
     void Update()
     {
         if (isMoving == false)
@@ -68,6 +76,9 @@ public class CharacterBehaviour : MonoBehaviour
             lastAttackTime = Time.time;
 
         }
+
+        ReduceCooltime();
+        
     }
 
     /// <summary>
@@ -189,7 +200,7 @@ public class CharacterBehaviour : MonoBehaviour
     /// </summary>
     public void Attack()
     {
-        
+
         Collider closestEnemy = GetClosestEnemy();
         if (closestEnemy == null)
         {
@@ -208,7 +219,7 @@ public class CharacterBehaviour : MonoBehaviour
         IDamageable target = closestEnemy.GetComponent<IDamageable>();
         if (target != null && isAttacking == true)
         {
-            
+
             float damage = charInstance != null ? charInstance.GetCurrentAttack() : 10;
             target.TakeDamage((int)damage, transform.position, knockbackForce: 1);
             //Debug.Log($"{charInstance.charcterName} 공격 데미지: {damage}");
@@ -239,27 +250,46 @@ public class CharacterBehaviour : MonoBehaviour
     }
 
     //스킬사용(액티브로 하기로 했음)
-    public bool UseSkill(int skillIndex, Vector3 position)
+    public bool UseSkill(int skillIndex)
     {
-
-        if (skillIndex < 0 || skillIndex >= charInstance.HasSkill().Count)
+        
+        if (skillIndex < 0 || skillIndex >= charInstance.GetActiveSkills().Count)
         {
             Debug.Log("스킬 인덱스가 잘못되었습니다.");
             return false;
         }
 
-        Skill skill = charInstance.HasSkill()[skillIndex];
+        Skill skill = GainSkill[skillIndex];
+
+        if (skill.currentCooldown > 0) return false;
 
         if (!skill.isActive)
         {
             Debug.Log($"스킬 {skill.skillName} is Not Activated");
             return false;
         }
-        position = transform.position;
-        skill.UseSkill(skillIndex, position);
+        skill.UseSkill(skill.skillKey, transform.position);
 
         return true;
     }
+
+    public void ReduceCooltime()
+    {
+        
+        foreach(var time in GainSkill)
+        {
+           
+            time.currentCooldown = Mathf.Max(0f, time.currentCooldown - Time.deltaTime);
+        }
+        
+    }
+
+    public float GetSkillCooltime(int index)
+    {
+        return GainSkill[index].currentCooldown;
+    }
+
+
 
 
     public void Die()

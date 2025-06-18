@@ -31,7 +31,7 @@ public class UISkill : MonoBehaviour
         UIManager Manager = UIManager.Instance;
         UISkillViewer Viewer = Manager.GetUI<UISkillViewer>(Manager.GetBattleCanvas());
         CharacterInstance Inst = Viewer.GetCharacterInst();
-
+        Inst.ExcuteSkill(index);
     }
 
     public void SetImage(Sprite _sprite)

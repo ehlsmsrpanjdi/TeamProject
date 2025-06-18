@@ -92,7 +92,7 @@ public class Skill
 
         switch (index)
         {
-            case (0):
+            case (2001):
                 {
                     GameObject go = GameObject.Instantiate(so.skillPrefab, chrPosition + new Vector3(0, 1.5f, 0), Quaternion.identity); //프리팹 소환
                     Vector3 throwDirection = go.transform.forward + Vector3.up * 0.5f; //던지는 방향. 어떻게 던져지는지 확인안됨
@@ -105,7 +105,7 @@ public class Skill
                     currentCooldown = skillCooldown;
                     break;
                 }
-            case (1):
+            case (2002):
                 {
                     Vector3 spawnPosition = chrPosition + Vector3.up * 1.5f + Vector3.forward *1.5f;
                     GameObject go = GameObject.Instantiate(so.skillPrefab);

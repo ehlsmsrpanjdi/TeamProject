@@ -26,27 +26,17 @@ public class ZombieAI : MonoBehaviour, IDamageable
     private NavMeshAgent agent; // 네비메시 에이전트
     private Animator animator; // 애니메이터
     private Rigidbody rb; // 리지드바디
-    private Renderer zombieRenderer; // 렌더러 (피격 시 색변경용)
     private Transform target; // 플레이어 Transform
     private ZombieStatHandler statHandler; // 좀비 스탯 핸들러
     private WaveManager waveManager; // 웨이브 매니저
     private Coroutine knockbackCoroutine;
 
-    [Header("공격타입")]
-    public AttackType attackType = AttackType.Melee;
-
-    [Header("발사위치")]
-    public Transform firePoint;
-
+    [Header("공격타입")] public AttackType attackType = AttackType.Melee;
+    [Header("발사위치")] public Transform firePoint;
     [Header("접근거리")] public float stopDistance = 2f;
-
-    [Header("대미지 점멸")] public float flashDuration = 0.1f;
-
     [Header("넉백회복")] public float knockbackRecoverTime = 0.3f;
 
-    [Header("피격효과")] [SerializeField] private GameObject bloodEffectPrefab;
     private float attackTimer; // 공격 딜레이 타이머
-    private Color originalColor; // 원래 색상 저장
     private bool isKnockback = false; // 넉백 중인지 여부
 
 
@@ -96,12 +86,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-        // Renderer 컴포넌트 가져오기
-        zombieRenderer = GetComponentInChildren<Renderer>();
-        // Renderer가 있으면 원래 색상을 저장
-        if (zombieRenderer != null)
-            originalColor = zombieRenderer.material.color;
-
         // 시작 시 참조 캐싱
         statHandler = GetComponent<ZombieStatHandler>();
     }
@@ -379,11 +363,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
         // 공격 타이머 초기화
         attackTimer = 0f;
-    }
-    //넉백 상태 초기화
-    private void ResetStateAfterKnockback()
-    {
-        ChangeState(State.Chase);
     }
     // 좀비 사망 처리
     public void Die()

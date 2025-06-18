@@ -26,10 +26,16 @@ public class Barricade : MonoBehaviour, IDamageable
     //웨이브 마다 체력이 세팅이 되도록
     //체력은 그냥 캐릭터의 체력 합산
     //무한 반복 웨이브가 오면 체력은 무한으로?
+
+    public void Start()
+    {
+        SetHealth();
+    }
+
     public void SetHealth()
     {
         currentHealth = CharacterManager.Instance.GetTotalHealt();
-        Debug.Log($"{currentHealth}");
+        //Debug.Log($"{currentHealth}");
     }
 
     

@@ -118,7 +118,6 @@ public class QuestManager : MonoBehaviour
 
         if (dailyQuestListSO == null)
         {
-            Debug.LogWarning("퀘스트 리스트 SO가 연결되지 않았습니다.");
             return;
         }
 
@@ -146,7 +145,6 @@ public class QuestManager : MonoBehaviour
             quest.IsClaimed = false;
         }
         SaveQuestsToJson();
-        // Debug.Log("일일 퀘스트가 초기화되었습니다.");
     }
 
     #endregion
@@ -239,6 +237,7 @@ public class QuestManager : MonoBehaviour
             quest.IsClaimed = true;
             SaveQuestsToJson();
             OnQuestRewardClaimed?.Invoke(quest.Id);
+            SoundManager.Instance.PlaySFX(SfxType.QuestClear, -1);
 
             switch (quest.Id)
             {

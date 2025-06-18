@@ -36,7 +36,7 @@ public class SkillData
 
     public SkillSO GetAllSkill(int key)
     {
-        dicSkills.TryGetValue(key,out var so);
+        dicSkills.TryGetValue(key, out var so);
         return so;
     }
 
@@ -54,11 +54,16 @@ public class Skill
     public string skillDescription;
     public Sprite skillImage;
     public float skillDamage;
-    public float skillCooldown;
+    public readonly float skillCooldown;
     public Rank requiredRank; //스킬의 랭크요구치
     public bool isActive; //현재 랭크에 따라서 스킬 활성화 또는 비활성화
     public GameObject skillPrefab;
     public float skillRange;
+    public float currentCooldown = 0;
+
+    //private float currentCooldown = 0f;
+
+    //public bool IsReady() => currentCooldown <= 0f;
 
     public Skill(SkillSO so, Rank currentRank)
     {
@@ -72,6 +77,7 @@ public class Skill
         isActive = currentRank >= requiredRank;
         this.skillPrefab = so.skillPrefab;
         this.skillRange = so.skillRange;
+
     }
 
     public void UpdateSkillbyRank(Rank currentRank)
@@ -79,35 +85,42 @@ public class Skill
         isActive = currentRank >= requiredRank;
     }
 
+
     public void UseSkill(int index, Vector3 chrPosition)
     {
-        //전달받은 인덱스를 가지고 스킬을 사용함
-        //스킬키 2001, 2002가 있음.
-        //전달받은 스킬키에 맞는 스킬 프리팹 소환
-        //던진다
-        //프리팹에 달려있는 스크립트에서 물리작용 처리
-
         SkillSO so = SkillData.Instance.GetAllSkill(index);
-        if(so == null)
-        {
-            Debug.Log($"스킬 {index} SkillSO를 찾을 수 없습니다.");
-            return;
-        }
-        if(so.skillPrefab == null)
-        {
-            Debug.Log($"스킬 {index} 프리팹을 찾을 수 없습니다.");
-        }
 
-        GameObject go = GameObject.Instantiate(so.skillPrefab, chrPosition, Quaternion.identity); //프리팹 소환
-        Vector3 throwDirection = go.transform.forward + Vector3.up * 0.5f; //던지는 방향. 어떻게 던져지는지 확인안됨
-
-        Grenade grenade = go.GetComponent<Grenade>(); //스킬 프리팹 컴포넌트 획득
-        if( grenade != null)
+        switch (index)
         {
-            grenade.GrenadeThrow(throwDirection, so.skillRange, so.skillDamage); //던지고 터지는건 grenade에서 처리
-        }
+            case (2001):
+                {
+                    GameObject go = GameObject.Instantiate(so.skillPrefab, chrPosition + new Vector3(0, 1.5f, 0), Quaternion.identity); //프리팹 소환
+                    Vector3 throwDirection = go.transform.forward + Vector3.up * 0.5f; //던지는 방향. 어떻게 던져지는지 확인안됨
 
+                    Grenade grenade = go.GetComponent<Grenade>(); //스킬 프리팹 컴포넌트 획득
+                    if (grenade != null)
+                    {
+                        grenade.GrenadeThrow(throwDirection, so.skillRange, so.skillDamage); //던지고 터지는건 grenade에서 처리
+                    }
+                    currentCooldown = skillCooldown;
+                    break;
+                }
+            case (2002):
+                {
+                    Vector3 spawnPosition = chrPosition + Vector3.up * 1.5f + Vector3.forward *1.5f;
+                    
+                    GameObject go = GameObject.Instantiate(so.skillPrefab);
+                    go.transform.position = spawnPosition;
+                    go.transform.rotation = Quaternion.identity;
+
+                    FireLauncher launcher = go.GetComponent<FireLauncher>();
+                    if (launcher != null)
+                    {
+                        launcher.Launch(skillDamage, skillRange);
+                    }
+                    currentCooldown = skillCooldown;
+                }
+                break;
+        }
     }
-
-
 }

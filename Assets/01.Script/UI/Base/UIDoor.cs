@@ -31,10 +31,12 @@ public class UIDoor : UIBase
     public override void Open()
     {
         base.Open();
+        transform.SetAsLastSibling();
         LeftDoorImg.gameObject.transform.MoveX(LeftPos, 0);
         Tween tween = RightDoorImg.gameObject.transform.MoveX(RightPos, 0);
         tween.OnComplete(() =>
         {
+            SoundManager.Instance.PlaySFX(SfxType.UI, 3);
             OnCloseAction?.Invoke();
             OnCloseAction = null;
             StartCoroutine(CloseCoroutine());
@@ -43,7 +45,7 @@ public class UIDoor : UIBase
 
     IEnumerator CloseCoroutine()
     {
-        yield return new WaitForSeconds(2f);
+        yield return CoroutineHelper.GetTime(2f);
         Close();
     }
 

@@ -20,6 +20,8 @@ public class CharacterInstance
     public List<RankInfo> rankInfo;
     public List<Skill> learnedSkills;
     public GameObject charPrefab;
+    public Sprite enhanceImage;
+    
 
     public CharacterInstance(CharacterDataSO data)
     {
@@ -32,6 +34,7 @@ public class CharacterInstance
         this.enhancementLevel = data.enhancementLevel;
         charPrefab = data.characterPrefab;
         this.rankInfo = data.rankInfo;
+        this.enhanceImage = data.enhanceImage;
 
         learnedSkills = new List<Skill>(); //스킬 리스트초기화
 
@@ -47,6 +50,17 @@ public class CharacterInstance
         {
             var skill = new Skill(so, currentRank);
             learnedSkills.Add(skill);
+
+        }
+    }
+
+    public void SetSkillCooltime()
+    {
+        List <Skill> Skills = GetActiveSkills();
+
+        foreach(var skill in Skills)
+        {
+            skill.currentCooldown = 0;
         }
     }
 
@@ -165,20 +179,15 @@ public class CharacterInstance
 
         if(info == null)
         {
-            Debug.Log("강화 실패: 현재 랭크 정보가 없습니다.");
             return;
         }
 
         if(enhancementLevel >= info.maxenhancementLevel)
         {
-            Debug.Log("최대 강화 수치 도달.");
             return;
         }
 
         enhancementLevel++;
-        Debug.Log($"현재 강화 수치 : {enhancementLevel}");
-        Debug.Log($"현재 공격력 : {GetCurrentAttack()}");
-        Debug.Log($"현재 체력 : {GetCurrentHealth()}");
     }
 
     /// <summary>
@@ -199,7 +208,6 @@ public class CharacterInstance
 
         if (rankIndex == -1 || rankIndex +1 >= rankInfo.Count) //랭크인데스 (랭크정보) 보다 많거나 적으면 랭크업 불가
         {
-            Debug.Log("랭크업 불가능");
             return false;
         }
 
@@ -210,5 +218,34 @@ public class CharacterInstance
 
         return true;
     }
+
+    CharacterBehaviour behaviour;
+
+    public void SetBehaviour(CharacterBehaviour _behaviour)
+    {
+        behaviour = _behaviour;
+    }
+
+    public bool ExcuteSkill(int _index)
+    {
+        
+        return behaviour.UseSkill(_index);
+    }
+
+    public float ExcuteCooltime(int _index)
+    {
+        return behaviour.GetSkillCooltime(_index);
+    }
+
+
+    //public void UpdateSkillCooldown(float time)
+    //{
+    //    foreach (var skill in learnedSkills)
+    //    {
+    //        skill.ReduceCooldown(time);
+    //    }
+    //}
+
+
 }
 

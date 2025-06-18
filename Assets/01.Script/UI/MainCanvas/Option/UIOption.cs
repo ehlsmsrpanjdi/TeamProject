@@ -44,9 +44,12 @@ public class UIOption : UIBase
             {
                 SceneManager.LoadScene(SampleScene);
                 Manager.OpenUI<UILobby>(Manager.GetMainCanvas());
+                Manager.GetUI<UIStatus>(Manager.GetMainCanvas()).transform.SetAsLastSibling();
                 Manager.CloseUI<UISkillViewer>(Manager.GetBattleCanvas());
                 Manager.CloseUI<UIStage>(Manager.GetBattleCanvas());
                 Manager.CloseUI<UIBattleMemberViewer>(Manager.GetBattleCanvas());
+                Manager.CloseUI<UINextStage>(Manager.GetBattleCanvas());
+                uiDoor.transform.SetAsLastSibling();
             };
             uiDoor.Open();
         }
@@ -76,6 +79,7 @@ public class UIOption : UIBase
     {
         base.Open();
         transform.FadeOutXY();
+        transform.SetAsLastSibling();
     }
 
     public override void Close()

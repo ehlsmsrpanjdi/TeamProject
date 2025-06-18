@@ -18,6 +18,7 @@ public class CharacterManager
             if (instance == null)
             {
                 instance = new CharacterManager();
+                instance.characters = Player.Instance.LoadCharacters();
 
             }
             return instance;
@@ -28,6 +29,7 @@ public class CharacterManager
 
     private List<CharacterInstance> characters = new();
     private Dictionary<int, CharacterInstance> participated = new();
+
 
     /// <summary>
     /// 캐릭터 데이터를 기반으로 인스턴스를 생성하고 등록
@@ -43,6 +45,8 @@ public class CharacterManager
         }
         CharacterInstance newCharacter = new CharacterInstance(data);
         characters.Add(newCharacter);
+        Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
 
         return newCharacter;
     }
@@ -57,6 +61,8 @@ public class CharacterManager
         }
         CharacterInstance newCharacter = new CharacterInstance(data);
         characters.Add(newCharacter);
+        Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
     }
 
     /// <summary>
@@ -84,6 +90,8 @@ public class CharacterManager
             return;
         }
         characters.RemoveAt(index);
+        Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
     }
 
     /// <summary>
@@ -199,8 +207,12 @@ public class CharacterManager
             return false;
         }
 
+        Player.Instance.UseGold(1000);
+
         character.Enhance();
         QuestManager.Instance.OnEnchantButtonPressed();
+        Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
         return true;
     }
 
@@ -233,7 +245,6 @@ public class CharacterManager
         var sameCharacter = characters.Where(sc => sc.key == character.key && sc.currentRank == character.currentRank).ToList(); //동일한 키, 동일한 등급을 가지고 있는 캐릭터만 선택하여 리스트화
         if(sameCharacter.Count < requiredCount)
         {
-            Debug.Log("강화에 필요한 수량이 부족합니다.");
             return false;
         }
 
@@ -248,7 +259,8 @@ public class CharacterManager
 
         }
         character.RankUp();
-        Debug.Log("랭크업 성공");
+        Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
         //GetAllCharacters(); 필요없음.
 
         return true;
@@ -289,18 +301,14 @@ public class CharacterManager
 
         foreach (var character in characters)
         {
-            Debug.Log($"생성된 캐릭터 이름: {character.charcterName}\n 생성된 캐릭터 랭크: {character.currentRank}");
-            Debug.Log($"공격력: {character.GetCurrentAttack()}\n 체력 : {character.GetCurrentHealth()}");
             List<Skill> activeSkills = character.GetActiveSkills();
 
             if (activeSkills.Count > 0)
             {
                 string skillNames = string.Join(", ", activeSkills.Select(skill => skill.skillName));
-                Debug.Log($"활성화된 스킬: {skillNames}");
             }
             else
             {
-                Debug.Log("활성화된 스킬이 없습니다.");
             }
 
         }
@@ -311,18 +319,11 @@ public class CharacterManager
         RankUpCharacter(0);
         foreach (var character in characters)
         {
-            Debug.Log($"캐릭터 이름: {character.charcterName}\n 캐릭터 랭크: {character.currentRank}");
-            Debug.Log($"공격력: {character.GetCurrentAttack()}\n 체력 : {character.GetCurrentHealth()}");
             List<Skill> activeSkills = character.GetActiveSkills();
 
             if (activeSkills.Count > 0)
             {
                 string skillNames = string.Join(", ", activeSkills.Select(skill => skill.skillName));
-                Debug.Log($"활성화된 스킬: {skillNames}");
-            }
-            else
-            {
-                Debug.Log("활성화된 스킬이 없습니다.");
             }
         }
     }

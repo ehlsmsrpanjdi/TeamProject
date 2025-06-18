@@ -816,6 +816,7 @@ GameObject:
   - component: {fileID: 3915735207624839816}
   - component: {fileID: 4304707325123531778}
   - component: {fileID: 475801421299904057}
+  - component: {fileID: 8427992794073856755}
   m_Layer: 0
   m_Name: Char_1001
   m_TagString: Untagged
@@ -873,11 +874,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c67d50ce207cc5429f5914ad8eb80aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackRange: 10
+  attackRange: 9
   attackDelay: 0.5
   duration: 0
   animator: {fileID: 0}
   isAttacking: 0
+  isMoving: 0
+--- !u!114 &8427992794073856755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097627126657063767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e59610a5f30efd4d97dd604121212fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2338106438903685403
 GameObject:
   m_ObjectHideFlags: 0

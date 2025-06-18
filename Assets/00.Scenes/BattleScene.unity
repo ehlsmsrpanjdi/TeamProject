@@ -134,12 +134,12 @@ PrefabInstance:
     - target: {fileID: 2911252482962131820, guid: 59615babfb302534aaaec8277cac008d,
         type: 3}
       propertyPath: spawnAreaSize.x
-      value: 5.5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2911252482962131820, guid: 59615babfb302534aaaec8277cac008d,
         type: 3}
       propertyPath: spawnAreaSize.y
-      value: 10
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5666238988601303684, guid: 59615babfb302534aaaec8277cac008d,
         type: 3}
@@ -154,7 +154,7 @@ PrefabInstance:
     - target: {fileID: 5666238988601303684, guid: 59615babfb302534aaaec8277cac008d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 25.08
+      value: 30.11
       objectReference: {fileID: 0}
     - target: {fileID: 5666238988601303684, guid: 59615babfb302534aaaec8277cac008d,
         type: 3}
@@ -263,6 +263,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 5824347474969611468, guid: a97ffb6b65f611047b60ca6eea084208,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 25.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9163622854671330735, guid: a97ffb6b65f611047b60ca6eea084208,
+        type: 3}
+      propertyPath: m_Range
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 9163622854671330735, guid: a97ffb6b65f611047b60ca6eea084208,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.41162336
+      objectReference: {fileID: 0}
+    - target: {fileID: 9163622854671330735, guid: a97ffb6b65f611047b60ca6eea084208,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.6664661
+      objectReference: {fileID: 0}
+    - target: {fileID: 9163622854671330735, guid: a97ffb6b65f611047b60ca6eea084208,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.6981132
+      objectReference: {fileID: 0}
+    - target: {fileID: 9163622854671330735, guid: a97ffb6b65f611047b60ca6eea084208,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -387,6 +417,55 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1 &773574883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 773574885}
+  - component: {fileID: 773574884}
+  m_Layer: 0
+  m_Name: Global Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &773574884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773574883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 1276b8b545203f04085e6eeb5005d233, type: 2}
+--- !u!4 &773574885
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773574883}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.8734503, y: 0.7991371, z: 1.8852043}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &869197359
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -717,7 +796,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -767,3 +846,4 @@ SceneRoots:
   - {fileID: 869197359}
   - {fileID: 1533786190}
   - {fileID: 1421027896}
+  - {fileID: 773574885}

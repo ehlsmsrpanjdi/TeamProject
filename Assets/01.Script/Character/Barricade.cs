@@ -44,7 +44,6 @@ public class Barricade : MonoBehaviour, IDamageable
     public void TakeDamage(int amount, Vector3 attackerPosition, float knockbackForce)
     {
         currentHealth -= amount;
-        Debug.Log($"대미지 {amount} 받음 → 남은 체력: {currentHealth}");
 
          // 체력이 0 이하일 경우 스테이지 실패
         if (currentHealth <= 0)
@@ -59,7 +58,6 @@ public class Barricade : MonoBehaviour, IDamageable
                 foreach (var behaviour in behaviours)
                 {
                     behaviour.Die();
-                    Debug.Log("사망 호출");
                     waveManager.OnPlayerDead();
                 }
                 StartCoroutine(RunAway());
@@ -69,7 +67,7 @@ public class Barricade : MonoBehaviour, IDamageable
 
     IEnumerator RunAway()
     {
-        yield return new WaitForSeconds(3f);
+        yield return CoroutineHelper.GetTime(3f);
         WaveManager.Instance.RunAwayStage();
     }
 

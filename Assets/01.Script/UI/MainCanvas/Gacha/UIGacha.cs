@@ -101,7 +101,7 @@ public class UIGacha : UIBase
 
     IEnumerator CloseCoroutine()
     {
-        yield return new WaitForSeconds(3f);
+        yield return CoroutineHelper.GetTime(3f);
         if (true == gameObject.activeSelf)
         {
             Close();

@@ -42,7 +42,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     private IEnumerator MoveSetPosition(Transform setPosition)
     {
-        yield return new WaitForSeconds(1f);
+        yield return CoroutineHelper.GetTime(1f);
         animController.Moving(true);
         float speed = 3f;
         while (Vector3.Distance(transform.position, setPosition.position) > 0.1f)
@@ -254,7 +254,6 @@ public class CharacterBehaviour : MonoBehaviour
 
         if (skillIndex < 0 || skillIndex >= charInstance.GetActiveSkills().Count)
         {
-            Debug.Log("스킬 인덱스가 잘못되었습니다.");
             return false;
         }
 
@@ -264,7 +263,6 @@ public class CharacterBehaviour : MonoBehaviour
 
         if (!skill.isActive)
         {
-            Debug.Log($"스킬 {skill.skillName} is Not Activated");
             return false;
         }
         skill.UseSkill(skill.skillKey, transform.position);

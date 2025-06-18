@@ -36,7 +36,7 @@ public class FireLauncher : MonoBehaviour
                     target.TakeDamage((int)damage, transform.position, knockbackForce: 0f);
                 }
             }
-            yield return new WaitForSeconds(interval);
+            yield return CoroutineHelper.GetTime(interval);
             elapsed += interval;
         }
         Destroy(gameObject);

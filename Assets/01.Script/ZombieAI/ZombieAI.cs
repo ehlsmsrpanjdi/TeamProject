@@ -149,10 +149,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
                 agent.isStopped = false;
                 agent.SetDestination(target.position);
             }
-            else
-            {
-                Debug.LogWarning("[Chase] agent가 NavMesh 위에 없음");
-            }
 
             // 상태값 변경 시에만 애니메이션 변경
             if (animator != null && animator.runtimeAnimatorController != null &&
@@ -212,7 +208,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
         // 공격 딜레이가 지나면 공격 실행
         if (attackTimer >= statHandler.AttackDelay)
         {
-            Debug.Log("[ZombieAI] 공격 시도");
 
             if (animator != null && animator.runtimeAnimatorController != null)
             {
@@ -226,12 +221,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
                 IDamageable damageTarget = target.GetComponent<IDamageable>();
                 if (damageTarget != null)
                 {
-                    Debug.Log("[ZombieAI] 근접 대미지 전달");
                     damageTarget.TakeDamage(statHandler.Damage, transform.position, 0f);
-                }
-                else
-                {
-                    Debug.LogWarning("[ZombieAI] 대상이 IDamageable 아님");
                 }
             }
             //원거리 공격
@@ -243,7 +233,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
                 if (velocity == Vector3.zero)
                 {
-                    Debug.LogWarning("[ProjectileAttack] 속도 0 → 직선 대체");
                     velocity = (target.position - firePoint.position).normalized * 20f;
                 }
 
@@ -260,14 +249,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
                         proj.SetShooter(gameObject);
                         proj.Launch(velocity);
                     }
-                    else
-                    {
-                        Debug.LogWarning("[ZombieAI] ZombieProjectile 컴포넌트 없음");
-                    }
-                }
-                else
-                {
-                    Debug.LogWarning("[ZombieAI] 투사체 풀에서 꺼내기 실패");
                 }
             }
 
@@ -367,7 +348,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
     }
     private IEnumerator ReturnEffect(GameObject obj, string key, float delay)
     {
-        yield return new WaitForSeconds(delay);
+        yield return CoroutineHelper.GetTime(delay);
         ObjectPool.Return(key, obj);
     }
 
@@ -384,7 +365,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         dir.y = 0.1f;
         rb.AddForce(dir * force, ForceMode.Impulse);
 
-        yield return new WaitForSeconds(knockbackRecoverTime);
+        yield return CoroutineHelper.GetTime(knockbackRecoverTime);
         if (currentState == State.Die) yield break;
 
         rb.velocity = Vector3.zero;
@@ -438,7 +419,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
             int reward = isRetry ? Mathf.CeilToInt(baseReward * 0.1f) : baseReward;
 
             Player.Instance.AddGold(reward);
-            Debug.Log($"[ZombieAI] 골드 {reward} 획득 (스테이지 {currentStage}, 반복 모드: {isRetry})");
         }
 
         // 풀에 반환 대기 시작
@@ -452,7 +432,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
 
     private IEnumerator ReturnToPoolAfterDelay(float delay, string key)
     {
-        yield return new WaitForSeconds(delay);
+        yield return CoroutineHelper.GetTime(delay);
         ObjectPool.Return(key, gameObject);
     }
 

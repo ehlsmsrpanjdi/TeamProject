@@ -179,20 +179,15 @@ public class CharacterInstance
 
         if(info == null)
         {
-            Debug.Log("강화 실패: 현재 랭크 정보가 없습니다.");
             return;
         }
 
         if(enhancementLevel >= info.maxenhancementLevel)
         {
-            Debug.Log("최대 강화 수치 도달.");
             return;
         }
 
         enhancementLevel++;
-        Debug.Log($"현재 강화 수치 : {enhancementLevel}");
-        Debug.Log($"현재 공격력 : {GetCurrentAttack()}");
-        Debug.Log($"현재 체력 : {GetCurrentHealth()}");
     }
 
     /// <summary>
@@ -213,7 +208,6 @@ public class CharacterInstance
 
         if (rankIndex == -1 || rankIndex +1 >= rankInfo.Count) //랭크인데스 (랭크정보) 보다 많거나 적으면 랭크업 불가
         {
-            Debug.Log("랭크업 불가능");
             return false;
         }
 

@@ -37,7 +37,7 @@ public class UISkillPopup : UIBase
 
     IEnumerator CloseCoroutine()
     {
-        yield return new WaitForSeconds(2.0f);
+        yield return CoroutineHelper.GetTime(2.0f);
         Close();
     }
 

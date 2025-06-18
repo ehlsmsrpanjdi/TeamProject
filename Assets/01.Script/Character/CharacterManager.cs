@@ -245,7 +245,6 @@ public class CharacterManager
         var sameCharacter = characters.Where(sc => sc.key == character.key && sc.currentRank == character.currentRank).ToList(); //동일한 키, 동일한 등급을 가지고 있는 캐릭터만 선택하여 리스트화
         if(sameCharacter.Count < requiredCount)
         {
-            Debug.Log("강화에 필요한 수량이 부족합니다.");
             return false;
         }
 
@@ -262,7 +261,6 @@ public class CharacterManager
         character.RankUp();
         Player.Instance.SaveCharacters(characters);
         Player.Instance.SavePlayerData();
-        Debug.Log("랭크업 성공");
         //GetAllCharacters(); 필요없음.
 
         return true;
@@ -303,18 +301,14 @@ public class CharacterManager
 
         foreach (var character in characters)
         {
-            Debug.Log($"생성된 캐릭터 이름: {character.charcterName}\n 생성된 캐릭터 랭크: {character.currentRank}");
-            Debug.Log($"공격력: {character.GetCurrentAttack()}\n 체력 : {character.GetCurrentHealth()}");
             List<Skill> activeSkills = character.GetActiveSkills();
 
             if (activeSkills.Count > 0)
             {
                 string skillNames = string.Join(", ", activeSkills.Select(skill => skill.skillName));
-                Debug.Log($"활성화된 스킬: {skillNames}");
             }
             else
             {
-                Debug.Log("활성화된 스킬이 없습니다.");
             }
 
         }
@@ -325,18 +319,11 @@ public class CharacterManager
         RankUpCharacter(0);
         foreach (var character in characters)
         {
-            Debug.Log($"캐릭터 이름: {character.charcterName}\n 캐릭터 랭크: {character.currentRank}");
-            Debug.Log($"공격력: {character.GetCurrentAttack()}\n 체력 : {character.GetCurrentHealth()}");
             List<Skill> activeSkills = character.GetActiveSkills();
 
             if (activeSkills.Count > 0)
             {
                 string skillNames = string.Join(", ", activeSkills.Select(skill => skill.skillName));
-                Debug.Log($"활성화된 스킬: {skillNames}");
-            }
-            else
-            {
-                Debug.Log("활성화된 스킬이 없습니다.");
             }
         }
     }

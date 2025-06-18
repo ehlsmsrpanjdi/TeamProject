@@ -39,7 +39,7 @@ public class Grenade : MonoBehaviour
 
     private IEnumerator ExplosionTime()
     {
-        yield return new WaitForSeconds(explosionDelay);
+        yield return CoroutineHelper.GetTime(explosionDelay);
         if (explosionEffect != null)
         {
             GameObject obj = Instantiate(explosionEffect, transform.position, Quaternion.identity);

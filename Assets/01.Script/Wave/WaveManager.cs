@@ -128,7 +128,7 @@ public class WaveManager : MonoBehaviour
         int spawnBatch = 5; //몇번 나눠서 올것인가
         int zombiesPerBatch = Mathf.CeilToInt((float)zombieTotalCount / spawnBatch);
 
-        yield return new WaitForSeconds(waveInterval);
+        yield return CoroutineHelper.GetTime(waveInterval);
 
         int totalSpawned = 0;
         for (int i = 0; i < spawnBatch; i++)
@@ -137,9 +137,8 @@ public class WaveManager : MonoBehaviour
             int count = Mathf.Min(zombiesPerBatch, remaining);
             int spawned = spawner.SpawnWave(count, false);
             totalSpawned += spawned;
-            yield return new WaitForSeconds(1.0f); //스폰간격
+            yield return CoroutineHelper.GetTime(1.0f); //스폰간격
         }
-        Debug.Log($"[WaveManager] 일반 웨이브 - 스테이지: {stage}, 생성된 좀비 수: {totalSpawned}");
     }
 
     private IEnumerator StartRepeatWave()
@@ -150,7 +149,7 @@ public class WaveManager : MonoBehaviour
         int spawnBatch = 5; //몇번 나눠서 올것인가
         int zombiesPerBatch = Mathf.CeilToInt((float)zombieRepeatCount / spawnBatch);
 
-        yield return new WaitForSeconds(waveInterval);
+        yield return CoroutineHelper.GetTime(waveInterval);
 
         int totalSpawned = 0;
         for (int i = 0; i < spawnBatch; i++)
@@ -159,9 +158,8 @@ public class WaveManager : MonoBehaviour
             int count = Mathf.Min(zombiesPerBatch, remaining);
             int spawned = spawner.SpawnWave(count, true);
             totalSpawned += spawned;
-            yield return new WaitForSeconds(1.0f); //스폰간격
+            yield return CoroutineHelper.GetTime(1.0f); //스폰간격
         }
-        Debug.Log($"[WaveManager] 반복(약화) 웨이브 - 스테이지: {stage}, 생성된 좀비 수: {totalSpawned}");
     }
 
     public void OnZombieDied()

@@ -45,7 +45,7 @@ public class UIDoor : UIBase
 
     IEnumerator CloseCoroutine()
     {
-        yield return new WaitForSeconds(2f);
+        yield return CoroutineHelper.GetTime(2f);
         Close();
     }
 

@@ -12,8 +12,6 @@ public class ZombieSpawner : MonoBehaviour
     {
         int spawnSuccess = 0;
 
-        SoundManager.Instance.PlaySFX(SfxType.ZSpawn, -1);
-
         for (int i = 0; i < zombieCount; i++)
         {
             Vector3 randomPos = GetRandomPositionInArea();

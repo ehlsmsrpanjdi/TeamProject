@@ -22,11 +22,6 @@ public enum SfxType // SFX 타입
     UI,
     Running,
     Clear,
-    ZAttack,
-    ZDie,
-    ZMove,
-    ZSpawn,
-    ZTakeDamage,
     QuestClear,
     ZombieAttack,
     ZombieHit,
@@ -69,8 +64,6 @@ public class SoundManager : MonoBehaviour
     public float MasterVolume { get; private set; }
     public float BgmVolume { get; private set; }
     public float SfxVolume { get; private set; }
-
-    private bool isSfxPlaying = false;
 
     // 볼륨 설정은 PlayerPrefs를 통해 저장
     private const string MASTER_VOLUME_KEY = "MasterVolume";
@@ -160,21 +153,10 @@ public class SoundManager : MonoBehaviour
         List<AudioClip> clips = sfx[sfxType];
         if (clips.Count == 0) return;
 
-        if (isSfxPlaying) return;
-
         AudioClip clip = (index < 0) ? clips[Random.Range(0, clips.Count)] : clips[index];
 
         sfxSource.clip = clip;
         sfxSource.PlayOneShot(clip, SfxVolume);
-        isSfxPlaying = true;
-
-        StartCoroutine(ResetSfxFlag(clip.length));
-    }
-
-    private IEnumerator ResetSfxFlag(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        isSfxPlaying = false;
     }
 
     public void SetMasterVolume(float volume)

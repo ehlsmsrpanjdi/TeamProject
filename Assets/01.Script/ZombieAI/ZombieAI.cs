@@ -148,7 +148,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
             {
                 agent.isStopped = false;
                 agent.SetDestination(target.position);
-                SoundManager.Instance.PlaySFX(SfxType.ZMove, -1);
             }
             else
             {
@@ -214,7 +213,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
         if (attackTimer >= statHandler.AttackDelay)
         {
             Debug.Log("[ZombieAI] 공격 시도");
-            SoundManager.Instance.PlaySFX(SfxType.ZAttack, -1);
 
             if (animator != null && animator.runtimeAnimatorController != null)
             {
@@ -327,10 +325,10 @@ public class ZombieAI : MonoBehaviour, IDamageable
             return;
         }
 
-        SoundManager.Instance.PlaySFX(SfxType.ZTakeDamage, -1);
         bool isDead = statHandler.TakeDamage(amount);
         if (isDead)
         {
+            SoundManager.Instance.PlaySFX(SfxType.Attack, -1);
             SoundManager.Instance.PlaySFX(SfxType.ZombieDie, -1);
             // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
             if (animator != null && animator.runtimeAnimatorController != null)
@@ -342,6 +340,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         }
         else
         {
+            SoundManager.Instance.PlaySFX(SfxType.Attack, -1);
             SoundManager.Instance.PlaySFX(SfxType.ZombieHit, -1);
             // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
             if (animator != null && animator.runtimeAnimatorController != null)
@@ -412,7 +411,6 @@ public class ZombieAI : MonoBehaviour, IDamageable
         if (currentState == State.Die) return;
 
         ChangeState(State.Die);
-        SoundManager.Instance.PlaySFX(SfxType.ZDie, -1);
 
         if (agent != null && agent.enabled)
         {

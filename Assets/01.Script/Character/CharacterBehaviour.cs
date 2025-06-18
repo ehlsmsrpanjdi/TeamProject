@@ -21,7 +21,7 @@ public class CharacterBehaviour : MonoBehaviour
     List<Skill> GainSkill;
 
     //public float currentCooldown = 0f;
-    
+
 
     public void Init(CharacterInstance data, Transform destination)
     {
@@ -78,7 +78,7 @@ public class CharacterBehaviour : MonoBehaviour
         }
 
         ReduceCooltime();
-        
+
     }
 
     /// <summary>
@@ -200,7 +200,6 @@ public class CharacterBehaviour : MonoBehaviour
     /// </summary>
     public void Attack()
     {
-
         Collider closestEnemy = GetClosestEnemy();
         if (closestEnemy == null)
         {
@@ -252,7 +251,7 @@ public class CharacterBehaviour : MonoBehaviour
     //스킬사용(액티브로 하기로 했음)
     public bool UseSkill(int skillIndex)
     {
-        
+
         if (skillIndex < 0 || skillIndex >= charInstance.GetActiveSkills().Count)
         {
             Debug.Log("스킬 인덱스가 잘못되었습니다.");
@@ -275,13 +274,13 @@ public class CharacterBehaviour : MonoBehaviour
 
     public void ReduceCooltime()
     {
-        
+
         foreach(var time in GainSkill)
         {
-           
+
             time.currentCooldown = Mathf.Max(0f, time.currentCooldown - Time.deltaTime);
         }
-        
+
     }
 
     public float GetSkillCooltime(int index)

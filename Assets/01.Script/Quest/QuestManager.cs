@@ -239,6 +239,7 @@ public class QuestManager : MonoBehaviour
             quest.IsClaimed = true;
             SaveQuestsToJson();
             OnQuestRewardClaimed?.Invoke(quest.Id);
+            SoundManager.Instance.PlaySFX(SfxType.QuestClear, -1);
 
             switch (quest.Id)
             {

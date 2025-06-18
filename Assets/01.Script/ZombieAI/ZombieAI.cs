@@ -328,6 +328,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         bool isDead = statHandler.TakeDamage(amount);
         if (isDead)
         {
+            SoundManager.Instance.PlaySFX(SfxType.Attack, -1);
             SoundManager.Instance.PlaySFX(SfxType.ZombieDie, -1);
             // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
             if (animator != null && animator.runtimeAnimatorController != null)
@@ -339,6 +340,7 @@ public class ZombieAI : MonoBehaviour, IDamageable
         }
         else
         {
+            SoundManager.Instance.PlaySFX(SfxType.Attack, -1);
             SoundManager.Instance.PlaySFX(SfxType.ZombieHit, -1);
             // 애니메이터가 있고, 컨트롤러가 할당된 경우에만 실행
             if (animator != null && animator.runtimeAnimatorController != null)

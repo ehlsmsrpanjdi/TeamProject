@@ -16,7 +16,7 @@ MonoBehaviour:
   skillName: Boom
   skillDescription: "\uC218\uB958\uD0C4 \uD22C\uCC99"
   skillIcon: {fileID: 21300000, guid: 926010ccc46967444833ab0170da41b4, type: 3}
-  skillDamage: 1000
+  skillDamage: 100
   skillCooldown: 15
   skillPrefab: {fileID: 7750279728706684280, guid: 26812210f4def9748b7614e23f6fbe7c,
     type: 3}

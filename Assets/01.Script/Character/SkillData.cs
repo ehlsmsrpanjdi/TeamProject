@@ -108,13 +108,15 @@ public class Skill
             case (2002):
                 {
                     Vector3 spawnPosition = chrPosition + Vector3.up * 1.5f + Vector3.forward *1.5f;
+                    
                     GameObject go = GameObject.Instantiate(so.skillPrefab);
                     go.transform.position = spawnPosition;
+                    go.transform.rotation = Quaternion.identity;
 
                     FireLauncher launcher = go.GetComponent<FireLauncher>();
                     if (launcher != null)
                     {
-                        launcher.Lauancher(skillDamage, skillRange);
+                        launcher.Launch(skillDamage, skillRange);
                     }
                     currentCooldown = skillCooldown;
                 }

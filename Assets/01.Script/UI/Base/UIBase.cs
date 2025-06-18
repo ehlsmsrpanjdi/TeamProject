@@ -16,6 +16,7 @@ public class UIBase : MonoBehaviour
 
     public virtual void Close()
     {
+        transform.KillDoTween();
         gameObject.SetActive(false);
     }
 }

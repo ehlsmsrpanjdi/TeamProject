@@ -210,5 +210,17 @@ public class CharacterInstance
 
         return true;
     }
+
+    CharacterBehaviour behaviour;
+
+    public void SetBehaviour(CharacterBehaviour _behaviour)
+    {
+        behaviour = _behaviour;
+    }
+
+    public void ExcuteSkill(int _index)
+    {
+        behaviour.UseSkill(_index);
+    }
 }
 

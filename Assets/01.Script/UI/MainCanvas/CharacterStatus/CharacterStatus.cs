@@ -102,7 +102,7 @@ public class CharacterStatus : MonoBehaviour
     public void SetStatusView(CharacterInstance _instance)
     {
         CharacterImage.sprite = _instance.characterImage;
-        WeaponImage.sprite = _instance.characterImage;
+        WeaponImage.sprite = _instance.enhanceImage;
 
         StatusReset();
     }

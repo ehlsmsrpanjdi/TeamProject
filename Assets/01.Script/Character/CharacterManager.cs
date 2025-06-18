@@ -18,6 +18,7 @@ public class CharacterManager
             if (instance == null)
             {
                 instance = new CharacterManager();
+                instance.characters = Player.Instance.LoadCharacters();
 
             }
             return instance;
@@ -43,6 +44,7 @@ public class CharacterManager
         }
         CharacterInstance newCharacter = new CharacterInstance(data);
         characters.Add(newCharacter);
+        Player.Instance.SaveCharacters(characters);
 
         return newCharacter;
     }
@@ -57,6 +59,7 @@ public class CharacterManager
         }
         CharacterInstance newCharacter = new CharacterInstance(data);
         characters.Add(newCharacter);
+        Player.Instance.SaveCharacters(characters);
     }
 
     /// <summary>
@@ -84,6 +87,7 @@ public class CharacterManager
             return;
         }
         characters.RemoveAt(index);
+        Player.Instance.SaveCharacters(characters);
     }
 
     /// <summary>
@@ -199,8 +203,11 @@ public class CharacterManager
             return false;
         }
 
+        Player.Instance.UseGold(1000);
+        
         character.Enhance();
         QuestManager.Instance.OnEnchantButtonPressed();
+        Player.Instance.SaveCharacters(characters);
         return true;
     }
 
@@ -248,6 +255,7 @@ public class CharacterManager
 
         }
         character.RankUp();
+        Player.Instance.SaveCharacters(characters);
         Debug.Log("랭크업 성공");
         //GetAllCharacters(); 필요없음.
 

@@ -28,6 +28,9 @@ public enum SfxType // SFX 타입
     ZSpawn,
     ZTakeDamage,
     QuestClear,
+    ZombieAttack,
+    ZombieHit,
+    ZombieDie,
     // 필요한 효과음 타입 추가
 }
 
@@ -76,6 +79,16 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
         bgmSource = gameObject.AddComponent<AudioSource>();
         sfxSource = gameObject.AddComponent<AudioSource>();
         Init(bgmSource, sfxSource);

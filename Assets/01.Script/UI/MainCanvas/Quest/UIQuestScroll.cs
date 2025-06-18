@@ -56,7 +56,7 @@ public class UIQuestScroll : UIBase
         Tween tween = transform.FadeInXY();
         tween.OnComplete(() =>
         {
-            foreach(QuestLog Log in questList)
+            foreach (QuestLog Log in questList)
             {
                 Destroy(Log.gameObject);
             }
@@ -76,5 +76,22 @@ public class UIQuestScroll : UIBase
         log.SetInfo(_info);
         log.SetValue(_info);
         questList.Add(log);
+    }
+
+    public void SetQuest(QuestDisplayInfo _info, QuestLog _Log)
+    {
+        if(_info.IsClaimed == true)
+        {
+            _Log.SetClaimedColor();
+        }
+        _Log.SetQuestName(_info.Title);
+        _Log.SetQuestDescription(_info.Description);
+        _Log.SetInfo(_info);
+        _Log.SetValue(_info);
+    }
+
+    public void ResetQuest()
+    {
+        List<QuestDisplayInfo> questInfos = QuestManager.Instance.GetQuestDisplayInfos();
     }
 }

@@ -106,5 +106,8 @@ https://github.com/user-attachments/assets/5de271f4-13a9-4886-bb0d-7d7c149e5227
 - Zombie Sound Pack - Free Version(https://assetstore.unity.com/packages/audio/sound-fx/zombie-sound-pack-free-version-124430)
 - Free Sound Effects Pack(https://assetstore.unity.com/packages/audio/sound-fx/free-sound-effects-pack-155776)
 - Tokyo_Street(https://assetstore.unity.com/packages/3d/environments/urban/tokyo-street-228474)
+- Free Quick Effects Vol. 1(https://assetstore.unity.com/packages/vfx/particles/free-quick-effects-vol-1-304424)
+- Character Selection Effects FREE(https://assetstore.unity.com/packages/vfx/particles/character-selection-effects-free-285268)
+- 100 Best Effects Pack(https://assetstore.unity.com/packages/vfx/particles/spells/100-best-effects-pack-25634)
 - 배민 한나는열한살체(https://www.woowahan.com/fonts)
 - AI 생성 이미지

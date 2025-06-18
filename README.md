@@ -1,4 +1,4 @@
-# Team Project (가제)
+# Street of the Dead
 
   * [목차](#목차)
   * [🧭프로젝트 목적](#프로젝트-목적)
@@ -37,21 +37,15 @@ https://github.com/user-attachments/assets/146506e7-d404-4f94-b14f-57bc5e308546
 
 https://github.com/user-attachments/assets/48fa4358-8373-46b9-bc00-f63aecfcbcd4
 
-### ◇ 전투 씬
+### ◇ 배틀 씬
 
-#### 로비 - 전투 씬 전환
+#### 로비 - 배틀 씬 전환
 
 https://github.com/user-attachments/assets/5de271f4-13a9-4886-bb0d-7d7c149e5227
 
-#### 전투 씬 배치
+#### 배틀 씬 UI
 
-
-#### 용병(캐릭터) 공격 및 스킬
-
-(추가 필요)
-
-#### 좀비 종류 별 패턴(AI)
-- 여기는 UI 동영상만 올릴 예정이라 지우겠습니다. 아래 설명이 잘 돼있어서 괜찮을 것 같네요.
+https://github.com/user-attachments/assets/e4887dfd-9684-4401-8bc3-6e5749b5029c
 
 </br>
 
@@ -102,6 +96,7 @@ https://github.com/user-attachments/assets/5de271f4-13a9-4886-bb0d-7d7c149e5227
 ### 개발 환경
 - Unity 2022.3.17f1
 - Windows 10 & 11
+- GitHub
 
 ### 리소스
 - Essential Game Music Pack(https://assetstore.unity.com/packages/audio/music/essential-game-music-pack-313118)

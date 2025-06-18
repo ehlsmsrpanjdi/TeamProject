@@ -44,11 +44,7 @@ https://github.com/user-attachments/assets/48fa4358-8373-46b9-bc00-f63aecfcbcd4
 https://github.com/user-attachments/assets/5de271f4-13a9-4886-bb0d-7d7c149e5227
 
 #### 전투 씬 배치
-Map
-ZombieSpawner
-WaveManager
-CharacterData
-EventSystem
+
 
 #### 용병(캐릭터) 공격 및 스킬
 
@@ -108,7 +104,6 @@ EventSystem
 ### 개발 환경
 - Unity 2022.3.17f1
 - Windows 10 & 11
-- (추가 필요)
 
 ### 리소스
 - Essential Game Music Pack(https://assetstore.unity.com/packages/audio/music/essential-game-music-pack-313118)

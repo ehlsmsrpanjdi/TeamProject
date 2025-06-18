@@ -67,6 +67,16 @@ public class SoundManager : MonoBehaviour
 
     private void Awake()
     {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+
         bgmSource = gameObject.AddComponent<AudioSource>();
         sfxSource = gameObject.AddComponent<AudioSource>();
         Init(bgmSource, sfxSource);

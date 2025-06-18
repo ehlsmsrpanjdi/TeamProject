@@ -128,5 +128,13 @@ public class Skill
 
     }
 
+    public void UseSkill2(int index, Vector3 chrPosition)
+    {
+        SkillSO so = SkillData.Instance.GetAllSkill(index);
+
+        GameObject go = GameObject.Instantiate(so.skillPrefab, chrPosition, Quaternion.identity);
+        Vector3 launchDirection = go.transform.forward;
+    }
+
 
 }

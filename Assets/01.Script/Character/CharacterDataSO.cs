@@ -30,6 +30,7 @@ public class CharacterDataSO : ScriptableObject
     public int enhancementLevel; // 강화 수치
 
     public List<RankInfo> rankInfo;
+    public Sprite enhanceImage;
 }
 
 

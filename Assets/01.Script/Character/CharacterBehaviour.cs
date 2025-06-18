@@ -20,7 +20,7 @@ public class CharacterBehaviour : MonoBehaviour
 
     List<Skill> GainSkill;
 
-    public float currentCooldown = 0f;
+    //public float currentCooldown = 0f;
     
 
     public void Init(CharacterInstance data, Transform destination)
@@ -34,6 +34,8 @@ public class CharacterBehaviour : MonoBehaviour
 
         isMoving = true;
         StartCoroutine(MoveSetPosition(destination));
+
+        charInstance.SetSkillCooltime();
 
         //animController.SetAttack(true);
     }
@@ -259,7 +261,7 @@ public class CharacterBehaviour : MonoBehaviour
 
         Skill skill = GainSkill[skillIndex];
 
-        if (skill.skillCooldown > 0) return false;
+        if (skill.currentCooldown > 0) return false;
 
         if (!skill.isActive)
         {
@@ -277,14 +279,14 @@ public class CharacterBehaviour : MonoBehaviour
         foreach(var time in GainSkill)
         {
            
-            time.skillCooldown = Mathf.Max(0f, time.skillCooldown - Time.deltaTime);
+            time.currentCooldown = Mathf.Max(0f, time.currentCooldown - Time.deltaTime);
         }
         
     }
 
     public float GetSkillCooltime(int index)
     {
-        return GainSkill[index].skillCooldown;
+        return GainSkill[index].currentCooldown;
     }
 
 

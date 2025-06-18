@@ -47,6 +47,17 @@ public class CharacterInstance
         {
             var skill = new Skill(so, currentRank);
             learnedSkills.Add(skill);
+
+        }
+    }
+
+    public void SetSkillCooltime()
+    {
+        List <Skill> Skills = GetActiveSkills();
+
+        foreach(var skill in Skills)
+        {
+            skill.currentCooldown = 0;
         }
     }
 

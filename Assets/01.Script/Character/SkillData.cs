@@ -54,11 +54,12 @@ public class Skill
     public string skillDescription;
     public Sprite skillImage;
     public float skillDamage;
-    public float skillCooldown;
+    public readonly float skillCooldown;
     public Rank requiredRank; //스킬의 랭크요구치
     public bool isActive; //현재 랭크에 따라서 스킬 활성화 또는 비활성화
     public GameObject skillPrefab;
     public float skillRange;
+    public float currentCooldown = 0; 
 
     //private float currentCooldown = 0f;
 
@@ -123,7 +124,7 @@ public class Skill
             grenade.GrenadeThrow(throwDirection, so.skillRange, so.skillDamage); //던지고 터지는건 grenade에서 처리
         }
 
-        //currentCooldown = skillCooldown;
+        currentCooldown = skillCooldown;
 
     }
 

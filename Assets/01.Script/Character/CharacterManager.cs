@@ -30,6 +30,7 @@ public class CharacterManager
     private List<CharacterInstance> characters = new();
     private Dictionary<int, CharacterInstance> participated = new();
 
+
     /// <summary>
     /// 캐릭터 데이터를 기반으로 인스턴스를 생성하고 등록
     /// </summary>
@@ -45,6 +46,7 @@ public class CharacterManager
         CharacterInstance newCharacter = new CharacterInstance(data);
         characters.Add(newCharacter);
         Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
 
         return newCharacter;
     }
@@ -60,6 +62,7 @@ public class CharacterManager
         CharacterInstance newCharacter = new CharacterInstance(data);
         characters.Add(newCharacter);
         Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
     }
 
     /// <summary>
@@ -88,6 +91,7 @@ public class CharacterManager
         }
         characters.RemoveAt(index);
         Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
     }
 
     /// <summary>
@@ -204,10 +208,11 @@ public class CharacterManager
         }
 
         Player.Instance.UseGold(1000);
-        
+
         character.Enhance();
         QuestManager.Instance.OnEnchantButtonPressed();
         Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
         return true;
     }
 
@@ -256,6 +261,7 @@ public class CharacterManager
         }
         character.RankUp();
         Player.Instance.SaveCharacters(characters);
+        Player.Instance.SavePlayerData();
         Debug.Log("랭크업 성공");
         //GetAllCharacters(); 필요없음.
 

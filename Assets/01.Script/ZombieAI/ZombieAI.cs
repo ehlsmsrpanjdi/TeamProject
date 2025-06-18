@@ -488,8 +488,9 @@ public class ZombieAI : MonoBehaviour, IDamageable
         // 리지드바디 물리 속도 제거 및 고정
         if (rb != null)
         {
-            rb.isKinematic = true;
+            rb.isKinematic = false;
             rb.velocity = Vector3.zero;
+            rb.isKinematic = true;
         }
 
         // 애니메이션 트리거 및 상태 초기화

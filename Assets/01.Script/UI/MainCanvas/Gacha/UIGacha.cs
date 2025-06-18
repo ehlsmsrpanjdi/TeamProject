@@ -37,7 +37,16 @@ public class UIGacha : UIBase
             GameObject GachaObj = Resources.Load<GameObject>(GachaCamera);
             GachaComponent = Instantiate(GachaObj).GetComponent<GachaCamera>();
         }
-        SpawnBox = GachaComponent.SpawnNormalBox();
+    }
+
+    public GachaCamera GetGachaCamera()
+    {
+        if (null == GachaComponent)
+        {
+            GameObject GachaObj = Resources.Load<GameObject>(GachaCamera);
+            GachaComponent = Instantiate(GachaObj).GetComponent<GachaCamera>();
+        }
+        return GachaComponent;
     }
 
     public override void Close()
@@ -49,16 +58,24 @@ public class UIGacha : UIBase
         IsOpen = false;
     }
 
+    public void SetBox(GameObject _Box)
+    {
+        SpawnBox = _Box;
+    }
+
     void OnClickGachaUI()
     {
+        Transform GachaTransform = GachaComponent.transform;
         if (false == IsOpening)
         {
             SpawnBox.GetComponent<GachaBox>().Opening();
+            GachaTransform.MoveZ(GachaTransform.position.z, GachaTransform.transform.position.z + 2f);
             IsOpening = true;
         }
         else if (false == IsOpen)
         {
             Tween tween = SpawnBox.transform.ScaleUp(1.5f);
+            GachaTransform.MoveZ(GachaTransform.position.z, GachaTransform.transform.position.z + 1f);
             tween.OnComplete(() =>
         {
             if (true == gameObject.activeSelf)

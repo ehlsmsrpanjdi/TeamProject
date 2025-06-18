@@ -39,6 +39,11 @@ public class QuestLog : MonoBehaviour
         }
     }
 
+    public void SetClaimedColor()
+    {
+        GetComponent<Image>().color = new Color(0.5f, 0.5f, 0.5f);
+    }
+
     public void SetQuestName(string name)
     {
         QuestName.text = name;

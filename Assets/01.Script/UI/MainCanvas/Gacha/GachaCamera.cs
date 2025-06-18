@@ -11,11 +11,6 @@ public class GachaCamera : MonoBehaviour
     const string NormalGachaBall = "UI/NormalGachaBall";
     const string HighGachaBall = "UI/HighGachaBall";
 
-    private void Start()
-    {
-
-    }
-
     public GameObject SpawnNormalBox()
     {
         if (NormalBox == null)

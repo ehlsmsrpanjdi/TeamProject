@@ -48,6 +48,7 @@ public class UIOption : UIBase
                 Manager.CloseUI<UISkillViewer>(Manager.GetBattleCanvas());
                 Manager.CloseUI<UIStage>(Manager.GetBattleCanvas());
                 Manager.CloseUI<UIBattleMemberViewer>(Manager.GetBattleCanvas());
+                Manager.CloseUI<UINextStage>(Manager.GetBattleCanvas());
                 uiDoor.transform.SetAsLastSibling();
             };
             uiDoor.Open();

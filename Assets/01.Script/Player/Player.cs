@@ -151,4 +151,10 @@ public class Player
     {
         return Data.particpateCharacterKeys;
     }
+
+    public void ResetCharacterData()
+    {
+        Data.characterInstances.Clear();
+        SavePlayerData();
+    }
 }

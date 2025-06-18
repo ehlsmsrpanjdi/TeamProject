@@ -25,6 +25,10 @@ public class DebugWindow : EditorWindow
         {
 
         }
+        if (GUILayout.Button("캐릭터 데이터 리셋 버튼"))
+        {
+            Player.Instance.ResetCharacterData();
+        }
 
         StageValue = EditorGUILayout.IntField("StageValue", StageValue);
 
@@ -37,7 +41,7 @@ public class DebugWindow : EditorWindow
         {
             GachaManager.Instance.DrawCharacter(GachaType.Normal, 1);
         }
-     
+
         if (GUILayout.Button("프리미엄 뽑기 버튼"))
         {
             GachaManager.Instance.DrawCharacter(GachaType.Premium, 1);
